@@ -44,7 +44,7 @@ Cada integrante debe seguir este flujo de trabajo:
 Para saber que cambiaste puedes seguir los conventional commits,
 Le puedes pedir a Chatgpt que te lo genere.
 
-✅ Convenciones de commits
+## ✅ Convenciones de commits
 
 Usamos el estándar Conventional Commits:
 

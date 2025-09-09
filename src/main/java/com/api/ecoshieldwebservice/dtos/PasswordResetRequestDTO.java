@@ -9,8 +9,6 @@ import lombok.Setter;
 @Setter
 @AllArgsConstructor
 @NoArgsConstructor
-public class UsuarioUpdateDTO {
-    private String usuarionombre;
-    private String usuariofotoperfil;
-    private String usuariopais;
+public class PasswordResetRequestDTO {
+    private String usuariocorreo;
 }
