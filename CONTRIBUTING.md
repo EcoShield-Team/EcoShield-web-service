@@ -16,7 +16,7 @@ A continuación se listan los módulos (`feature/*`) asignados a cada integrante
 ### 🔹 Integrante 4
 - `feature/recommendations` → módulo de recomendaciones: blogs, noticias y tips diarios.
 
-### 🔹 Integrante 5
+### 🔹 Camilo Parraga
 - `feature/feedback` → formulario de feedback con puntuación y comentarios.
 - `feature/photos-history` → historial de fotos y resultados de detecciones.  
 
