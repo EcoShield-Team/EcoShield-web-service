@@ -15,6 +15,7 @@ import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.time.OffsetDateTime;
 import java.util.List;
 
 @Service
@@ -46,6 +47,7 @@ public class ComentarioService implements IComentarioServices {
     public ComentarioResponseDTO registrar(ComentarioRequestDTO dto) {
         Comentario comentario = new Comentario();
         comentario.setComentariotexto(dto.getComentariotexto());
+        comentario.setComentariofecha(OffsetDateTime.now());
         Post p = postRepository.findById(dto.getPostid())
                 .orElseThrow(() -> new EntityNotFoundException("Post no encontrado"));
         comentario.setPostid(p);
