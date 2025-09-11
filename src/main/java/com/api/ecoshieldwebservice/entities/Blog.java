@@ -1,5 +1,7 @@
 package com.api.ecoshieldwebservice.entities;
 
+import com.api.ecoshieldwebservice.enums.BlogEstado;
+import com.api.ecoshieldwebservice.enums.BlogTipo;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Size;
@@ -23,10 +25,9 @@ public class Blog {
     @JoinColumn(name = "usuarioid", nullable = false)
     private Usuario usuarioid;
 
-    @Size(max = 20)
-    @NotNull
+    @Enumerated(EnumType.STRING)
     @Column(name = "blogtipo", nullable = false, length = 20)
-    private String blogtipo;
+    private BlogTipo blogtipo;
 
     @Size(max = 200)
     @NotNull
@@ -42,14 +43,11 @@ public class Blog {
     @Column(name = "blogimagen", nullable = false)
     private String blogimagen;
 
-    @NotNull
-    @Column(name = "blogdestacado", nullable = false)
-    private Boolean blogdestacado = false;
 
-    @Size(max = 20)
-    @NotNull
+    @Enumerated(EnumType.STRING)
     @Column(name = "blogestado", nullable = false, length = 20)
-    private String blogestado;
+    private BlogEstado blogestado;
+
 
     @NotNull
     @ColumnDefault("now()")
