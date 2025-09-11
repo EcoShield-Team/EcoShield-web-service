@@ -10,6 +10,7 @@ import lombok.Setter;
 @AllArgsConstructor
 @NoArgsConstructor
 public class UsuarioUpdateDTO {
+    private Integer usuarioid;
     private String usuarionombre;
     private String usuariofotoperfil;
     private String usuariopais;

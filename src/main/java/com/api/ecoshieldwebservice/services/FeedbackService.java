@@ -13,6 +13,7 @@ import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.time.OffsetDateTime;
 import java.util.List;
 
 @Service
@@ -39,22 +40,20 @@ public class FeedbackService implements IFeedbackServices {
     // ---------- Métodos ----------
     @Override
     public FeedbackResponseDTO findById(Integer id) {
-        Feedback e = feedbackRepository.findById(id)
+        Feedback feedback = feedbackRepository.findById(id)
                 .orElseThrow(() -> new EntityNotFoundException("Feedback no encontrado"));
-        return EtoRespDTO(e);
+        return EtoRespDTO(feedback);
     }
 
     @Override
     public FeedbackResponseDTO registrar(FeedbackRequestDTO dto) {
         Feedback feedback = modelMapper.map(dto, Feedback.class);
-
         Usuario u = usuarioRepository.findById(dto.getUsuarioid())
                 .orElseThrow(() -> new EntityNotFoundException("Usuario no encontrado"));
         feedback.setUsuarioid(u);
-
+        feedback.setFeedbackfecha(OffsetDateTime.now());
         feedback = feedbackRepository.save(feedback);
-
-        return modelMapper.map(feedback, FeedbackResponseDTO.class);
+        return EtoRespDTO(feedback);
     }
 
 

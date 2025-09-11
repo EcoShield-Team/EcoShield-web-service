@@ -14,8 +14,9 @@ import java.time.OffsetDateTime;
 @Table(name = "comentario")
 public class Comentario {
     @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "comentarioid", nullable = false)
-    private Integer id;
+    private Integer comentarioid;
 
     @NotNull
     @ManyToOne(fetch = FetchType.LAZY, optional = false)
@@ -28,7 +29,7 @@ public class Comentario {
     private Usuario usuarioid;
 
     @NotNull
-    @Column(name = "comentariotexto", nullable = false, length = Integer.MAX_VALUE)
+    @Column(name = "comentariotexto", nullable = false, length = 3000)
     private String comentariotexto;
 
     @NotNull
