@@ -8,7 +8,7 @@ import lombok.Setter;
 @Getter
 @Setter
 public class PostRequestDTO {
-    private Integer usuarioId;
+    private Integer usuarioid;
     private String posttitulo;
     private String postdescripcion;
     private String postfoto;

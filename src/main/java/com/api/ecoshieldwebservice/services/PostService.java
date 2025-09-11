@@ -16,7 +16,6 @@ import org.springframework.stereotype.Service;
 
 import java.time.OffsetDateTime;
 import java.util.List;
-import java.util.stream.Collectors;
 
 @Service
 @RequiredArgsConstructor
@@ -33,7 +32,7 @@ public class PostService implements IPostServices {
         Usuario u = post.getUsuarioid();
         if (u != null) {
             UsuarioUpdateDTO uDto = new UsuarioUpdateDTO();
-            uDto.setUsuarioid(u.getId());
+            uDto.setUsuarioid(u.getUsuarioid());
             uDto.setUsuarionombre(u.getUsuarionombre());
             uDto.setUsuariofotoperfil(u.getUsuariofotoperfil());
             uDto.setUsuariopais(u.getUsuariopais());
@@ -45,7 +44,7 @@ public class PostService implements IPostServices {
     @Override
     public PostResponseDTO registrar(PostRequestDTO dto) {
         Post post = modelMapper.map(dto, Post.class);
-        Usuario u = usuarioRepository.findById(dto.getUsuarioId())
+        Usuario u = usuarioRepository.findById(dto.getUsuarioid())
                 .orElseThrow(() -> new EntityNotFoundException("Usuario no encontrado"));
         post.setUsuarioid(u);
         post.setPostfecha(OffsetDateTime.now());
@@ -85,8 +84,8 @@ public class PostService implements IPostServices {
     }
 
     @Override
-    public List<PostResponseDTO> findByUsuarioid_Id(Integer usuarioId) {
-        return postRepository.findByUsuarioid_Id(usuarioId).stream()
+    public List<PostResponseDTO> findByUsuarioid(Usuario usuarioId) {
+        return postRepository.findByUsuarioid(usuarioId).stream()
                 .map(this::EtoRespDTO).toList();
     }
 

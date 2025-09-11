@@ -13,7 +13,7 @@ import lombok.Setter;
 @AllArgsConstructor
 @NoArgsConstructor
 public class PlagaDetailDTO {
-    private Integer id;
+    private Integer plagaid;
     private String plaganombre;
     private String plaganombrecientifico;
     private PlagaTipo plagatipo;

@@ -34,7 +34,7 @@ public class ComentarioService implements IComentarioServices {
         Usuario user = comentario.getUsuarioid();
         if (user != null) {
             UsuarioUpdateDTO uDto = new UsuarioUpdateDTO();
-            uDto.setUsuarioid(user.getId());
+            uDto.setUsuarioid(user.getUsuarioid());
             uDto.setUsuarionombre(user.getUsuarionombre());
             uDto.setUsuariofotoperfil(user.getUsuariofotoperfil());
             uDto.setUsuariopais(user.getUsuariopais());
@@ -88,13 +88,13 @@ public class ComentarioService implements IComentarioServices {
 
     @Override
     public List<ComentarioResponseDTO> findByPostId(Integer postId) {
-        return comentarioRepository.findByPostid_IdOrderByComentariofechaAsc(postId)
+        return comentarioRepository.findByPostid_PostidOrderByComentariofechaAsc(postId)
                 .stream().map(this::EtoRespDTO).toList();
     }
 
     @Override
-    public List<ComentarioResponseDTO> findByUsuarioid_Id(Integer usuarioId) {
-        return comentarioRepository.findByUsuarioid_Id(usuarioId)
+    public List<ComentarioResponseDTO> findByUsuarioid(Usuario usuarioId) {
+        return comentarioRepository.findByUsuarioid(usuarioId)
                 .stream()
                 .map(this::EtoRespDTO)
                 .toList();

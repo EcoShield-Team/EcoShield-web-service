@@ -13,7 +13,7 @@ import lombok.Setter;
 @AllArgsConstructor
 @NoArgsConstructor
 public class EnfermedadDetailDTO {
-    private Integer id;
+    private Integer enfermedadid;
     private String enfermedadnombre;
     private String enfermedadnombrecientifico;
     private EnfermedadTipo enfermedadtipo;

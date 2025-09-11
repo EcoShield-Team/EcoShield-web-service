@@ -2,6 +2,7 @@ package com.api.ecoshieldwebservice.controllers;
 
 import com.api.ecoshieldwebservice.dtos.PostRequestDTO;
 import com.api.ecoshieldwebservice.dtos.PostResponseDTO;
+import com.api.ecoshieldwebservice.entities.Usuario;
 import com.api.ecoshieldwebservice.services.PostService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
@@ -39,6 +40,11 @@ public class PostController {
     @DeleteMapping("/posts/{id}")
     public void borrarPost(@PathVariable Integer id) {
         postService.borrar(id);
+    }
+
+    @GetMapping("/usuarios/{usuarioId}/posts")
+    public List<PostResponseDTO> listarPorUsuario(@PathVariable Usuario usuarioId) {
+        return postService.findByUsuarioid(usuarioId);
     }
 
 }

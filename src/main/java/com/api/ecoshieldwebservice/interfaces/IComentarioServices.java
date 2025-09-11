@@ -2,6 +2,7 @@ package com.api.ecoshieldwebservice.interfaces;
 
 import com.api.ecoshieldwebservice.dtos.ComentarioRequestDTO;
 import com.api.ecoshieldwebservice.dtos.ComentarioResponseDTO;
+import com.api.ecoshieldwebservice.entities.Usuario;
 
 import java.util.List;
 
@@ -12,5 +13,5 @@ public interface IComentarioServices {
     public List<ComentarioResponseDTO> findAll();
     public void borrar(Integer comentarioid);
     public List<ComentarioResponseDTO> findByPostId(Integer postId);
-    public List<ComentarioResponseDTO> findByUsuarioid_Id(Integer usuarioId);
+    public List<ComentarioResponseDTO> findByUsuarioid(Usuario usuarioId);
 }

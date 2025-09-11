@@ -2,6 +2,7 @@ package com.api.ecoshieldwebservice.controllers;
 
 import com.api.ecoshieldwebservice.dtos.ComentarioRequestDTO;
 import com.api.ecoshieldwebservice.dtos.ComentarioResponseDTO;
+import com.api.ecoshieldwebservice.entities.Usuario;
 import com.api.ecoshieldwebservice.services.ComentarioService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
@@ -31,8 +32,8 @@ public class ComentarioController {
     }
 
     @GetMapping("/usuarios/{usuarioId}/comentarios")
-    public List<ComentarioResponseDTO> listarPorUsuario(@PathVariable Integer usuarioId) {
-        return comentarioService.findByUsuarioid_Id(usuarioId);
+    public List<ComentarioResponseDTO> findByUsuarioid(@PathVariable Usuario usuarioId) {
+        return comentarioService.findByUsuarioid(usuarioId);
     }
 
     @GetMapping("/comentarios/{comentarioid}")
