@@ -15,6 +15,7 @@ import java.time.OffsetDateTime;
 @Table(name = "feedback")
 public class Feedback {
     @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "feedbackid", nullable = false)
     private Integer id;
 
@@ -32,11 +33,6 @@ public class Feedback {
     @Column(name = "feedbackdescripcion", nullable = false, length = Integer.MAX_VALUE)
     private String feedbackdescripcion;
 
-    @Size(max = 20)
-    @NotNull
-    @Column(name = "feedbackestado", nullable = false, length = 20)
-    private String feedbackestado;
-
     @Column(name = "feedbackrating")
     private Integer feedbackrating;
 
@@ -44,5 +40,4 @@ public class Feedback {
     @ColumnDefault("now()")
     @Column(name = "feedbackfecha", nullable = false)
     private OffsetDateTime feedbackfecha;
-
 }

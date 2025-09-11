@@ -8,7 +8,7 @@ A continuación se listan los módulos (`feature/*`) asignados a cada integrante
 
 ### 🔹 Integrante 2
 - `feature/almanaque` → gestión de enfermedades y plagas (listado y detalle).
-- `feature/crop-detection` → simulación de detección de cultivos a partir de fotos.
+- `feature/crop-detection` → simulación degit add . detección de cultivos a partir de fotos.
 
 ### 🔹 Integrante 3
 - `feature/community-forum` → foro de comunidad (posts y comentarios).
