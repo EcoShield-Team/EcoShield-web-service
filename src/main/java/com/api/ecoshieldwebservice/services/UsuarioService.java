@@ -1,6 +1,7 @@
 package com.api.ecoshieldwebservice.services;
 
 import com.api.ecoshieldwebservice.dtos.*;
+import com.api.ecoshieldwebservice.entities.Usuario;
 import com.api.ecoshieldwebservice.interfaces.IUsuarioServices;
 import com.api.ecoshieldwebservice.repositories.UsuarioRepository;
 import org.modelmapper.ModelMapper;
@@ -18,40 +19,27 @@ public class UsuarioService implements IUsuarioServices {
     @Autowired
     private ModelMapper modelMapper;
 
-    @Override
-    public UsuarioRegisterDTO register(UsuarioRegisterDTO usuarioRegisterDTO) {
-        return null;
-    }
-
-    @Override
-    public UsuarioLoginDTO login(UsuarioLoginDTO usuarioLoginDTO) {
-        return null;
-    }
-
-    @Override
-    public PasswordResetRequestDTO resetPassword(PasswordResetRequestDTO passwordResetRequestDTO) {
-        return null;
-    }
-
-    @Override
-    public PasswordChangeDTO changePassword(PasswordChangeDTO passwordChangeDTO) {
-        return null;
-    }
-
-
 
     @Override
     public UsuarioProfileDTO findById(Integer id) {
-        return null;
+        Usuario usuario = usuarioRepository.findById(id).orElse(null);
+        return modelMapper.map(usuario, UsuarioProfileDTO.class);
     }
 
     @Override
     public UsuarioProfileDTO updateProfile(Integer id, UsuarioProfileDTO usuarioProfileDTO) {
-        return null;
+        Usuario usuario = usuarioRepository.findById(id).orElse(null);
+        usuario.setUsuariofotoperfil(usuarioProfileDTO.getUsuariofotoperfil());
+        usuario.setUsuariopais(usuarioProfileDTO.getUsuariopais());
+
+        Usuario usuarioUpdated = usuarioRepository.save(usuario);
+        return modelMapper.map(usuarioUpdated, UsuarioProfileDTO.class);
     }
 
     @Override
     public List<UsuarioResponseDTO> findAll() {
-        return List.of();
+        return usuarioRepository.findAll().stream()
+                .map(usuario -> modelMapper.map(usuario, UsuarioResponseDTO.class))
+                .toList();
     }
 }
