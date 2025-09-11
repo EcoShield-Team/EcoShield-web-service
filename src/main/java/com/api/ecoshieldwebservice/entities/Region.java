@@ -13,8 +13,9 @@ import java.math.BigDecimal;
 @Table(name = "region")
 public class Region {
     @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "regionid", nullable = false)
-    private Integer id;
+    private Integer regionid;
 
     @NotNull
     @ManyToOne(fetch = FetchType.LAZY, optional = false)

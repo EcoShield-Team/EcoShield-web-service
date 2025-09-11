@@ -1,9 +1,9 @@
 package com.api.ecoshieldwebservice.entities;
 
-import jakarta.persistence.Column;
-import jakarta.persistence.Entity;
-import jakarta.persistence.Id;
-import jakarta.persistence.Table;
+import com.api.ecoshieldwebservice.enums.EnfermedadTipo;
+import com.api.ecoshieldwebservice.enums.Severidad;
+import com.api.ecoshieldwebservice.enums.Temporada;
+import jakarta.persistence.*;
 import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Size;
 import lombok.Getter;
@@ -15,8 +15,9 @@ import lombok.Setter;
 @Table(name = "enfermedad")
 public class Enfermedad {
     @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "enfermedadid", nullable = false)
-    private Integer id;
+    private Integer enfermedadid;
 
     @Size(max = 150)
     @NotNull
@@ -28,10 +29,9 @@ public class Enfermedad {
     @Column(name = "enfermedadnombrecientifico", nullable = false, length = 200)
     private String enfermedadnombrecientifico;
 
-    @Size(max = 20)
-    @NotNull
+    @Enumerated(EnumType.STRING)
     @Column(name = "enfermedadtipo", nullable = false, length = 20)
-    private String enfermedadtipo;
+    private EnfermedadTipo enfermedadtipo;
 
     @Column(name = "enfermedaddescripcion", length = Integer.MAX_VALUE)
     private String enfermedaddescripcion;
@@ -53,4 +53,11 @@ public class Enfermedad {
     @Column(name = "enfermedadfoto", nullable = false)
     private String enfermedadfoto;
 
+    @Enumerated(EnumType.STRING)
+    @Column(name = "temporada", nullable = false, length = 20)
+    private Temporada temporada;
+
+    @Enumerated(EnumType.STRING)
+    @Column(name = "severidad", nullable = false, length = 10)
+    private Severidad severidad;
 }

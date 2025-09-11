@@ -1,4 +1,24 @@
 package com.api.ecoshieldwebservice.repositories;
 
-public interface EnfermedadRepository {
+import com.api.ecoshieldwebservice.entities.Enfermedad;
+import com.api.ecoshieldwebservice.enums.EnfermedadTipo;
+import com.api.ecoshieldwebservice.enums.Severidad;
+import com.api.ecoshieldwebservice.enums.Temporada;
+import org.springframework.data.jpa.repository.JpaRepository;
+import org.springframework.data.jpa.repository.Query;
+
+import java.util.List;
+
+public interface EnfermedadRepository extends JpaRepository<Enfermedad, Integer> {
+
+    List<Enfermedad> findByEnfermedadnombreContainingIgnoreCase(String nombre);
+
+    List<Enfermedad> findByEnfermedadtipo(EnfermedadTipo tipo);
+
+    List<Enfermedad> findByTemporada(Temporada temporada);
+
+    List<Enfermedad> findBySeveridad(Severidad severidad);
+
+    @Query("SELECT e FROM Enfermedad e WHERE e.enfermedadtipo = :tipo AND e.id <> :id")
+    List<Enfermedad> findRelacionadas(EnfermedadTipo tipo, Integer id);
 }

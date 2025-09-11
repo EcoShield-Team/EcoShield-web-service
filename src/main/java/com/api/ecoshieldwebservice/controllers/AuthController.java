@@ -6,12 +6,15 @@ import com.api.ecoshieldwebservice.dtos.UsuarioLoginDTO;
 import com.api.ecoshieldwebservice.dtos.UsuarioRegisterDTO;
 import com.api.ecoshieldwebservice.services.AuthService;
 import com.api.ecoshieldwebservice.services.UsuarioService;
+import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RestController;
 
-@Service
+@RestController
+@RequiredArgsConstructor
 public class AuthController {
 
     @Autowired

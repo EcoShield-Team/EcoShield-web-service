@@ -2,6 +2,7 @@ package com.api.ecoshieldwebservice.controllers;
 
 import com.api.ecoshieldwebservice.dtos.FeedbackRequestDTO;
 import com.api.ecoshieldwebservice.dtos.FeedbackResponseDTO;
+import com.api.ecoshieldwebservice.entities.Usuario;
 import com.api.ecoshieldwebservice.services.FeedbackService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -11,10 +12,11 @@ import org.springframework.web.bind.annotation.*;
 import java.util.List;
 
 @RestController
-@RequestMapping("/api/feedback")
+@RequestMapping("/feedback")
 public class FeedbackController {
     @Autowired
     private FeedbackService feedbackService;
+
     @PostMapping
     public ResponseEntity<FeedbackResponseDTO> registrar(@RequestBody FeedbackRequestDTO dto) {
         var created = feedbackService.registrar(dto);
@@ -37,8 +39,8 @@ public class FeedbackController {
     }
 
     @GetMapping("/usuario/{usuarioId}")
-    public List<FeedbackResponseDTO> findByUsuario(@PathVariable Integer usuarioId) {
-        return feedbackService.findByUsuarioid_Id(usuarioId);
+    public List<FeedbackResponseDTO> findByUsuarioid(@PathVariable Usuario usuarioId) {
+        return feedbackService.findByUsuarioid(usuarioId);
     }
 
     @GetMapping("/tipo/{tipo}")

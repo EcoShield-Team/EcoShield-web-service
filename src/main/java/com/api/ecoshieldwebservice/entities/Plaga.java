@@ -1,9 +1,9 @@
 package com.api.ecoshieldwebservice.entities;
 
-import jakarta.persistence.Column;
-import jakarta.persistence.Entity;
-import jakarta.persistence.Id;
-import jakarta.persistence.Table;
+import com.api.ecoshieldwebservice.enums.PlagaTipo;
+import com.api.ecoshieldwebservice.enums.Severidad;
+import com.api.ecoshieldwebservice.enums.Temporada;
+import jakarta.persistence.*;
 import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Size;
 import lombok.Getter;
@@ -15,8 +15,9 @@ import lombok.Setter;
 @Table(name = "plaga")
 public class Plaga {
     @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "plagaid", nullable = false)
-    private Integer id;
+    private Integer plagaid;
 
     @Size(max = 150)
     @NotNull
@@ -29,7 +30,7 @@ public class Plaga {
 
     @Size(max = 20)
     @Column(name = "plagatipo", length = 20)
-    private String plagatipo;
+    private PlagaTipo plagatipo;
 
     @Column(name = "plagadescripcion", length = Integer.MAX_VALUE)
     private String plagadescripcion;
@@ -50,4 +51,11 @@ public class Plaga {
     @Column(name = "plagafoto")
     private String plagafoto;
 
+    @Enumerated(EnumType.STRING)
+    @Column(name = "temporada", nullable = false, length = 20)
+    private Temporada temporada;
+
+    @Enumerated(EnumType.STRING)
+    @Column(name = "severidad", nullable = false, length = 10)
+    private Severidad severidad;
 }

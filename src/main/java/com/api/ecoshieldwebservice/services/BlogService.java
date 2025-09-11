@@ -52,7 +52,7 @@ public class BlogService implements IBlogServices {
     public BlogResponseDTO actualizar(Integer id, BlogRequestDTO blogRequestDTO) {
         if (blogRepository.existsById(id)) {
             Blog blog = modelMapper.map(blogRequestDTO, Blog.class);
-            blog.setId(id);
+            blog.setBlogid(id);
 
             Usuario usuario = usuarioRepository.findById(blogRequestDTO.getUsuarioid())
                     .orElseThrow(() -> new RuntimeException("Usuario no encontrado"));
@@ -81,7 +81,7 @@ public class BlogService implements IBlogServices {
 
     @Override
     public BlogResponseDTO findTipDelDia() {
-        Blog blog = blogRepository.findTipDelDia(BlogTipo.TIP);
+        Blog blog = blogRepository.findFirstByBlogtipoOrderByBlogfechapublicacionDesc(BlogTipo.TIP);
         return blog != null ? modelMapper.map(blog, BlogResponseDTO.class) : null;
     }
 

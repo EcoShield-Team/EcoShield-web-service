@@ -17,8 +17,9 @@ import java.time.OffsetDateTime;
 @Table(name = "blog")
 public class Blog {
     @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "blogid", nullable = false)
-    private Integer id;
+    private Integer blogid;
 
     @NotNull
     @ManyToOne(fetch = FetchType.LAZY, optional = false)

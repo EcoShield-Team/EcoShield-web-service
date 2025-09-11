@@ -2,6 +2,7 @@ package com.api.ecoshieldwebservice.interfaces;
 
 import com.api.ecoshieldwebservice.dtos.FeedbackRequestDTO;
 import com.api.ecoshieldwebservice.dtos.FeedbackResponseDTO;
+import com.api.ecoshieldwebservice.entities.Usuario;
 
 import java.util.List;
 
@@ -10,6 +11,6 @@ public interface IFeedbackServices {
     public FeedbackResponseDTO registrar(FeedbackRequestDTO dto);
     public void borrar(Integer id);
     public List<FeedbackResponseDTO> findAll();
-    public List<FeedbackResponseDTO> findByUsuarioid_Id(Integer usuarioId);
+    public List<FeedbackResponseDTO> findByUsuarioid(Usuario usuarioId);
     public List<FeedbackResponseDTO> findByFeedbacktipo(String tipo);
 }

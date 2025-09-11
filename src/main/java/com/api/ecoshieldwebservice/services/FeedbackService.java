@@ -27,8 +27,8 @@ public class FeedbackService implements IFeedbackServices {
     // ---------- Mapeos ----------
     private FeedbackResponseDTO EtoRespDTO(Feedback e) {
         FeedbackResponseDTO dto = modelMapper.map(e, FeedbackResponseDTO.class);
-        dto.setUsuarioid(e.getUsuarioid().getId());
-        dto.setId(e.getId());
+        dto.setUsuarioid(e.getUsuarioid().getUsuarioid());
+        dto.setId(e.getFeedbackid());
         dto.setFeedbacktipo(e.getFeedbacktipo());
         dto.setFeedbackdescripcion(e.getFeedbackdescripcion());
         dto.setFeedbackrating(e.getFeedbackrating());
@@ -72,8 +72,8 @@ public class FeedbackService implements IFeedbackServices {
     }
 
     @Override
-    public List<FeedbackResponseDTO> findByUsuarioid_Id(Integer usuarioId) {
-        return feedbackRepository.findByUsuarioid_Id(usuarioId).stream()
+    public List<FeedbackResponseDTO> findByUsuarioid(Usuario usuarioId) {
+        return feedbackRepository.findByUsuarioid(usuarioId).stream()
                 .map(this::EtoRespDTO).toList();
     }
 

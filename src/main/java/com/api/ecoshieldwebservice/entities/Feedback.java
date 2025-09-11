@@ -17,7 +17,7 @@ public class Feedback {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "feedbackid", nullable = false)
-    private Integer id;
+    private Integer feedbackid;
 
     @NotNull
     @ManyToOne(fetch = FetchType.LAZY, optional = false)

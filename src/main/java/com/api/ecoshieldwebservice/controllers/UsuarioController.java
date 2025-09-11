@@ -28,5 +28,4 @@ public class UsuarioController {
         return usuarioService.updateProfile(id, usuarioProfileDTO);
     }
 
-
 }
