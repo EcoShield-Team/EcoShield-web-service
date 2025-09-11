@@ -13,29 +13,32 @@ public class PostController {
     @Autowired
     private PostService postService;
 
-    @PostMapping("/post")
-    public PostResponseDTO crearPost(@RequestBody PostRequestDTO postRequestDTO) {
-        return postService.registrarPost(postRequestDTO);
+    @PostMapping("/posts")
+    public PostResponseDTO crearPost(@RequestBody PostRequestDTO dto) {
+        return postService.registrar(dto);
     }
 
-    @PutMapping("/post")
-    public PostResponseDTO actualizarPost(@RequestBody PostRequestDTO postRequestDTO) {
-        return postService.actualizarPost(postRequestDTO);
+    @PutMapping("/posts/{id}")
+    public PostResponseDTO actualizarPost(@PathVariable Integer id, @RequestBody PostRequestDTO dto) {
+        return postService.actualizar(id, dto);
     }
 
-    @GetMapping("/post")
-    public List<PostResponseDTO> findAllPosts() {
-        return postService.findAllPosts();
+    @GetMapping("/posts")
+    public List<PostResponseDTO> findAllPosts(@RequestParam(required = false) String titulo) {
+        if (titulo != null && !titulo.isBlank()) {
+            return postService.findByPosttitulo(titulo);
+        }
+        return postService.findAll();
     }
 
-    @GetMapping("/post/{id}")
-    public PostResponseDTO findPostById(@PathVariable Integer id) {
-        return postService.findPostById(id);
+    @GetMapping("/posts/{id}")
+    public PostResponseDTO findById(@PathVariable Integer id) {
+        return postService.findById(id);
     }
 
-    @DeleteMapping("/post/{id}")
+    @DeleteMapping("/posts/{id}")
     public void borrarPost(@PathVariable Integer id) {
-        postService.borrarPost(id);
+        postService.borrar(id);
     }
 
 }

@@ -1,15 +1,17 @@
 package com.api.ecoshieldwebservice.interfaces;
 
+import com.api.ecoshieldwebservice.dtos.FeedbackResponseDTO;
 import com.api.ecoshieldwebservice.dtos.PostRequestDTO;
 import com.api.ecoshieldwebservice.dtos.PostResponseDTO;
-import com.api.ecoshieldwebservice.entities.Post;
 
 import java.util.List;
 
 public interface IPostServices {
-    public PostResponseDTO registrarPost(PostRequestDTO postRequestDTO);
-    public PostResponseDTO actualizarPost(PostRequestDTO postRequestDTO);
-    public PostResponseDTO findPostById(Integer id);
-    public List<PostResponseDTO> findAllPosts();
-    public void borrarPost(Integer id);
+    public PostResponseDTO registrar(PostRequestDTO dto);
+    public PostResponseDTO actualizar(Integer id, PostRequestDTO dto);
+    public List<PostResponseDTO> findByPosttitulo(String titulo);
+    public List<PostResponseDTO> findAll();
+    public PostResponseDTO findById(Integer id);
+    public List<PostResponseDTO> findByUsuarioid_Id(Integer usuarioId);
+    public void borrar(Integer id);
 }

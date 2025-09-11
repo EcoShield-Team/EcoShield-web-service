@@ -14,28 +14,34 @@ public class ComentarioController {
     @Autowired
     private ComentarioService comentarioService;
 
-    @PostMapping("/comentario")
-    public ComentarioResponseDTO crearComentario(@RequestBody ComentarioRequestDTO comentarioRequestDTO) {
-        return comentarioService.registrarComentario(comentarioRequestDTO);
+    @PostMapping("/posts/{postId}/comentarios")
+    public ComentarioResponseDTO crear(@PathVariable Integer postId, @RequestBody ComentarioRequestDTO dto) {
+        dto.setPostid(postId);
+        return comentarioService.registrar(dto);
     }
 
-    @PutMapping("/comentario")
-    public ComentarioResponseDTO actualizarComentario(@RequestBody ComentarioRequestDTO comentarioRequestDTO) {
-        return comentarioService.actualizarComentario(comentarioRequestDTO);
+    @PutMapping("/comentarios/{comentarioId}")
+    public ComentarioResponseDTO actualizarComentario(@PathVariable Integer comentarioId, @RequestBody ComentarioRequestDTO dto) {
+        return comentarioService.actualizar(comentarioId, dto);
     }
 
-    @GetMapping("/comentario")
-    public List<ComentarioResponseDTO> findAllComentarios() {
-        return comentarioService.findAll();
+    @GetMapping("/posts/{postId}/comentarios")
+    public List<ComentarioResponseDTO> listarPorPost(@PathVariable Integer postId) {
+        return comentarioService.findByPostId(postId);
     }
 
-    @GetMapping("/comentario/{id}")
-    public ComentarioResponseDTO findComentarioById(@PathVariable Integer id) {
-        return comentarioService.findById(id);
+    @GetMapping("/usuarios/{usuarioId}/comentarios")
+    public List<ComentarioResponseDTO> listarPorUsuario(@PathVariable Integer usuarioId) {
+        return comentarioService.findByUsuarioid_Id(usuarioId);
     }
 
-    @DeleteMapping("/comentario/{id}")
-    public void borrarComentario(@PathVariable Integer id) {
-        comentarioService.borrarComentario(id);
+    @GetMapping("/comentarios/{comentarioid}")
+    public ComentarioResponseDTO findComentarioById(@PathVariable Integer comentarioid) {
+        return comentarioService.findById(comentarioid);
+    }
+
+    @DeleteMapping("/comentarios/{comentarioid}")
+    public void borrarComentario(@PathVariable Integer comentarioid) {
+        comentarioService.borrar(comentarioid);
     }
 }

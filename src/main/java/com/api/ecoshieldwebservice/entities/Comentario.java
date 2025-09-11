@@ -29,7 +29,7 @@ public class Comentario {
     private Usuario usuarioid;
 
     @NotNull
-    @Column(name = "comentariotexto", nullable = false, length = Integer.MAX_VALUE)
+    @Column(name = "comentariotexto", nullable = false, length = 3000)
     private String comentariotexto;
 
     @NotNull
