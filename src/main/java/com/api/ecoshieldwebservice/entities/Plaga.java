@@ -28,7 +28,7 @@ public class Plaga {
     @Column(name = "plaganombrecientifico", length = 200)
     private String plaganombrecientifico;
 
-    @Size(max = 20)
+    @Enumerated(EnumType.STRING)
     @Column(name = "plagatipo", length = 20)
     private PlagaTipo plagatipo;
 

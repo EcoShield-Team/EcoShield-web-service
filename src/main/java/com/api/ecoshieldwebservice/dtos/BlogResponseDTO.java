@@ -18,7 +18,6 @@ public class BlogResponseDTO {
     private String blogtitulo;
     private String blogdescripcion;
     private String blogimagen;
-    private Boolean blogdestacado;
     private String blogestado;
     private OffsetDateTime blogfechapublicacion;
 }

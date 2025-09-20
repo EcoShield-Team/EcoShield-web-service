@@ -15,6 +15,7 @@ import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.time.OffsetDateTime;
 import java.util.List;
 
 @Service
@@ -46,6 +47,7 @@ public class ComentarioService implements IComentarioServices {
     public ComentarioResponseDTO registrar(ComentarioRequestDTO dto) {
         Comentario comentario = new Comentario();
         comentario.setComentariotexto(dto.getComentariotexto());
+        comentario.setComentariofecha(OffsetDateTime.now());
         Post p = postRepository.findById(dto.getPostid())
                 .orElseThrow(() -> new EntityNotFoundException("Post no encontrado"));
         comentario.setPostid(p);
@@ -57,9 +59,14 @@ public class ComentarioService implements IComentarioServices {
     }
 
     @Override
-    public ComentarioResponseDTO actualizar(Integer comentarioid, ComentarioRequestDTO dto) {
+    public ComentarioResponseDTO actualizar(Integer postId, Integer comentarioid, ComentarioRequestDTO dto) {
         Comentario comentario = comentarioRepository.findById(comentarioid)
                 .orElseThrow(() -> new EntityNotFoundException("Comentario no encontrado"));
+
+        if (!comentario.getPostid().getPostid().equals(postId)) {
+            throw new EntityNotFoundException("El comentario no pertenece al post indicado");
+        }
+
         comentario.setComentariotexto(dto.getComentariotexto());
         Comentario actualizado = comentarioRepository.save(comentario);
         return EtoRespDTO(actualizado);
@@ -79,11 +86,13 @@ public class ComentarioService implements IComentarioServices {
     }
 
     @Override
-    public void borrar(Integer comentarioid) {
-        if (!comentarioRepository.existsById(comentarioid)) {
-            throw new EntityNotFoundException("Comentario no encontrado");
+    public void borrar(Integer postId, Integer comentarioId) {
+        Comentario c = comentarioRepository.findById(comentarioId)
+                .orElseThrow(() -> new EntityNotFoundException("Comentario no encontrado"));
+        if (!c.getPostid().getPostid().equals(postId)) {
+            throw new EntityNotFoundException("El comentario no pertenece al post indicado");
         }
-        comentarioRepository.deleteById(comentarioid);
+        comentarioRepository.delete(c);
     }
 
     @Override
@@ -93,8 +102,11 @@ public class ComentarioService implements IComentarioServices {
     }
 
     @Override
-    public List<ComentarioResponseDTO> findByUsuarioid(Usuario usuarioId) {
-        return comentarioRepository.findByUsuarioid(usuarioId)
+    public List<ComentarioResponseDTO> findByUsuarioid(Integer usuarioId) {
+        Usuario usuario = usuarioRepository.findById(usuarioId)
+                .orElseThrow(() -> new EntityNotFoundException("Usuario no encontrado"));
+
+        return comentarioRepository.findByUsuarioid(usuario)
                 .stream()
                 .map(this::EtoRespDTO)
                 .toList();
