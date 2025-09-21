@@ -79,6 +79,7 @@ public class EnfermedadService implements IEnfermedadService {
                 .orElseThrow(() -> new RuntimeException("Enfermedad no encontrada"));
         return enfermedadRepository.findRelacionadas(enfermedad.getEnfermedadtipo(), id)
                 .stream()
+                .limit(4)
                 .map(e -> modelMapper.map(e, EnfermedadListDTO.class))
                 .collect(Collectors.toList());
     }
