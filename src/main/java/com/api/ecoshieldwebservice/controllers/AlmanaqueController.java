@@ -35,6 +35,21 @@ public class AlmanaqueController {
         return ResponseEntity.ok(enfermedadService.listarTodas());
     }
 
+    @GetMapping("/enfermedades/ordenadas/severidad")
+    public ResponseEntity<List<EnfermedadListDTO>> listarEnfermedadesSeveridad() {
+        return ResponseEntity.ok(enfermedadService.listarSeveridad());
+    }
+
+    @GetMapping("/enfermedades/ordenadas/nombre-asc")
+    public ResponseEntity<List<EnfermedadListDTO>> listarEnfermedadesOrdenadasPorNombreAsc() {
+        return ResponseEntity.ok(enfermedadService.ordenarAscendente());
+    }
+
+    @GetMapping("/enfermedades/ordenadas/nombre-desc")
+    public ResponseEntity<List<EnfermedadListDTO>> listarEnfermedadesOrdenadasPorNombreDesc() {
+        return ResponseEntity.ok(enfermedadService.ordenarDescendente());
+    }
+
     @GetMapping("/enfermedades/buscar")
     public ResponseEntity<List<EnfermedadListDTO>> buscarEnfermedades(@RequestParam String nombre) {
         if (nombre == null || nombre.isBlank()) {
@@ -75,6 +90,21 @@ public class AlmanaqueController {
     @GetMapping("/plagas")
     public ResponseEntity<List<PlagaListDTO>> listarPlagas() {
         return ResponseEntity.ok(plagaService.listarTodas());
+    }
+
+    @GetMapping("/plagas/ordenadas/severidad")
+    public ResponseEntity<List<PlagaListDTO>> listarPlagasSeveridad() {
+        return ResponseEntity.ok(plagaService.listarSeveridad());
+    }
+
+    @GetMapping("/plagas/ordenadas/nombre-asc")
+    public ResponseEntity<List<PlagaListDTO>> listarPlagasOrdenadasPorNombreAsc() {
+        return ResponseEntity.ok(plagaService.ordenarAscendente());
+    }
+
+    @GetMapping("/plagas/ordenadas/nombre-desc")
+    public ResponseEntity<List<PlagaListDTO>> listarPlagasOrdenadasPorNombreDesc() {
+        return ResponseEntity.ok(plagaService.ordenarDescendente());
     }
 
     @GetMapping("/plagas/buscar")
