@@ -2,7 +2,6 @@ package com.api.ecoshieldwebservice.controllers;
 
 import com.api.ecoshieldwebservice.dtos.ComentarioRequestDTO;
 import com.api.ecoshieldwebservice.dtos.ComentarioResponseDTO;
-import com.api.ecoshieldwebservice.entities.Usuario;
 import com.api.ecoshieldwebservice.services.ComentarioService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
@@ -10,7 +9,6 @@ import org.springframework.web.bind.annotation.*;
 import java.util.List;
 
 @RestController
-@RequestMapping("/api")
 public class ComentarioController {
     @Autowired
     private ComentarioService comentarioService;
@@ -21,9 +19,10 @@ public class ComentarioController {
         return comentarioService.registrar(dto);
     }
 
-    @PutMapping("/comentarios/{comentarioId}")
-    public ComentarioResponseDTO actualizarComentario(@PathVariable Integer comentarioId, @RequestBody ComentarioRequestDTO dto) {
-        return comentarioService.actualizar(comentarioId, dto);
+    @PutMapping("/posts/{postId}/comentarios/{comentarioId}")
+    public ComentarioResponseDTO actualizar(@PathVariable Integer postId, @PathVariable Integer comentarioId, @RequestBody ComentarioRequestDTO dto) {
+        dto.setPostid(postId);
+        return comentarioService.actualizar(postId, comentarioId, dto);
     }
 
     @GetMapping("/posts/{postId}/comentarios")
@@ -32,7 +31,7 @@ public class ComentarioController {
     }
 
     @GetMapping("/usuarios/{usuarioId}/comentarios")
-    public List<ComentarioResponseDTO> findByUsuarioid(@PathVariable Usuario usuarioId) {
+    public List<ComentarioResponseDTO> findByUsuarioid(@PathVariable Integer usuarioId) {
         return comentarioService.findByUsuarioid(usuarioId);
     }
 
@@ -41,8 +40,8 @@ public class ComentarioController {
         return comentarioService.findById(comentarioid);
     }
 
-    @DeleteMapping("/comentarios/{comentarioid}")
-    public void borrarComentario(@PathVariable Integer comentarioid) {
-        comentarioService.borrar(comentarioid);
+    @DeleteMapping("/posts/{postId}/comentarios/{comentarioId}")
+    public void borrar(@PathVariable Integer postId, @PathVariable Integer comentarioId) {
+        comentarioService.borrar(postId, comentarioId);
     }
 }
