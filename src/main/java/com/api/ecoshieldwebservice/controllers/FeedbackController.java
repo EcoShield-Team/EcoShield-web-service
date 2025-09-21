@@ -24,27 +24,41 @@ public class FeedbackController {
     }
 
     @GetMapping
-    public List<FeedbackResponseDTO> findAll() {
-        return feedbackService.findAll();
+    public ResponseEntity<List<FeedbackResponseDTO>> findAll() {
+        var lista =  feedbackService.findAll();
+        if (lista.isEmpty()) {
+            return ResponseEntity.noContent().build();
+        }
+        return ResponseEntity.ok(lista);
     }
 
     @GetMapping("/{id}")
-    public FeedbackResponseDTO findById(@PathVariable Integer id) {
-        return feedbackService.findById(id);
+    public ResponseEntity<FeedbackResponseDTO> findById(@PathVariable Integer id) {
+        var founded = feedbackService.findById(id);
+        return ResponseEntity.status(HttpStatus.OK).body(founded);
     }
 
     @DeleteMapping("/{id}")
-    public void borrar(@PathVariable Integer id) {
+    public ResponseEntity<Void> borrar(@PathVariable Integer id) {
         feedbackService.borrar(id);
+        return ResponseEntity.noContent().build();
     }
 
     @GetMapping("/usuario/{usuarioId}")
-    public List<FeedbackResponseDTO> findByUsuarioid(@PathVariable Usuario usuarioId) {
-        return feedbackService.findByUsuarioid(usuarioId);
+    public ResponseEntity<List<FeedbackResponseDTO>> findByUsuarioid(@PathVariable Usuario usuarioId) {
+        var lista = feedbackService.findByUsuarioid(usuarioId);
+        if (lista.isEmpty()) {
+            return ResponseEntity.noContent().build();
+        }
+        return ResponseEntity.ok(lista);
     }
 
     @GetMapping("/tipo/{tipo}")
-    public List<FeedbackResponseDTO> findByTipo(@PathVariable String tipo) {
-        return feedbackService.findByFeedbacktipo(tipo);
+    public ResponseEntity<List<FeedbackResponseDTO>> findByTipo(@PathVariable String tipo) {
+        var lista = feedbackService.findByFeedbacktipo(tipo);
+        if  (lista.isEmpty()) {
+            return ResponseEntity.noContent().build();
+        }
+        return ResponseEntity.ok(lista);
     }
 }
