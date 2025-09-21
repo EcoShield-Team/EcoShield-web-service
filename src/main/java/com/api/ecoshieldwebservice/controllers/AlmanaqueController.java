@@ -37,7 +37,14 @@ public class AlmanaqueController {
 
     @GetMapping("/enfermedades/buscar")
     public ResponseEntity<List<EnfermedadListDTO>> buscarEnfermedades(@RequestParam String nombre) {
-        return ResponseEntity.ok(enfermedadService.buscarPorNombre(nombre));
+        if (nombre == null || nombre.isBlank()) {
+            return ResponseEntity.badRequest().build();
+        }
+        List<EnfermedadListDTO> lista = enfermedadService.buscarPorNombre(nombre.trim());
+        if (lista.isEmpty()) {
+            return ResponseEntity.noContent().build();
+        }
+        return ResponseEntity.ok(lista);
     }
 
     @GetMapping("/enfermedades/filtro/tipo")
@@ -65,8 +72,6 @@ public class AlmanaqueController {
         return ResponseEntity.ok(enfermedadService.enfermedadesRelacionadas(id));
     }
 
-
-
     @GetMapping("/plagas")
     public ResponseEntity<List<PlagaListDTO>> listarPlagas() {
         return ResponseEntity.ok(plagaService.listarTodas());
@@ -74,7 +79,14 @@ public class AlmanaqueController {
 
     @GetMapping("/plagas/buscar")
     public ResponseEntity<List<PlagaListDTO>> buscarPlagas(@RequestParam String nombre) {
-        return ResponseEntity.ok(plagaService.buscarPorNombre(nombre));
+        if (nombre == null || nombre.isBlank()) {
+            return ResponseEntity.badRequest().build();
+        }
+        List<PlagaListDTO> lista = plagaService.buscarPorNombre(nombre.trim());
+        if (lista.isEmpty()) {
+            return ResponseEntity.noContent().build();
+        }
+        return ResponseEntity.ok(lista);
     }
 
     @GetMapping("/plagas/filtro/tipo")

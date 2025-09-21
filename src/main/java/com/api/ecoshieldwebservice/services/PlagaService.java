@@ -79,6 +79,7 @@ public class PlagaService implements IPlagaService {
                 .orElseThrow(() -> new RuntimeException("Plaga no encontrada"));
         return plagaRepository.findRelacionadas(plaga.getPlagatipo(), id)
                 .stream()
+                .limit(4)
                 .map(p -> modelMapper.map(p, PlagaListDTO.class))
                 .collect(Collectors.toList());
     }
