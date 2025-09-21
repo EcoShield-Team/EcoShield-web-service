@@ -16,4 +16,7 @@ public interface IPlagaService {
     List<PlagaListDTO> filtrarPorSeveridad(Severidad severidad);
     PlagaDetailDTO verDetalle(Integer id);
     List<PlagaListDTO> plagasRelacionadas(Integer id);
+    List<PlagaListDTO> listarSeveridad();
+    List<PlagaListDTO> ordenarAscendente();
+    List<PlagaListDTO> ordenarDescendente();
 }

@@ -21,4 +21,18 @@ public interface PlagaRepository extends JpaRepository<Plaga, Integer> {
 
     @Query("SELECT p FROM Plaga p WHERE p.plagatipo = :tipo AND p.id <> :id")
     List<Plaga> findRelacionadas(PlagaTipo tipo, Integer id);
+
+    @Query ("""
+           SELECT p FROM Plaga p
+           ORDER BY 
+             CASE p.severidad
+               WHEN 'GRAVE' THEN 1
+               WHEN 'MODERADA' THEN 2
+               WHEN 'LEVE' THEN 3
+               ELSE 4
+             END
+           """)
+    List<Plaga> findAllOrderBySeveridad();
+    List<Plaga> findAllByOrderByPlaganombreAsc();
+    List<Plaga> findAllByOrderByPlaganombreDesc();
 }

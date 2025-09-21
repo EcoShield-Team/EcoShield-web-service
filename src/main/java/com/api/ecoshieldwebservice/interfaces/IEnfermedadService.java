@@ -16,4 +16,7 @@ public interface IEnfermedadService {
     List<EnfermedadListDTO> filtrarPorSeveridad(Severidad severidad);
     EnfermedadDetailDTO verDetalle(Integer id);
     List<EnfermedadListDTO> enfermedadesRelacionadas(Integer id);
+    List<EnfermedadListDTO> listarSeveridad();
+    List<EnfermedadListDTO> ordenarAscendente();
+    List<EnfermedadListDTO> ordenarDescendente();
 }

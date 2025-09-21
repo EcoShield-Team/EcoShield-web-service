@@ -83,4 +83,28 @@ public class PlagaService implements IPlagaService {
                 .map(p -> modelMapper.map(p, PlagaListDTO.class))
                 .collect(Collectors.toList());
     }
+
+    @Override
+    public List<PlagaListDTO> listarSeveridad() {
+        return plagaRepository.findAllOrderBySeveridad()
+                .stream()
+                .map(e -> modelMapper.map(e, PlagaListDTO.class))
+                .collect(Collectors.toList());
+    }
+
+    @Override
+    public List<PlagaListDTO> ordenarAscendente() {
+        return plagaRepository.findAllByOrderByPlaganombreAsc()
+                .stream()
+                .map(e -> modelMapper.map(e, PlagaListDTO.class))
+                .collect(Collectors.toList());
+    }
+
+    @Override
+    public List<PlagaListDTO> ordenarDescendente() {
+        return plagaRepository.findAllByOrderByPlaganombreDesc()
+                .stream()
+                .map(e -> modelMapper.map(e, PlagaListDTO.class))
+                .collect(Collectors.toList());
+    }
 }

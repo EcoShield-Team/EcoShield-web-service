@@ -83,4 +83,28 @@ public class EnfermedadService implements IEnfermedadService {
                 .map(e -> modelMapper.map(e, EnfermedadListDTO.class))
                 .collect(Collectors.toList());
     }
+
+    @Override
+    public List<EnfermedadListDTO> listarSeveridad() {
+        return enfermedadRepository.findAllOrderBySeveridad()
+                .stream()
+                .map(e -> modelMapper.map(e, EnfermedadListDTO.class))
+                .collect(Collectors.toList());
+    }
+
+    @Override
+    public List<EnfermedadListDTO> ordenarAscendente() {
+        return enfermedadRepository.findAllByOrderByEnfermedadnombreAsc()
+                .stream()
+                .map(e -> modelMapper.map(e, EnfermedadListDTO.class))
+                .collect(Collectors.toList());
+    }
+
+    @Override
+    public List<EnfermedadListDTO> ordenarDescendente() {
+        return enfermedadRepository.findAllByOrderByEnfermedadnombreDesc()
+                .stream()
+                .map(e -> modelMapper.map(e, EnfermedadListDTO.class))
+                .collect(Collectors.toList());
+    }
 }
