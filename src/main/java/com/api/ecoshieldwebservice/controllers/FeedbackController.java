@@ -29,8 +29,9 @@ public class FeedbackController {
     }
 
     @GetMapping("/{id}")
-    public FeedbackResponseDTO findById(@PathVariable Integer id) {
-        return feedbackService.findById(id);
+    public ResponseEntity<FeedbackResponseDTO> findById(@PathVariable Integer id) {
+        var founded = feedbackService.findById(id);
+        return ResponseEntity.status(HttpStatus.OK).body(founded);
     }
 
     @DeleteMapping("/{id}")
