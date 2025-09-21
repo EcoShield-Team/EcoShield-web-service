@@ -57,6 +57,7 @@ public class BlogService implements IBlogServices {
             Usuario usuario = usuarioRepository.findById(blogRequestDTO.getUsuarioid())
                     .orElseThrow(() -> new RuntimeException("Usuario no encontrado"));
             blog.setUsuarioid(usuario);
+            blog.setBlogfechapublicacion(OffsetDateTime.now());
 
             Blog actualizado = blogRepository.save(blog);
             return modelMapper.map(actualizado, BlogResponseDTO.class);
