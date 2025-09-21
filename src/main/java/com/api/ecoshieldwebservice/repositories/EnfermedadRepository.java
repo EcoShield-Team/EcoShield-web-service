@@ -19,12 +19,12 @@ public interface EnfermedadRepository extends JpaRepository<Enfermedad, Integer>
 
     List<Enfermedad> findBySeveridad(Severidad severidad);
 
-    @Query("SELECT e FROM Enfermedad e WHERE e.enfermedadtipo = :tipo AND e.id <> :id")
+    @Query("SELECT e FROM Enfermedad e WHERE e.enfermedadtipo = :tipo AND e.enfermedadid <> :id")
     List<Enfermedad> findRelacionadas(EnfermedadTipo tipo, Integer id);
 
     @Query ("""
            SELECT e FROM Enfermedad e
-           ORDER BY 
+           ORDER BY
              CASE e.severidad
                WHEN 'GRAVE' THEN 1
                WHEN 'MODERADA' THEN 2
