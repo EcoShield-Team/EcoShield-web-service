@@ -5,12 +5,13 @@ import com.api.ecoshieldwebservice.entities.Rol;
 import com.api.ecoshieldwebservice.entities.Usuario;
 import com.api.ecoshieldwebservice.enums.UsuarioEstado;
 import com.api.ecoshieldwebservice.interfaces.IAuthServices;
-import com.api.ecoshieldwebservice.interfaces.IUsuarioServices;
 import com.api.ecoshieldwebservice.repositories.RolRepository;
 import com.api.ecoshieldwebservice.repositories.UsuarioRepository;
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
+import org.springframework.web.server.ResponseStatusException;
 
 import java.time.OffsetDateTime;
 
@@ -29,17 +30,14 @@ public class AuthService  implements IAuthServices {
     public UsuarioRegisterDTO register(UsuarioRegisterDTO usuarioRegisterDTO) {
 
         if (usuarioRepository.existsByUsuariocorreo(usuarioRegisterDTO.getUsuariocorreo())) {
-            throw new RuntimeException("Correo ya registrado");
+            throw new ResponseStatusException(HttpStatus.CONFLICT, "Correo ya registrado");
         }
 
-        // Buscar el rol por defecto (USUARIO)
         Rol rolUser = rolRepository.findByRolnombre("USUARIO")
                 .orElseThrow(() -> new RuntimeException("Rol USUARIO no encontrado"));
 
-        Usuario usuario = new Usuario();
-        usuario.setUsuarionombre(usuarioRegisterDTO.getUsuarionombre());
-        usuario.setUsuariocorreo(usuarioRegisterDTO.getUsuariocorreo());
-        usuario.setUsuariocontrasena(usuarioRegisterDTO.getUsuariocontrasena());
+        Usuario usuario = modelMapper.map(usuarioRegisterDTO, Usuario.class);
+
         usuario.setUsuarioestado(UsuarioEstado.ACTIVO.name());
         usuario.setUsuariopais("PERU");
         usuario.setUsuariofecharegistro(OffsetDateTime.now());
@@ -52,16 +50,37 @@ public class AuthService  implements IAuthServices {
 
     @Override
     public UsuarioLoginDTO login(UsuarioLoginDTO usuarioLoginDTO) {
-        return null;
+        Usuario usuario = usuarioRepository.findByUsuariocorreo(usuarioLoginDTO.getUsuariocorreo())
+                .orElseThrow(() -> new ResponseStatusException(HttpStatus.UNAUTHORIZED, "Correo o contraseña incorrectos"));
+
+        if (!usuario.getUsuariocontrasena().equals(usuarioLoginDTO.getUsuariocontrasena())) {
+            throw new ResponseStatusException(HttpStatus.UNAUTHORIZED, "Correo o contraseña incorrectos");
+        }
+
+        return modelMapper.map(usuario, UsuarioLoginDTO.class);
     }
 
     @Override
     public PasswordResetRequestDTO resetPassword(PasswordResetRequestDTO passwordResetRequestDTO) {
-        return null;
+        Usuario usuario = usuarioRepository.findByUsuariocorreo(passwordResetRequestDTO.getUsuariocorreo())
+                .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "Usuario no encontrado"));
+        System.out.println("Enviando link de reseteo a: " + usuario.getUsuariocorreo());
+
+        return passwordResetRequestDTO;
     }
 
     @Override
     public PasswordChangeDTO changePassword(PasswordChangeDTO passwordChangeDTO) {
-        return null;
+        Usuario usuario = usuarioRepository.findByUsuariocorreo(passwordChangeDTO.getUsuariocorreo())
+                .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "Usuario no encontrado"));
+
+        if (!usuario.getUsuariocontrasena().equals(passwordChangeDTO.getActualcontrasena())) {
+            throw new ResponseStatusException(HttpStatus.UNAUTHORIZED, "Contraseña actual incorrecta");
+        }
+
+        usuario.setUsuariocontrasena(passwordChangeDTO.getNuevacontrasena());
+        usuarioRepository.save(usuario);
+
+        return passwordChangeDTO;
     }
 }
