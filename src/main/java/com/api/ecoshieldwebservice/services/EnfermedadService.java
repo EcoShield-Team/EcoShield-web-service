@@ -11,7 +11,9 @@ import com.api.ecoshieldwebservice.repositories.EnfermedadRepository;
 import lombok.RequiredArgsConstructor;
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
+import org.springframework.web.server.ResponseStatusException;
 
 import java.util.List;
 import java.util.stream.Collectors;
@@ -76,7 +78,8 @@ public class EnfermedadService implements IEnfermedadService {
     @Override
     public List<EnfermedadListDTO> enfermedadesRelacionadas(Integer id) {
         Enfermedad enfermedad = enfermedadRepository.findById(id)
-                .orElseThrow(() -> new RuntimeException("Enfermedad no encontrada"));
+                .orElseThrow(() -> new ResponseStatusException(
+                        HttpStatus.NOT_FOUND, "Enfermedades relacionadas no encontradas"));
         return enfermedadRepository.findRelacionadas(enfermedad.getEnfermedadtipo(), id)
                 .stream()
                 .limit(4)
