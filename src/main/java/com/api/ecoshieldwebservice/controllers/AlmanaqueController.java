@@ -16,6 +16,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
+import java.util.Map;
 
 @RestController
 @RequestMapping("/almanaque")
@@ -51,14 +52,17 @@ public class AlmanaqueController {
     }
 
     @GetMapping("/enfermedades/buscar")
-    public ResponseEntity<List<EnfermedadListDTO>> buscarEnfermedades(@RequestParam String nombre) {
+    public ResponseEntity<?> buscarEnfermedades(@RequestParam String nombre) {
         if (nombre == null || nombre.isBlank()) {
-            return ResponseEntity.badRequest().build();
+            return ResponseEntity.badRequest().body(Map.of("mensaje", "El parámetro 'nombre' es obligatorio"));
         }
+
         List<EnfermedadListDTO> lista = enfermedadService.buscarPorNombre(nombre.trim());
+
         if (lista.isEmpty()) {
-            return ResponseEntity.noContent().build();
+            return ResponseEntity.ok(Map.of("mensaje", "No se encontraron resultados"));
         }
+
         return ResponseEntity.ok(lista);
     }
 
