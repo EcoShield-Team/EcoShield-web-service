@@ -7,8 +7,8 @@ import org.springframework.data.jpa.repository.Query;
 
 import java.util.List;
 
-public interface BlogRepository extends JpaRepository<Blog, Integer> {
-    Blog findFirstByBlogtipoOrderByBlogfechapublicacionDesc(BlogTipo tipo);
+public interface BlogRepository extends JpaRepository<Blog, Long> {
+    Blog findFirstByBlogTipoOrderByBlogFechaPublicacionDesc(BlogTipo tipo);
 
     @Query("SELECT b FROM Blog b WHERE b.blogtipo = 'NEWS' ORDER BY b.blogfechapublicacion DESC")
     List<Blog> findAllNews();

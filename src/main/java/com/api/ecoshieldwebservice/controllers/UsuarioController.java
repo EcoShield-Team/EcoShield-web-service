@@ -19,12 +19,12 @@ public class UsuarioController {
     }
 
     @GetMapping("/users/{id}")
-    public UsuarioProfileDTO findById(@PathVariable Integer id) {
+    public UsuarioProfileDTO findById(@PathVariable Long id) {
         return usuarioService.findById(id);
     }
 
     @PutMapping("/users/{id}")
-    public UsuarioProfileDTO updateProfile(@PathVariable Integer id, @RequestBody UsuarioProfileDTO usuarioProfileDTO) {
+    public UsuarioProfileDTO updateProfile(@PathVariable Long id, @RequestBody UsuarioProfileDTO usuarioProfileDTO) {
         return usuarioService.updateProfile(id, usuarioProfileDTO);
     }
 

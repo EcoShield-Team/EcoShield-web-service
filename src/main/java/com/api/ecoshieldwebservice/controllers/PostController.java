@@ -1,6 +1,6 @@
 package com.api.ecoshieldwebservice.controllers;
 
-import com.api.ecoshieldwebservice.dtos.PostRequestDTO;
+import com.api.ecoshieldwebservice.dtos.request.PostRequestDTO;
 import com.api.ecoshieldwebservice.dtos.PostResponseDTO;
 import com.api.ecoshieldwebservice.entities.Usuario;
 import com.api.ecoshieldwebservice.services.PostService;
@@ -20,7 +20,7 @@ public class PostController {
     }
 
     @PutMapping("/posts/{id}")
-    public PostResponseDTO actualizarPost(@PathVariable Integer id, @RequestBody PostRequestDTO dto) {
+    public PostResponseDTO actualizarPost(@PathVariable Long id, @RequestBody PostRequestDTO dto) {
         return postService.actualizar(id, dto);
     }
 
@@ -33,12 +33,12 @@ public class PostController {
     }
 
     @GetMapping("/posts/{id}")
-    public PostResponseDTO findById(@PathVariable Integer id) {
+    public PostResponseDTO findById(@PathVariable Long id) {
         return postService.findById(id);
     }
 
     @DeleteMapping("/posts/{id}")
-    public void borrarPost(@PathVariable Integer id) {
+    public void borrarPost(@PathVariable Long id) {
         postService.borrar(id);
     }
 

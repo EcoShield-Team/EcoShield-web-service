@@ -1,8 +1,8 @@
 package com.api.ecoshieldwebservice.services;
 
-import com.api.ecoshieldwebservice.dtos.PostRequestDTO;
+import com.api.ecoshieldwebservice.dtos.UsuarioResponseForoDTO;
+import com.api.ecoshieldwebservice.dtos.request.PostRequestDTO;
 import com.api.ecoshieldwebservice.dtos.PostResponseDTO;
-import com.api.ecoshieldwebservice.dtos.UsuarioUpdateDTO;
 import com.api.ecoshieldwebservice.entities.Post;
 import com.api.ecoshieldwebservice.entities.Usuario;
 import com.api.ecoshieldwebservice.interfaces.IPostServices;
@@ -29,13 +29,13 @@ public class PostService implements IPostServices {
 
     private PostResponseDTO EtoRespDTO(Post post) {
         PostResponseDTO dto = modelMapper.map(post, PostResponseDTO.class);
-        Usuario u = post.getUsuarioid();
+        Usuario u = post.getUsuario();
         if (u != null) {
-            UsuarioUpdateDTO uDto = new UsuarioUpdateDTO();
-            uDto.setUsuarioid(u.getUsuarioid());
-            uDto.setUsuarionombre(u.getUsuarionombre());
-            uDto.setUsuariofotoperfil(u.getUsuariofotoperfil());
-            uDto.setUsuariopais(u.getUsuariopais());
+            UsuarioResponseForoDTO uDto = new UsuarioResponseForoDTO();
+            uDto.setUsuarioId(u.getUsuarioId());
+            uDto.setUsuarioNombre(u.getUsuarioNombre());
+            uDto.setUsuarioFotoPerfil(u.getUsuarioFotoPerfil());
+            uDto.setUsuarioPais(u.getUsuarioPais());
             dto.setUsuario(uDto);
         }
         return dto;
@@ -44,28 +44,28 @@ public class PostService implements IPostServices {
     @Override
     public PostResponseDTO registrar(PostRequestDTO dto) {
         Post post = modelMapper.map(dto, Post.class);
-        Usuario u = usuarioRepository.findById(dto.getUsuarioid())
+        Usuario u = usuarioRepository.findById(dto.getUsuarioId())
                 .orElseThrow(() -> new EntityNotFoundException("Usuario no encontrado"));
-        post.setUsuarioid(u);
-        post.setPostfecha(OffsetDateTime.now());
+        post.setUsuario(u);
+        post.setPostFecha(OffsetDateTime.now());
         post = postRepository.save(post);
         return EtoRespDTO(post);
     }
 
     @Override
-    public PostResponseDTO actualizar(Integer id, PostRequestDTO dto) {
+    public PostResponseDTO actualizar(Long id, PostRequestDTO dto) {
         Post existe = postRepository.findById(id)
                 .orElseThrow(() -> new EntityNotFoundException("Post no encontrado"));
-        Usuario prop = existe.getUsuarioid();
+        Usuario u = existe.getUsuario();
         modelMapper.map(dto , existe);
-        existe.setUsuarioid(prop);
+        existe.setUsuario(u);
         Post actualizado = postRepository.save(existe);
         return  EtoRespDTO(actualizado);
     }
 
     @Override
     public List<PostResponseDTO> findByPosttitulo(String titulo) {
-        return postRepository.findByPosttitulo(titulo).stream()
+        return postRepository.findByPostTitulo(titulo).stream()
                 .map(this::EtoRespDTO)
                 .toList();
     }
@@ -77,7 +77,7 @@ public class PostService implements IPostServices {
     }
 
     @Override
-    public PostResponseDTO findById(Integer id) {
+    public PostResponseDTO findById(Long id) {
         Post post = postRepository.findById(id)
                 .orElseThrow(() -> new EntityNotFoundException("Post no encontrado"));
         return EtoRespDTO(post);
@@ -85,12 +85,12 @@ public class PostService implements IPostServices {
 
     @Override
     public List<PostResponseDTO> findByUsuarioid(Usuario usuarioId) {
-        return postRepository.findByUsuarioid(usuarioId).stream()
+        return postRepository.findByUsuario(usuarioId).stream()
                 .map(this::EtoRespDTO).toList();
     }
 
     @Override
-    public void borrar(Integer id) {
+    public void borrar(Long id) {
         if (!postRepository.existsById(id))
             throw new EntityNotFoundException("Feedback no encontrado");
         postRepository.deleteById(id);

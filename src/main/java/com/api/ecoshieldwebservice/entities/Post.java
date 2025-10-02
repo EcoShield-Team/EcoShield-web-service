@@ -6,6 +6,7 @@ import jakarta.validation.constraints.Size;
 import lombok.Getter;
 import lombok.Setter;
 import org.hibernate.annotations.ColumnDefault;
+import org.hibernate.annotations.CreationTimestamp;
 
 import java.time.OffsetDateTime;
 
@@ -14,33 +15,27 @@ import java.time.OffsetDateTime;
 @Entity
 @Table(name = "post")
 public class Post {
+
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "postid", nullable = false)
-    private Integer postid;
+    private Long postId;
 
-    @NotNull
     @ManyToOne(fetch = FetchType.LAZY, optional = false)
     @JoinColumn(name = "usuarioid", nullable = false)
-    private Usuario usuarioid;
+    private Usuario usuario;
 
-    @Size(max = 200)
-    @NotNull
     @Column(name = "posttitulo", nullable = false, length = 200)
-    private String posttitulo;
+    private String postTitulo;
 
-    @NotNull
-    @Column(name = "postdescripcion", nullable = false, length = Integer.MAX_VALUE)
-    private String postdescripcion;
+    @Lob
+    @Column(name = "postdescripcion", nullable = false)
+    private String postDescripcion;
 
-    @Size(max = 255)
-    @NotNull
-    @Column(name = "postfoto", nullable = false)
-    private String postfoto;
+    @Column(name = "postfoto", length = 255)
+    private String postFoto;
 
-    @NotNull
-    @ColumnDefault("now()")
-    @Column(name = "postfecha", nullable = false)
-    private OffsetDateTime postfecha;
-
+    @CreationTimestamp
+    @Column(name = "postfecha", nullable = false, updatable = false)
+    private OffsetDateTime postFecha;
 }

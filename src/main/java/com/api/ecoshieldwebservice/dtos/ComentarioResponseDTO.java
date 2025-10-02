@@ -8,8 +8,8 @@ import java.time.OffsetDateTime;
 @Getter
 @Setter
 public class ComentarioResponseDTO {
-    private Integer comentarioid;
-    private UsuarioUpdateDTO usuario;
-    private String comentariotexto;
-    private OffsetDateTime comentariofecha;
+    private Long comentarioId;
+    private UsuarioResponseForoDTO usuario;
+    private String comentarioTexto;
+    private OffsetDateTime comentarioFecha;
 }

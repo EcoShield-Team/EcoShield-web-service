@@ -6,6 +6,7 @@ import jakarta.validation.constraints.Size;
 import lombok.Getter;
 import lombok.Setter;
 import org.hibernate.annotations.ColumnDefault;
+import org.hibernate.annotations.CreationTimestamp;
 
 import java.time.OffsetDateTime;
 
@@ -14,48 +15,36 @@ import java.time.OffsetDateTime;
 @Entity
 @Table(name = "usuario")
 public class Usuario {
+
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "usuarioid", nullable = false)
-    private Integer usuarioid;
+    private Long usuarioId;
 
-    @NotNull
     @ManyToOne(fetch = FetchType.LAZY, optional = false)
     @JoinColumn(name = "rolid", nullable = false)
-    private Rol rolid;
+    private Rol rol;
 
-    @Size(max = 100)
-    @NotNull
     @Column(name = "usuarionombre", nullable = false, length = 100)
-    private String usuarionombre;
+    private String usuarioNombre;
 
-    @Size(max = 150)
-    @NotNull
     @Column(name = "usuariocorreo", nullable = false, length = 150)
-    private String usuariocorreo;
+    private String usuarioCorreo;
 
-    @Size(max = 255)
-    @NotNull
-    @Column(name = "usuariocontrasena", nullable = false)
-    private String usuariocontrasena;
+    @Column(name = "usuariocontrasena", nullable = false, length = 255)
+    private String usuarioContrasena;
 
-    @Size(max = 20)
-    @NotNull
     @Column(name = "usuarioestado", nullable = false, length = 20)
-    private String usuarioestado;
+    private String usuarioEstado;
 
-    @Size(max = 500)
     @Column(name = "usuariofotoperfil", length = 500)
-    private String usuariofotoperfil;
+    private String usuarioFotoPerfil;
 
-    @Size(max = 100)
-    @NotNull
     @Column(name = "usuariopais", nullable = false, length = 100)
-    private String usuariopais;
+    private String usuarioPais;
 
-    @NotNull
-    @ColumnDefault("now()")
-    @Column(name = "usuariofecharegistro", nullable = false)
-    private OffsetDateTime usuariofecharegistro;
+    @CreationTimestamp
+    @Column(name = "usuariofecharegistro", nullable = false, updatable = false)
+    private OffsetDateTime usuarioFechaRegistro;
 
 }

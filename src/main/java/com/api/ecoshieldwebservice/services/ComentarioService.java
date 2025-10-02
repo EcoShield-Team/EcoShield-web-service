@@ -1,8 +1,8 @@
 package com.api.ecoshieldwebservice.services;
 
-import com.api.ecoshieldwebservice.dtos.ComentarioRequestDTO;
+import com.api.ecoshieldwebservice.dtos.UsuarioResponseForoDTO;
+import com.api.ecoshieldwebservice.dtos.request.ComentarioRequestDTO;
 import com.api.ecoshieldwebservice.dtos.ComentarioResponseDTO;
-import com.api.ecoshieldwebservice.dtos.UsuarioUpdateDTO;
 import com.api.ecoshieldwebservice.entities.Comentario;
 import com.api.ecoshieldwebservice.entities.Post;
 import com.api.ecoshieldwebservice.entities.Usuario;
@@ -32,13 +32,13 @@ public class ComentarioService implements IComentarioServices {
 
     private ComentarioResponseDTO EtoRespDTO(Comentario comentario) {
         ComentarioResponseDTO dto = modelMapper.map(comentario, ComentarioResponseDTO.class);
-        Usuario user = comentario.getUsuarioid();
+        Usuario user = comentario.getUsuario();
         if (user != null) {
-            UsuarioUpdateDTO uDto = new UsuarioUpdateDTO();
-            uDto.setUsuarioid(user.getUsuarioid());
-            uDto.setUsuarionombre(user.getUsuarionombre());
-            uDto.setUsuariofotoperfil(user.getUsuariofotoperfil());
-            uDto.setUsuariopais(user.getUsuariopais());
+            UsuarioResponseForoDTO uDto = new UsuarioResponseForoDTO();
+            uDto.setUsuarioId(user.getUsuarioId());
+            uDto.setUsuarioNombre(user.getUsuarioNombre());
+            uDto.setUsuarioFotoPerfil(user.getUsuarioFotoPerfil());
+            uDto.setUsuarioPais(user.getUsuarioPais());
             dto.setUsuario(uDto);
         }
         return dto;
@@ -46,34 +46,34 @@ public class ComentarioService implements IComentarioServices {
     @Override
     public ComentarioResponseDTO registrar(ComentarioRequestDTO dto) {
         Comentario comentario = new Comentario();
-        comentario.setComentariotexto(dto.getComentariotexto());
-        comentario.setComentariofecha(OffsetDateTime.now());
-        Post p = postRepository.findById(dto.getPostid())
+        comentario.setComentarioTexto(dto.getComentarioTexto());
+        comentario.setComentarioFecha(OffsetDateTime.now());
+        Post p = postRepository.findById(dto.getPostId())
                 .orElseThrow(() -> new EntityNotFoundException("Post no encontrado"));
-        comentario.setPostid(p);
-        Usuario u = usuarioRepository.findById(dto.getUsuarioid())
+        comentario.setPost(p);
+        Usuario u = usuarioRepository.findById(dto.getUsuarioId())
                 .orElseThrow(() -> new EntityNotFoundException("Usuario no encontrado"));
-        comentario.setUsuarioid(u);
+        comentario.setUsuario(u);
         comentario = comentarioRepository.save(comentario);
         return EtoRespDTO(comentario);
     }
 
     @Override
-    public ComentarioResponseDTO actualizar(Integer postId, Integer comentarioid, ComentarioRequestDTO dto) {
+    public ComentarioResponseDTO actualizar(Long postId, Long comentarioid, ComentarioRequestDTO dto) {
         Comentario comentario = comentarioRepository.findById(comentarioid)
                 .orElseThrow(() -> new EntityNotFoundException("Comentario no encontrado"));
 
-        if (!comentario.getPostid().getPostid().equals(postId)) {
+        if (!comentario.getPost().getPostId().equals(postId)) {
             throw new EntityNotFoundException("El comentario no pertenece al post indicado");
         }
 
-        comentario.setComentariotexto(dto.getComentariotexto());
+        comentario.setComentarioTexto(dto.getComentarioTexto());
         Comentario actualizado = comentarioRepository.save(comentario);
         return EtoRespDTO(actualizado);
     }
 
     @Override
-    public ComentarioResponseDTO findById(Integer comentarioid) {
+    public ComentarioResponseDTO findById(Long comentarioid) {
         Comentario comentario = comentarioRepository.findById(comentarioid)
                 .orElseThrow(() -> new EntityNotFoundException("Comentario no encontrado"));
         return EtoRespDTO(comentario);
@@ -86,27 +86,27 @@ public class ComentarioService implements IComentarioServices {
     }
 
     @Override
-    public void borrar(Integer postId, Integer comentarioId) {
+    public void borrar(Long postId, Long comentarioId) {
         Comentario c = comentarioRepository.findById(comentarioId)
                 .orElseThrow(() -> new EntityNotFoundException("Comentario no encontrado"));
-        if (!c.getPostid().getPostid().equals(postId)) {
+        if (!c.getPost().getPostId().equals(postId)) {
             throw new EntityNotFoundException("El comentario no pertenece al post indicado");
         }
         comentarioRepository.delete(c);
     }
 
     @Override
-    public List<ComentarioResponseDTO> findByPostId(Integer postId) {
-        return comentarioRepository.findByPostid_PostidOrderByComentariofechaAsc(postId)
+    public List<ComentarioResponseDTO> findByPostId(Long postId) {
+        return comentarioRepository.findByPost_PostIdOrderByComentarioFechaAsc(postId)
                 .stream().map(this::EtoRespDTO).toList();
     }
 
     @Override
-    public List<ComentarioResponseDTO> findByUsuarioid(Integer usuarioId) {
+    public List<ComentarioResponseDTO> findByUsuarioid(Long usuarioId) {
         Usuario usuario = usuarioRepository.findById(usuarioId)
                 .orElseThrow(() -> new EntityNotFoundException("Usuario no encontrado"));
 
-        return comentarioRepository.findByUsuarioid(usuario)
+        return comentarioRepository.findByUsuario(usuario)
                 .stream()
                 .map(this::EtoRespDTO)
                 .toList();

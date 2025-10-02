@@ -1,6 +1,6 @@
 package com.api.ecoshieldwebservice.controllers;
 
-import com.api.ecoshieldwebservice.dtos.FeedbackRequestDTO;
+import com.api.ecoshieldwebservice.dtos.request.FeedbackRequestDTO;
 import com.api.ecoshieldwebservice.dtos.FeedbackResponseDTO;
 import com.api.ecoshieldwebservice.entities.Usuario;
 import com.api.ecoshieldwebservice.services.FeedbackService;
@@ -33,13 +33,13 @@ public class FeedbackController {
     }
 
     @GetMapping("/{id}")
-    public ResponseEntity<FeedbackResponseDTO> findById(@PathVariable Integer id) {
+    public ResponseEntity<FeedbackResponseDTO> findById(@PathVariable Long id) {
         var founded = feedbackService.findById(id);
         return ResponseEntity.status(HttpStatus.OK).body(founded);
     }
 
     @DeleteMapping("/{id}")
-    public ResponseEntity<Void> borrar(@PathVariable Integer id) {
+    public ResponseEntity<Void> borrar(@PathVariable Long id) {
         feedbackService.borrar(id);
         return ResponseEntity.noContent().build();
     }

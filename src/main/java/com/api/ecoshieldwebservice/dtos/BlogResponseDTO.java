@@ -12,12 +12,14 @@ import java.time.OffsetDateTime;
 @AllArgsConstructor
 @NoArgsConstructor
 public class BlogResponseDTO {
-    private Integer blogid;
-    private Integer usuarioid;
-    private String blogtipo;
-    private String blogtitulo;
-    private String blogdescripcion;
-    private String blogimagen;
-    private String blogestado;
-    private OffsetDateTime blogfechapublicacion;
+
+    private Long blogId;
+    private Long usuarioId;
+    private String blogTipo;
+    private String blogTitulo;
+    private String blogDescripcion;
+    private String blogImagen;
+    private String blogEstado;
+    private OffsetDateTime blogFechaPublicacion;
+
 }

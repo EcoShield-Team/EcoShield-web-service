@@ -8,6 +8,7 @@ import jakarta.validation.constraints.Size;
 import lombok.Getter;
 import lombok.Setter;
 import org.hibernate.annotations.ColumnDefault;
+import org.hibernate.annotations.CreationTimestamp;
 
 import java.time.OffsetDateTime;
 
@@ -19,40 +20,33 @@ public class Blog {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "blogid", nullable = false)
-    private Integer blogid;
+    private Long blogId;
 
-    @NotNull
     @ManyToOne(fetch = FetchType.LAZY, optional = false)
     @JoinColumn(name = "usuarioid", nullable = false)
-    private Usuario usuarioid;
+    private Usuario usuario;  // mejor nombre que "usuarioid"
 
     @Enumerated(EnumType.STRING)
     @Column(name = "blogtipo", nullable = false, length = 20)
-    private BlogTipo blogtipo;
+    private BlogTipo blogTipo;
 
-    @Size(max = 200)
-    @NotNull
     @Column(name = "blogtitulo", nullable = false, length = 200)
-    private String blogtitulo;
+    private String blogTitulo;
 
-    @NotNull
-    @Column(name = "blogdescripcion", nullable = false, length = Integer.MAX_VALUE)
-    private String blogdescripcion;
+    @Lob
+    @Column(name = "blogdescripcion", nullable = false)
+    private String blogDescripcion;
 
-    @Size(max = 255)
-    @NotNull
-    @Column(name = "blogimagen", nullable = false)
-    private String blogimagen;
-
+    @Column(name = "blogimagen", length = 255)
+    private String blogImagen;
 
     @Enumerated(EnumType.STRING)
     @Column(name = "blogestado", nullable = false, length = 20)
-    private BlogEstado blogestado;
+    private BlogEstado blogEstado;
 
-
-    @NotNull
-    @ColumnDefault("now()")
-    @Column(name = "blogfechapublicacion", nullable = false)
-    private OffsetDateTime blogfechapublicacion;
+    // Timestamp automático de creación
+    @CreationTimestamp
+    @Column(name = "blogfechapublicacion", nullable = false, updatable = false)
+    private OffsetDateTime blogFechaPublicacion;
 
 }

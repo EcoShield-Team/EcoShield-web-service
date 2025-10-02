@@ -12,8 +12,8 @@ import java.time.OffsetDateTime;
 @AllArgsConstructor
 @NoArgsConstructor
 public class UsuarioProfileDTO {
-    private String usuarionombre;
-    private String usuariofotoperfil;
-    private String usuariopais;
-    private OffsetDateTime usuariofecharegistro;
+    private String usuarioNombre;
+    private String usuarioFotoPerfil;
+    private String usuarioPais;
+    private OffsetDateTime usuarioFechaRegistro;
 }

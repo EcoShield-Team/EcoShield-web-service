@@ -5,20 +5,15 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 
-import java.time.OffsetDateTime;
-
 @Getter
 @Setter
 @AllArgsConstructor
 @NoArgsConstructor
-public class UsuarioResponseDTO {
+public class UsuarioResponseForoDTO {
 
     private Long usuarioId;
     private String usuarioNombre;
-    private String usuarioCorreo;
-    private String usuarioPais;
     private String usuarioFotoPerfil;
-    private String usuarioEstado;
-    private OffsetDateTime usuarioFechaRegistro;
+    private String usuarioPais;
 
 }

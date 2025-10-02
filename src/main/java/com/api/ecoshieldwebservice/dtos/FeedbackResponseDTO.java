@@ -12,10 +12,10 @@ import java.time.OffsetDateTime;
 @AllArgsConstructor
 @NoArgsConstructor
 public class FeedbackResponseDTO {
-    private Integer id;
-    private Integer usuarioid;
-    private String feedbacktipo;
-    private String feedbackdescripcion;
-    private Integer feedbackrating;
-    private OffsetDateTime feedbackfecha;
+    private Long feedbackId;
+    private Long usuarioId;
+    private String feedbackTipo;
+    private String feedbackDescripcion;
+    private Integer feedbackRating;
+    private OffsetDateTime feedbackFecha;
 }

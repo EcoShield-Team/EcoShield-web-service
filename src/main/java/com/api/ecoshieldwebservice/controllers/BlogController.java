@@ -1,6 +1,6 @@
 package com.api.ecoshieldwebservice.controllers;
 
-import com.api.ecoshieldwebservice.dtos.BlogRequestDTO;
+import com.api.ecoshieldwebservice.dtos.request.BlogRequestDTO;
 import com.api.ecoshieldwebservice.dtos.BlogResponseDTO;
 import com.api.ecoshieldwebservice.services.BlogService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -17,7 +17,7 @@ public class BlogController {
     private BlogService blogService;
 
     @GetMapping("/blogs/{id}")
-    public ResponseEntity<BlogResponseDTO> findById(@PathVariable Integer id) {
+    public ResponseEntity<BlogResponseDTO> findById(@PathVariable Long id) {
         BlogResponseDTO blog = blogService.findById(id);
         if (blog != null) {
             return ResponseEntity.ok(blog);
@@ -37,7 +37,7 @@ public class BlogController {
     }
 
     @PutMapping("/blogs/{id}")
-    public ResponseEntity<BlogResponseDTO> actualizar(@PathVariable Integer id, @RequestBody BlogRequestDTO blogRequestDTO) {
+    public ResponseEntity<BlogResponseDTO> actualizar(@PathVariable Long id, @RequestBody BlogRequestDTO blogRequestDTO) {
         BlogResponseDTO blogActualizado = blogService.actualizar(id, blogRequestDTO);
         if (blogActualizado != null) {
             return ResponseEntity.ok(blogActualizado);
@@ -47,7 +47,7 @@ public class BlogController {
     }
 
     @DeleteMapping("/blogs/{id}")
-    public ResponseEntity<Void> borrar(@PathVariable Integer id) {
+    public ResponseEntity<Void> borrar(@PathVariable Long id) {
         blogService.borrar(id);
         return ResponseEntity.noContent().build();
     }

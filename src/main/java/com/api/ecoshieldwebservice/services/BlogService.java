@@ -1,6 +1,6 @@
 package com.api.ecoshieldwebservice.services;
 
-import com.api.ecoshieldwebservice.dtos.BlogRequestDTO;
+import com.api.ecoshieldwebservice.dtos.request.BlogRequestDTO;
 import com.api.ecoshieldwebservice.dtos.BlogResponseDTO;
 import com.api.ecoshieldwebservice.entities.Blog;
 import com.api.ecoshieldwebservice.entities.Usuario;
@@ -29,7 +29,7 @@ public class BlogService implements IBlogServices {
     private ModelMapper modelMapper;
 
     @Override
-    public BlogResponseDTO findById(Integer id) {
+    public BlogResponseDTO findById(Long id) {
         return blogRepository.findById(id)
                 .map(blog -> modelMapper.map(blog, BlogResponseDTO.class))
                 .orElse(null);
@@ -39,25 +39,25 @@ public class BlogService implements IBlogServices {
     public BlogResponseDTO registrar(BlogRequestDTO blogRequestDTO) {
         Blog blog = modelMapper.map(blogRequestDTO, Blog.class);
 
-        Usuario usuario = usuarioRepository.findById(blogRequestDTO.getUsuarioid())
+        Usuario usuario = usuarioRepository.findById(blogRequestDTO.getUsuarioId())
                 .orElseThrow(() -> new RuntimeException("Usuario no encontrado"));
-        blog.setUsuarioid(usuario);
-        blog.setBlogfechapublicacion(OffsetDateTime.now());
+        blog.setUsuario(usuario);
+        blog.setBlogFechaPublicacion(OffsetDateTime.now());
 
         Blog guardado = blogRepository.save(blog);
         return modelMapper.map(guardado, BlogResponseDTO.class);
     }
 
     @Override
-    public BlogResponseDTO actualizar(Integer id, BlogRequestDTO blogRequestDTO) {
+    public BlogResponseDTO actualizar(Long id, BlogRequestDTO blogRequestDTO) {
         if (blogRepository.existsById(id)) {
             Blog blog = modelMapper.map(blogRequestDTO, Blog.class);
-            blog.setBlogid(id);
+            blog.setBlogId(id);
 
-            Usuario usuario = usuarioRepository.findById(blogRequestDTO.getUsuarioid())
+            Usuario usuario = usuarioRepository.findById(blogRequestDTO.getUsuarioId())
                     .orElseThrow(() -> new RuntimeException("Usuario no encontrado"));
-            blog.setUsuarioid(usuario);
-            blog.setBlogfechapublicacion(OffsetDateTime.now());
+            blog.setUsuario(usuario);
+            blog.setBlogFechaPublicacion(OffsetDateTime.now());
 
             Blog actualizado = blogRepository.save(blog);
             return modelMapper.map(actualizado, BlogResponseDTO.class);
@@ -66,7 +66,7 @@ public class BlogService implements IBlogServices {
     }
 
     @Override
-    public void borrar(Integer id) {
+    public void borrar(Long id) {
         if (blogRepository.existsById(id)) {
             blogRepository.deleteById(id);
         }
@@ -82,7 +82,7 @@ public class BlogService implements IBlogServices {
 
     @Override
     public BlogResponseDTO findTipDelDia() {
-        Blog blog = blogRepository.findFirstByBlogtipoOrderByBlogfechapublicacionDesc(BlogTipo.TIP);
+        Blog blog = blogRepository.findFirstByBlogTipoOrderByBlogFechaPublicacionDesc(BlogTipo.TIP);
         return blog != null ? modelMapper.map(blog, BlogResponseDTO.class) : null;
     }
 

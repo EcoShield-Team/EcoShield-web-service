@@ -29,19 +29,19 @@ public class AuthService  implements IAuthServices {
     @Override
     public UsuarioRegisterDTO register(UsuarioRegisterDTO usuarioRegisterDTO) {
 
-        if (usuarioRepository.existsByUsuariocorreo(usuarioRegisterDTO.getUsuariocorreo())) {
+        if (usuarioRepository.existsByUsuarioCorreo(usuarioRegisterDTO.getUsuarioCorreo())) {
             throw new ResponseStatusException(HttpStatus.CONFLICT, "Correo ya registrado");
         }
 
-        Rol rolUser = rolRepository.findByRolnombre("USUARIO")
+        Rol rolUser = rolRepository.findByRolNombre("USUARIO")
                 .orElseThrow(() -> new RuntimeException("Rol USUARIO no encontrado"));
 
         Usuario usuario = modelMapper.map(usuarioRegisterDTO, Usuario.class);
 
-        usuario.setUsuarioestado(UsuarioEstado.ACTIVO.name());
-        usuario.setUsuariopais("PERU");
-        usuario.setUsuariofecharegistro(OffsetDateTime.now());
-        usuario.setRolid(rolUser);
+        usuario.setUsuarioEstado(UsuarioEstado.ACTIVO.name());
+        usuario.setUsuarioPais("PERU");
+        usuario.setUsuarioFechaRegistro(OffsetDateTime.now());
+        usuario.setRol(rolUser);
 
         usuarioRepository.save(usuario);
 
@@ -50,10 +50,10 @@ public class AuthService  implements IAuthServices {
 
     @Override
     public UsuarioLoginDTO login(UsuarioLoginDTO usuarioLoginDTO) {
-        Usuario usuario = usuarioRepository.findByUsuariocorreo(usuarioLoginDTO.getUsuariocorreo())
+        Usuario usuario = usuarioRepository.findByUsuarioCorreo(usuarioLoginDTO.getUsuarioCorreo())
                 .orElseThrow(() -> new ResponseStatusException(HttpStatus.UNAUTHORIZED, "Correo o contraseña incorrectos"));
 
-        if (!usuario.getUsuariocontrasena().equals(usuarioLoginDTO.getUsuariocontrasena())) {
+        if (!usuario.getUsuarioContrasena().equals(usuarioLoginDTO.getUsuarioContrasena())) {
             throw new ResponseStatusException(HttpStatus.UNAUTHORIZED, "Correo o contraseña incorrectos");
         }
 
@@ -62,23 +62,23 @@ public class AuthService  implements IAuthServices {
 
     @Override
     public PasswordResetRequestDTO resetPassword(PasswordResetRequestDTO passwordResetRequestDTO) {
-        Usuario usuario = usuarioRepository.findByUsuariocorreo(passwordResetRequestDTO.getUsuariocorreo())
+        Usuario usuario = usuarioRepository.findByUsuarioCorreo(passwordResetRequestDTO.getUsuarioCorreo())
                 .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "Usuario no encontrado"));
-        System.out.println("Enviando link de reseteo a: " + usuario.getUsuariocorreo());
+        System.out.println("Enviando link de reseteo a: " + usuario.getUsuarioCorreo());
 
         return passwordResetRequestDTO;
     }
 
     @Override
     public PasswordChangeDTO changePassword(PasswordChangeDTO passwordChangeDTO) {
-        Usuario usuario = usuarioRepository.findByUsuariocorreo(passwordChangeDTO.getUsuariocorreo())
+        Usuario usuario = usuarioRepository.findByUsuarioCorreo(passwordChangeDTO.getUsuarioCorreo())
                 .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "Usuario no encontrado"));
 
-        if (!usuario.getUsuariocontrasena().equals(passwordChangeDTO.getActualcontrasena())) {
+        if (!usuario.getUsuarioContrasena().equals(passwordChangeDTO.getActualContrasena())) {
             throw new ResponseStatusException(HttpStatus.UNAUTHORIZED, "Contraseña actual incorrecta");
         }
 
-        usuario.setUsuariocontrasena(passwordChangeDTO.getNuevacontrasena());
+        usuario.setUsuarioContrasena(passwordChangeDTO.getNuevaContrasena());
         usuarioRepository.save(usuario);
 
         return passwordChangeDTO;

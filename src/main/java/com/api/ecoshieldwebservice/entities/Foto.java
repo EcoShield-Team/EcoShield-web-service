@@ -6,6 +6,7 @@ import jakarta.validation.constraints.Size;
 import lombok.Getter;
 import lombok.Setter;
 import org.hibernate.annotations.ColumnDefault;
+import org.hibernate.annotations.CreationTimestamp;
 
 import java.time.OffsetDateTime;
 
@@ -14,37 +15,30 @@ import java.time.OffsetDateTime;
 @Entity
 @Table(name = "foto")
 public class Foto {
+
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "fotoid", nullable = false)
-    private Integer fotoid;
+    private Long fotoId;
 
-    @NotNull
     @ManyToOne(fetch = FetchType.LAZY, optional = false)
     @JoinColumn(name = "usuarioid", nullable = false)
-    private Usuario usuarioid;
+    private Usuario usuario;
 
-    @Size(max = 255)
-    @NotNull
-    @Column(name = "fotoruta", nullable = false)
-    private String fotoruta;
+    @Column(name = "fotoruta", nullable = false, length = 255)
+    private String fotoRuta;
 
-    @NotNull
-    @ColumnDefault("now()")
-    @Column(name = "fotofechasubida", nullable = false)
-    private OffsetDateTime fotofechasubida;
+    @CreationTimestamp
+    @Column(name = "fotofechasubida", nullable = false, updatable = false)
+    private OffsetDateTime fotoFechaSubida;
 
-    @Size(max = 20)
     @Column(name = "fotoformato", length = 20)
-    private String fotoformato;
+    private String fotoFormato;
 
-    @Size(max = 20)
-    @NotNull
     @Column(name = "fotoestado", nullable = false, length = 20)
-    private String fotoestado;
+    private String fotoEstado;
 
-    @Size(max = 255)
-    @Column(name = "fotoerrormensaje")
-    private String fotoerrormensaje;
+    @Column(name = "fotoerrormensaje", length = 255)
+    private String fotoErrorMensaje;
 
 }

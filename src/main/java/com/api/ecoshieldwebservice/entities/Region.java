@@ -12,30 +12,26 @@ import java.math.BigDecimal;
 @Entity
 @Table(name = "region")
 public class Region {
+
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "regionid", nullable = false)
-    private Integer regionid;
+    private Long regionId;
 
-    @NotNull
     @ManyToOne(fetch = FetchType.LAZY, optional = false)
     @JoinColumn(name = "deteccionid", nullable = false)
-    private Deteccion deteccionid;
+    private Deteccion deteccion;
 
-    @NotNull
-    @Column(name = "regionx", nullable = false, precision = 6, scale = 4)
-    private BigDecimal regionx;
+    @Column(name = "regionx", nullable = false, precision = 10, scale = 4)
+    private BigDecimal regionX;
 
-    @NotNull
-    @Column(name = "regiony", nullable = false, precision = 6, scale = 4)
-    private BigDecimal regiony;
+    @Column(name = "regiony", nullable = false, precision = 10, scale = 4)
+    private BigDecimal regionY;
 
-    @NotNull
-    @Column(name = "regionancho", nullable = false, precision = 6, scale = 4)
-    private BigDecimal regionancho;
+    @Column(name = "regionancho", nullable = false, precision = 10, scale = 4)
+    private BigDecimal regionAncho;
 
-    @NotNull
-    @Column(name = "regionalto", nullable = false, precision = 6, scale = 4)
-    private BigDecimal regionalto;
+    @Column(name = "regionalto", nullable = false, precision = 10, scale = 4)
+    private BigDecimal regionAlto;
 
 }

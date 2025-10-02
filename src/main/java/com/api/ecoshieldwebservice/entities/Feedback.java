@@ -6,6 +6,7 @@ import jakarta.validation.constraints.Size;
 import lombok.Getter;
 import lombok.Setter;
 import org.hibernate.annotations.ColumnDefault;
+import org.hibernate.annotations.CreationTimestamp;
 
 import java.time.OffsetDateTime;
 
@@ -14,30 +15,28 @@ import java.time.OffsetDateTime;
 @Entity
 @Table(name = "feedback")
 public class Feedback {
+
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "feedbackid", nullable = false)
-    private Integer feedbackid;
+    private Long feedbackId;
 
-    @NotNull
     @ManyToOne(fetch = FetchType.LAZY, optional = false)
     @JoinColumn(name = "usuarioid", nullable = false)
-    private Usuario usuarioid;
+    private Usuario usuario;
 
-    @Size(max = 50)
-    @NotNull
     @Column(name = "feedbacktipo", nullable = false, length = 50)
-    private String feedbacktipo;
+    private String feedbackTipo;
 
-    @NotNull
-    @Column(name = "feedbackdescripcion", nullable = false, length = Integer.MAX_VALUE)
-    private String feedbackdescripcion;
+    @Lob
+    @Column(name = "feedbackdescripcion", nullable = false)
+    private String feedbackDescripcion;
 
     @Column(name = "feedbackrating")
-    private Integer feedbackrating;
+    private Integer feedbackRating;
 
-    @NotNull
-    @ColumnDefault("now()")
-    @Column(name = "feedbackfecha", nullable = false)
-    private OffsetDateTime feedbackfecha;
+    @CreationTimestamp
+    @Column(name = "feedbackfecha", nullable = false, updatable = false)
+    private OffsetDateTime feedbackFecha;
+
 }

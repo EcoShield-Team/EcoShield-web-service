@@ -13,16 +13,18 @@ import lombok.Setter;
 @AllArgsConstructor
 @NoArgsConstructor
 public class PlagaDetailDTO {
-    private Integer plagaid;
-    private String plaganombre;
-    private String plaganombrecientifico;
-    private PlagaTipo plagatipo;
-    private String plagadescripcion;
-    private String plagasintomas;
-    private String plagatratamiento;
-    private String plagacausas;
-    private String plagaprevenciones;
-    private String plagafoto;
+
+    private Long plagaId;
+    private String plagaNombre;
+    private String plagaNombreCientifico;
+    private PlagaTipo plagaTipo;
+    private String plagaDescripcion;
+    private String plagaSintomas;
+    private String plagaTratamiento;
+    private String plagaCausas;
+    private String plagaPrevenciones;
+    private String plagaFoto;
     private Temporada temporada;
     private Severidad severidad;
+
 }

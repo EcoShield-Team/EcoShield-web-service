@@ -5,6 +5,7 @@ import jakarta.validation.constraints.NotNull;
 import lombok.Getter;
 import lombok.Setter;
 import org.hibernate.annotations.ColumnDefault;
+import org.hibernate.annotations.CreationTimestamp;
 
 import java.time.OffsetDateTime;
 
@@ -13,31 +14,30 @@ import java.time.OffsetDateTime;
 @Entity
 @Table(name = "deteccion")
 public class Deteccion {
+
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "deteccionid", nullable = false)
-    private Integer deteccionid;
+    private Long deteccionId;
 
-    @NotNull
     @ManyToOne(fetch = FetchType.LAZY, optional = false)
     @JoinColumn(name = "fotoid", nullable = false)
-    private Foto fotoid;
+    private Foto foto;
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "plagaid")
-    private Plaga plagaid;
+    private Plaga plaga;
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "enfermedadid")
-    private Enfermedad enfermedadid;
+    private Enfermedad enfermedad;
 
-    @NotNull
-    @Column(name = "deteccionresultado", nullable = false, length = Integer.MAX_VALUE)
-    private String deteccionresultado;
+    @Lob
+    @Column(name = "deteccionresultado", nullable = false)
+    private String deteccionResultado;
 
-    @NotNull
-    @ColumnDefault("now()")
-    @Column(name = "deteccionfecha", nullable = false)
-    private OffsetDateTime deteccionfecha;
+    @CreationTimestamp
+    @Column(name = "deteccionfecha", nullable = false, updatable = false)
+    private OffsetDateTime deteccionFecha;
 
 }

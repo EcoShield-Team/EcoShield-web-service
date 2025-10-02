@@ -1,7 +1,6 @@
 package com.api.ecoshieldwebservice.interfaces;
 
-import com.api.ecoshieldwebservice.dtos.FeedbackResponseDTO;
-import com.api.ecoshieldwebservice.dtos.PostRequestDTO;
+import com.api.ecoshieldwebservice.dtos.request.PostRequestDTO;
 import com.api.ecoshieldwebservice.dtos.PostResponseDTO;
 import com.api.ecoshieldwebservice.entities.Usuario;
 
@@ -9,10 +8,10 @@ import java.util.List;
 
 public interface IPostServices {
     public PostResponseDTO registrar(PostRequestDTO dto);
-    public PostResponseDTO actualizar(Integer id, PostRequestDTO dto);
+    public PostResponseDTO actualizar(Long id, PostRequestDTO dto);
     public List<PostResponseDTO> findByPosttitulo(String titulo);
     public List<PostResponseDTO> findAll();
-    public PostResponseDTO findById(Integer id);
+    public PostResponseDTO findById(Long id);
     public List<PostResponseDTO> findByUsuarioid(Usuario usuarioId);
-    public void borrar(Integer id);
+    public void borrar(Long id);
 }
