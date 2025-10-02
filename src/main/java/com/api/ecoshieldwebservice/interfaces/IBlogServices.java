@@ -9,7 +9,7 @@ public interface IBlogServices {
     BlogResponseDTO findById(Long id);
     BlogResponseDTO registrar(BlogRequestDTO blogRequestDTO);
     BlogResponseDTO actualizar(Long id, BlogRequestDTO blogRequestDTO);
-    void borrar(Long id);
+    boolean borrar(Long id);
     List<BlogResponseDTO> findAll();
     BlogResponseDTO findTipDelDia();
     List<BlogResponseDTO> findAllNews();

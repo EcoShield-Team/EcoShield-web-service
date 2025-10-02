@@ -3,6 +3,7 @@ package com.api.ecoshieldwebservice.controllers;
 import com.api.ecoshieldwebservice.dtos.request.BlogRequestDTO;
 import com.api.ecoshieldwebservice.dtos.BlogResponseDTO;
 import com.api.ecoshieldwebservice.services.BlogService;
+import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -27,7 +28,7 @@ public class BlogController {
     }
 
     @PostMapping("/blogs")
-    public ResponseEntity<BlogResponseDTO> registrar(@RequestBody BlogRequestDTO blogRequestDTO) {
+    public ResponseEntity<BlogResponseDTO> registrar(@Valid @RequestBody BlogRequestDTO blogRequestDTO) {
         BlogResponseDTO nuevoBlog = blogService.registrar(blogRequestDTO);
         if (nuevoBlog != null) {
             return ResponseEntity.status(HttpStatus.CREATED).body(nuevoBlog);
@@ -37,7 +38,7 @@ public class BlogController {
     }
 
     @PutMapping("/blogs/{id}")
-    public ResponseEntity<BlogResponseDTO> actualizar(@PathVariable Long id, @RequestBody BlogRequestDTO blogRequestDTO) {
+    public ResponseEntity<BlogResponseDTO> actualizar(@PathVariable Long id, @Valid @RequestBody BlogRequestDTO blogRequestDTO) {
         BlogResponseDTO blogActualizado = blogService.actualizar(id, blogRequestDTO);
         if (blogActualizado != null) {
             return ResponseEntity.ok(blogActualizado);
@@ -48,7 +49,10 @@ public class BlogController {
 
     @DeleteMapping("/blogs/{id}")
     public ResponseEntity<Void> borrar(@PathVariable Long id) {
-        blogService.borrar(id);
+        boolean borrado = blogService.borrar(id);
+        if (!borrado) {
+            return ResponseEntity.notFound().build();
+        }
         return ResponseEntity.noContent().build();
     }
 
@@ -70,9 +74,6 @@ public class BlogController {
     @GetMapping("/blogs/news")
     public ResponseEntity<List<BlogResponseDTO>> findAllNews() {
         List<BlogResponseDTO> news = blogService.findAllNews();
-        if (news.isEmpty()) {
-            return ResponseEntity.noContent().build();
-        }
         return ResponseEntity.ok(news);
     }
 }

@@ -5,6 +5,7 @@ import com.api.ecoshieldwebservice.dtos.PasswordResetRequestDTO;
 import com.api.ecoshieldwebservice.dtos.UsuarioLoginDTO;
 import com.api.ecoshieldwebservice.dtos.UsuarioRegisterDTO;
 import com.api.ecoshieldwebservice.services.AuthService;
+import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -21,26 +22,26 @@ public class AuthController {
     private AuthService authService;
 
     @PostMapping("/register")
-    public ResponseEntity<UsuarioRegisterDTO> register(@RequestBody UsuarioRegisterDTO usuarioRegisterDTO) {
+    public ResponseEntity<UsuarioRegisterDTO> register(@Valid @RequestBody UsuarioRegisterDTO usuarioRegisterDTO) {
         UsuarioRegisterDTO createdUser = authService.register(usuarioRegisterDTO);
         return ResponseEntity.status(HttpStatus.CREATED).body(createdUser);
     }
 
     @PostMapping("/login")
-    public ResponseEntity<UsuarioLoginDTO> login(@RequestBody UsuarioLoginDTO usuarioLoginDTO) {
+    public ResponseEntity<UsuarioLoginDTO> login(@Valid @RequestBody UsuarioLoginDTO usuarioLoginDTO) {
         UsuarioLoginDTO loggedUser = authService.login(usuarioLoginDTO);
-        return ResponseEntity.ok(loggedUser);
+        return ResponseEntity.status(HttpStatus.OK).body(loggedUser);
     }
 
     @PostMapping("/reset-password")
-    public ResponseEntity<PasswordResetRequestDTO> resetPassword(@RequestBody PasswordResetRequestDTO passwordResetRequestDTO) {
+    public ResponseEntity<PasswordResetRequestDTO> resetPassword(@Valid @RequestBody PasswordResetRequestDTO passwordResetRequestDTO) {
         PasswordResetRequestDTO response = authService.resetPassword(passwordResetRequestDTO);
-        return ResponseEntity.ok(response);
+        return ResponseEntity.status(HttpStatus.OK).body(response);
     }
 
     @PostMapping("/change-password")
-    public ResponseEntity<PasswordChangeDTO> changePassword(@RequestBody PasswordChangeDTO passwordChangeDTO) {
+    public ResponseEntity<PasswordChangeDTO> changePassword(@Valid @RequestBody PasswordChangeDTO passwordChangeDTO) {
         PasswordChangeDTO response = authService.changePassword(passwordChangeDTO);
-        return ResponseEntity.ok(response);
+        return ResponseEntity.status(HttpStatus.OK).body(response);
     }
 }
