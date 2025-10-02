@@ -13,10 +13,10 @@ import lombok.Setter;
 @AllArgsConstructor
 @NoArgsConstructor
 public class PlagaListDTO {
-    private Integer plagaid;
-    private String plaganombre;
-    private PlagaTipo plagatipo;
-    private String plagafoto;
+    private Long plagaId;
+    private String plagaNombre;
+    private PlagaTipo plagaTipo;
+    private String plagaFoto;
     private Temporada temporada;
     private Severidad severidad;
 }

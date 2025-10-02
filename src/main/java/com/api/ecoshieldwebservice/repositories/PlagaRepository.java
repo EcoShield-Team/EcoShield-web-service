@@ -9,18 +9,18 @@ import org.springframework.data.jpa.repository.Query;
 
 import java.util.List;
 
-public interface PlagaRepository extends JpaRepository<Plaga, Integer> {
+public interface PlagaRepository extends JpaRepository<Plaga, Long> {
 
-    List<Plaga> findByPlaganombreContainingIgnoreCase(String nombre);
+    List<Plaga> findByPlagaNombreContainingIgnoreCase(String nombre);
 
-    List<Plaga> findByPlagatipo(PlagaTipo tipo);
+    List<Plaga> findByPlagaTipo(PlagaTipo tipo);
 
     List<Plaga> findByTemporada(Temporada temporada);
 
     List<Plaga> findBySeveridad(Severidad severidad);
 
-    @Query("SELECT p FROM Plaga p WHERE p.plagatipo = :tipo AND p.id <> :id")
-    List<Plaga> findRelacionadas(PlagaTipo tipo, Integer id);
+    @Query("SELECT p FROM Plaga p WHERE p.plagaTipo = :tipo AND p.plagaId <> :id")
+    List<Plaga> findRelacionadas(PlagaTipo tipo, Long id);
 
     @Query ("""
            SELECT p FROM Plaga p
@@ -33,6 +33,6 @@ public interface PlagaRepository extends JpaRepository<Plaga, Integer> {
              END
            """)
     List<Plaga> findAllOrderBySeveridad();
-    List<Plaga> findAllByOrderByPlaganombreAsc();
-    List<Plaga> findAllByOrderByPlaganombreDesc();
+    List<Plaga> findAllByOrderByPlagaNombreAsc();
+    List<Plaga> findAllByOrderByPlagaNombreDesc();
 }

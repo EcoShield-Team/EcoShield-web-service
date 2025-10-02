@@ -9,10 +9,12 @@ import java.time.OffsetDateTime;
 @Getter
 @Setter
 public class PostResponseDTO {
-    private Integer postid;
-    private UsuarioUpdateDTO usuario;
-    private String posttitulo;
-    private String postdescripcion;
-    private String postfoto;
-    private OffsetDateTime postfecha;
+
+    private Long postId;
+    private UsuarioResponseForoDTO usuario;
+    private String postTitulo;
+    private String postDescripcion;
+    private String postFoto;
+    private OffsetDateTime postFecha;
+
 }

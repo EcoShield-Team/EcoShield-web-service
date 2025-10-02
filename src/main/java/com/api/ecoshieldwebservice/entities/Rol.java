@@ -12,18 +12,16 @@ import org.hibernate.annotations.ColumnDefault;
 @Entity
 @Table(name = "rol")
 public class Rol {
+
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "rolid", nullable = false)
-    private Integer rolid;
+    private Long rolId;
 
-    @Size(max = 50)
-    @NotNull
     @Column(name = "rolnombre", nullable = false, length = 50)
-    private String rolnombre;
+    private String rolNombre;
 
-    @Size(max = 100)
     @Column(name = "roldescripcion", length = 100)
-    private String roldescripcion;
+    private String rolDescripcion;
 
 }

@@ -9,18 +9,18 @@ import org.springframework.data.jpa.repository.Query;
 
 import java.util.List;
 
-public interface EnfermedadRepository extends JpaRepository<Enfermedad, Integer> {
+public interface EnfermedadRepository extends JpaRepository<Enfermedad, Long> {
 
-    List<Enfermedad> findByEnfermedadnombreContainingIgnoreCase(String nombre);
+    List<Enfermedad> findByEnfermedadNombreContainingIgnoreCase(String nombre);
 
-    List<Enfermedad> findByEnfermedadtipo(EnfermedadTipo tipo);
+    List<Enfermedad> findByEnfermedadTipo(EnfermedadTipo tipo);
 
     List<Enfermedad> findByTemporada(Temporada temporada);
 
     List<Enfermedad> findBySeveridad(Severidad severidad);
 
-    @Query("SELECT e FROM Enfermedad e WHERE e.enfermedadtipo = :tipo AND e.enfermedadid <> :id")
-    List<Enfermedad> findRelacionadas(EnfermedadTipo tipo, Integer id);
+    @Query("SELECT e FROM Enfermedad e WHERE e.enfermedadTipo = :tipo AND e.enfermedadId <> :id")
+    List<Enfermedad> findRelacionadas(EnfermedadTipo tipo, Long id);
 
     @Query ("""
            SELECT e FROM Enfermedad e
@@ -33,6 +33,6 @@ public interface EnfermedadRepository extends JpaRepository<Enfermedad, Integer>
              END
            """)
     List<Enfermedad> findAllOrderBySeveridad();
-    List<Enfermedad> findAllByOrderByEnfermedadnombreAsc();
-    List<Enfermedad> findAllByOrderByEnfermedadnombreDesc();
+    List<Enfermedad> findAllByOrderByEnfermedadNombreAsc();
+    List<Enfermedad> findAllByOrderByEnfermedadNombreDesc();
 }

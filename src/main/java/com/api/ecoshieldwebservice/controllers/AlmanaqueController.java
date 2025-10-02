@@ -82,12 +82,12 @@ public class AlmanaqueController {
     }
 
     @GetMapping("/enfermedades/{id}")
-    public ResponseEntity<EnfermedadDetailDTO> verDetalleEnfermedad(@PathVariable Integer id) {
+    public ResponseEntity<EnfermedadDetailDTO> verDetalleEnfermedad(@PathVariable Long id) {
         return ResponseEntity.ok(enfermedadService.verDetalle(id));
     }
 
     @GetMapping("/enfermedades/{id}/relacionadas")
-    public ResponseEntity<List<EnfermedadListDTO>> enfermedadesRelacionadas(@PathVariable Integer id) {
+    public ResponseEntity<List<EnfermedadListDTO>> enfermedadesRelacionadas(@PathVariable Long id) {
         return ResponseEntity.ok(enfermedadService.enfermedadesRelacionadas(id));
     }
 
@@ -139,12 +139,12 @@ public class AlmanaqueController {
     }
 
     @GetMapping("/plagas/{id}")
-    public ResponseEntity<PlagaDetailDTO> verDetallePlaga(@PathVariable Integer id) {
+    public ResponseEntity<PlagaDetailDTO> verDetallePlaga(@PathVariable Long id) {
         return ResponseEntity.ok(plagaService.verDetalle(id));
     }
 
     @GetMapping("/plagas/{id}/relacionadas")
-    public ResponseEntity<List<PlagaListDTO>> plagasRelacionadas(@PathVariable Integer id) {
+    public ResponseEntity<List<PlagaListDTO>> plagasRelacionadas(@PathVariable Long id) {
         return ResponseEntity.ok(plagaService.plagasRelacionadas(id));
     }
 }

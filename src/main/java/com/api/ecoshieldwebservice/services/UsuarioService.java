@@ -21,16 +21,16 @@ public class UsuarioService implements IUsuarioServices {
 
 
     @Override
-    public UsuarioProfileDTO findById(Integer id) {
+    public UsuarioProfileDTO findById(Long id) {
         Usuario usuario = usuarioRepository.findById(id).orElse(null);
         return modelMapper.map(usuario, UsuarioProfileDTO.class);
     }
 
     @Override
-    public UsuarioProfileDTO updateProfile(Integer id, UsuarioProfileDTO usuarioProfileDTO) {
+    public UsuarioProfileDTO updateProfile(Long id, UsuarioProfileDTO usuarioProfileDTO) {
         Usuario usuario = usuarioRepository.findById(id).orElse(null);
-        usuario.setUsuariofotoperfil(usuarioProfileDTO.getUsuariofotoperfil());
-        usuario.setUsuariopais(usuarioProfileDTO.getUsuariopais());
+        usuario.setUsuarioFotoPerfil(usuarioProfileDTO.getUsuarioFotoPerfil());
+        usuario.setUsuarioPais(usuarioProfileDTO.getUsuarioPais());
 
         Usuario usuarioUpdated = usuarioRepository.save(usuario);
         return modelMapper.map(usuarioUpdated, UsuarioProfileDTO.class);

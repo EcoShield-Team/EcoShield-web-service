@@ -14,48 +14,51 @@ import lombok.Setter;
 @Entity
 @Table(name = "plaga")
 public class Plaga {
+
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "plagaid", nullable = false)
-    private Integer plagaid;
+    private Long plagaId;
 
-    @Size(max = 150)
-    @NotNull
     @Column(name = "plaganombre", nullable = false, length = 150)
-    private String plaganombre;
+    private String plagaNombre;
 
-    @Size(max = 200)
     @Column(name = "plaganombrecientifico", length = 200)
-    private String plaganombrecientifico;
+    private String plagaNombreCientifico;
 
     @Enumerated(EnumType.STRING)
-    @Column(name = "plagatipo", length = 20)
-    private PlagaTipo plagatipo;
+    @Column(name = "plagatipo", length = 30)
+    private PlagaTipo plagaTipo;
 
-    @Column(name = "plagadescripcion", length = Integer.MAX_VALUE)
-    private String plagadescripcion;
+    @Lob
+    @Column(name = "plagadescripcion")
+    private String plagaDescripcion;
 
-    @Column(name = "plagasintomas", length = Integer.MAX_VALUE)
-    private String plagasintomas;
+    @Lob
+    @Column(name = "plagasintomas")
+    private String plagaSintomas;
 
-    @Column(name = "plagatratamiento", length = Integer.MAX_VALUE)
-    private String plagatratamiento;
+    @Lob
+    @Column(name = "plagatratamiento")
+    private String plagaTratamiento;
 
-    @Column(name = "plagacausas", length = Integer.MAX_VALUE)
-    private String plagacausas;
+    @Lob
+    @Column(name = "plagacausas")
+    private String plagaCausas;
 
-    @Column(name = "plagaprevenciones", length = Integer.MAX_VALUE)
-    private String plagaprevenciones;
+    @Lob
+    @Column(name = "plagaprevenciones")
+    private String plagaPrevenciones;
 
-    @Size(max = 255)
-    @Column(name = "plagafoto")
-    private String plagafoto;
+    @Column(name = "plagafoto", length = 255)
+    private String plagaFoto;
 
     @Enumerated(EnumType.STRING)
     @Column(name = "temporada", nullable = false, length = 20)
     private Temporada temporada;
 
     @Enumerated(EnumType.STRING)
-    @Column(name = "severidad", nullable = false, length = 10)
+    @Column(name = "severidad", nullable = false, length = 15)
     private Severidad severidad;
+
 }

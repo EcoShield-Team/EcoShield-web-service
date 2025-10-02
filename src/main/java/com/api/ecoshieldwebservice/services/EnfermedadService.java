@@ -38,7 +38,7 @@ public class EnfermedadService implements IEnfermedadService {
 
     @Override
     public List<EnfermedadListDTO> buscarPorNombre(String nombre) {
-        return enfermedadRepository.findByEnfermedadnombreContainingIgnoreCase(nombre)
+        return enfermedadRepository.findByEnfermedadNombreContainingIgnoreCase(nombre)
                 .stream()
                 .map(e -> modelMapper.map(e, EnfermedadListDTO.class))
                 .collect(Collectors.toList());
@@ -46,7 +46,7 @@ public class EnfermedadService implements IEnfermedadService {
 
     @Override
     public List<EnfermedadListDTO> filtrarPorTipo(EnfermedadTipo tipo) {
-        return enfermedadRepository.findByEnfermedadtipo(tipo)
+        return enfermedadRepository.findByEnfermedadTipo(tipo)
                 .stream()
                 .map(e -> modelMapper.map(e, EnfermedadListDTO.class))
                 .collect(Collectors.toList());
@@ -69,18 +69,18 @@ public class EnfermedadService implements IEnfermedadService {
     }
 
     @Override
-    public EnfermedadDetailDTO verDetalle(Integer id) {
+    public EnfermedadDetailDTO verDetalle(Long id) {
         Enfermedad enfermedad = enfermedadRepository.findById(id)
                 .orElseThrow(() -> new RuntimeException("Enfermedad no encontrada"));
         return modelMapper.map(enfermedad, EnfermedadDetailDTO.class);
     }
 
     @Override
-    public List<EnfermedadListDTO> enfermedadesRelacionadas(Integer id) {
+    public List<EnfermedadListDTO> enfermedadesRelacionadas(Long id) {
         Enfermedad enfermedad = enfermedadRepository.findById(id)
                 .orElseThrow(() -> new ResponseStatusException(
                         HttpStatus.NOT_FOUND, "Enfermedades relacionadas no encontradas"));
-        return enfermedadRepository.findRelacionadas(enfermedad.getEnfermedadtipo(), id)
+        return enfermedadRepository.findRelacionadas(enfermedad.getEnfermedadTipo(), id)
                 .stream()
                 .limit(4)
                 .map(e -> modelMapper.map(e, EnfermedadListDTO.class))
@@ -97,7 +97,7 @@ public class EnfermedadService implements IEnfermedadService {
 
     @Override
     public List<EnfermedadListDTO> ordenarAscendente() {
-        return enfermedadRepository.findAllByOrderByEnfermedadnombreAsc()
+        return enfermedadRepository.findAllByOrderByEnfermedadNombreAsc()
                 .stream()
                 .map(e -> modelMapper.map(e, EnfermedadListDTO.class))
                 .collect(Collectors.toList());
@@ -105,7 +105,7 @@ public class EnfermedadService implements IEnfermedadService {
 
     @Override
     public List<EnfermedadListDTO> ordenarDescendente() {
-        return enfermedadRepository.findAllByOrderByEnfermedadnombreDesc()
+        return enfermedadRepository.findAllByOrderByEnfermedadNombreDesc()
                 .stream()
                 .map(e -> modelMapper.map(e, EnfermedadListDTO.class))
                 .collect(Collectors.toList());

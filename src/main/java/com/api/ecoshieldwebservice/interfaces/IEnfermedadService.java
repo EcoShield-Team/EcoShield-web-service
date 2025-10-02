@@ -14,8 +14,8 @@ public interface IEnfermedadService {
     List<EnfermedadListDTO> filtrarPorTipo(EnfermedadTipo tipo);
     List<EnfermedadListDTO> filtrarPorTemporada(Temporada temporada);
     List<EnfermedadListDTO> filtrarPorSeveridad(Severidad severidad);
-    EnfermedadDetailDTO verDetalle(Integer id);
-    List<EnfermedadListDTO> enfermedadesRelacionadas(Integer id);
+    EnfermedadDetailDTO verDetalle(Long id);
+    List<EnfermedadListDTO> enfermedadesRelacionadas(Long id);
     List<EnfermedadListDTO> listarSeveridad();
     List<EnfermedadListDTO> ordenarAscendente();
     List<EnfermedadListDTO> ordenarDescendente();

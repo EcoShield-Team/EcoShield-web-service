@@ -1,6 +1,6 @@
 package com.api.ecoshieldwebservice.services;
 
-import com.api.ecoshieldwebservice.dtos.FeedbackRequestDTO;
+import com.api.ecoshieldwebservice.dtos.request.FeedbackRequestDTO;
 import com.api.ecoshieldwebservice.dtos.FeedbackResponseDTO;
 import com.api.ecoshieldwebservice.entities.Feedback;
 import com.api.ecoshieldwebservice.entities.Usuario;
@@ -25,21 +25,21 @@ public class FeedbackService implements IFeedbackServices {
     private UsuarioRepository usuarioRepository;
     @Autowired
     private ModelMapper modelMapper;
-    // ---------- Mapeos ----------
+
     private FeedbackResponseDTO EtoRespDTO(Feedback e) {
         FeedbackResponseDTO dto = modelMapper.map(e, FeedbackResponseDTO.class);
-        dto.setUsuarioid(e.getUsuarioid().getUsuarioid());
-        dto.setId(e.getFeedbackid());
-        dto.setFeedbacktipo(e.getFeedbacktipo());
-        dto.setFeedbackdescripcion(e.getFeedbackdescripcion());
-        dto.setFeedbackrating(e.getFeedbackrating());
-        dto.setFeedbackfecha(e.getFeedbackfecha());
+        dto.setUsuarioId(e.getUsuario().getUsuarioId());
+        dto.setFeedbackId(e.getFeedbackId());
+        dto.setFeedbackTipo(e.getFeedbackTipo());
+        dto.setFeedbackDescripcion(e.getFeedbackDescripcion());
+        dto.setFeedbackRating(e.getFeedbackRating());
+        dto.setFeedbackFecha(e.getFeedbackFecha());
         return dto;
     }
 
-    // ---------- Métodos ----------
+
     @Override
-    public FeedbackResponseDTO findById(Integer id) {
+    public FeedbackResponseDTO findById(Long id) {
         Feedback feedback = feedbackRepository.findById(id)
                 .orElseThrow(() -> new EntityNotFoundException("Feedback no encontrado"));
         return EtoRespDTO(feedback);
@@ -48,17 +48,17 @@ public class FeedbackService implements IFeedbackServices {
     @Override
     public FeedbackResponseDTO registrar(FeedbackRequestDTO dto) {
         Feedback feedback = modelMapper.map(dto, Feedback.class);
-        Usuario u = usuarioRepository.findById(dto.getUsuarioid())
+        Usuario u = usuarioRepository.findById(dto.getUsuarioId())
                 .orElseThrow(() -> new EntityNotFoundException("Usuario no encontrado"));
-        feedback.setUsuarioid(u);
-        feedback.setFeedbackfecha(OffsetDateTime.now());
+        feedback.setUsuario(u);
+        feedback.setFeedbackFecha(OffsetDateTime.now());
         feedback = feedbackRepository.save(feedback);
         return EtoRespDTO(feedback);
     }
 
 
     @Override
-    public void borrar(Integer id) {
+    public void borrar(Long id) {
         if (!feedbackRepository.existsById(id))
             throw new EntityNotFoundException("Feedback no encontrado");
         feedbackRepository.deleteById(id);
@@ -72,13 +72,13 @@ public class FeedbackService implements IFeedbackServices {
 
     @Override
     public List<FeedbackResponseDTO> findByUsuarioid(Usuario usuarioId) {
-        return feedbackRepository.findByUsuarioid(usuarioId).stream()
+        return feedbackRepository.findByUsuario(usuarioId).stream()
                 .map(this::EtoRespDTO).toList();
     }
 
     @Override
     public List<FeedbackResponseDTO> findByFeedbacktipo(String tipo) {
-        return feedbackRepository.findByFeedbacktipo(tipo).stream()
+        return feedbackRepository.findByFeedbackTipo(tipo).stream()
                 .map(this::EtoRespDTO).toList();
     }
 }

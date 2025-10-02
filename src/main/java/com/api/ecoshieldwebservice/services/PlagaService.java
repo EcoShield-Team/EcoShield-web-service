@@ -36,7 +36,7 @@ public class PlagaService implements IPlagaService {
 
     @Override
     public List<PlagaListDTO> buscarPorNombre(String nombre) {
-        return plagaRepository.findByPlaganombreContainingIgnoreCase(nombre)
+        return plagaRepository.findByPlagaNombreContainingIgnoreCase(nombre)
                 .stream()
                 .map(p -> modelMapper.map(p, PlagaListDTO.class))
                 .collect(Collectors.toList());
@@ -44,7 +44,7 @@ public class PlagaService implements IPlagaService {
 
     @Override
     public List<PlagaListDTO> filtrarPorTipo(PlagaTipo tipo) {
-        return plagaRepository.findByPlagatipo(tipo)
+        return plagaRepository.findByPlagaTipo(tipo)
                 .stream()
                 .map(p -> modelMapper.map(p, PlagaListDTO.class))
                 .collect(Collectors.toList());
@@ -67,17 +67,17 @@ public class PlagaService implements IPlagaService {
     }
 
     @Override
-    public PlagaDetailDTO verDetalle(Integer id) {
+    public PlagaDetailDTO verDetalle(Long id) {
         Plaga plaga = plagaRepository.findById(id)
                 .orElseThrow(() -> new RuntimeException("Plaga no encontrada"));
         return modelMapper.map(plaga, PlagaDetailDTO.class);
     }
 
     @Override
-    public List<PlagaListDTO> plagasRelacionadas(Integer id) {
+    public List<PlagaListDTO> plagasRelacionadas(Long id) {
         Plaga plaga = plagaRepository.findById(id)
                 .orElseThrow(() -> new RuntimeException("Plaga no encontrada"));
-        return plagaRepository.findRelacionadas(plaga.getPlagatipo(), id)
+        return plagaRepository.findRelacionadas(plaga.getPlagaTipo(), id)
                 .stream()
                 .limit(4)
                 .map(p -> modelMapper.map(p, PlagaListDTO.class))
@@ -94,7 +94,7 @@ public class PlagaService implements IPlagaService {
 
     @Override
     public List<PlagaListDTO> ordenarAscendente() {
-        return plagaRepository.findAllByOrderByPlaganombreAsc()
+        return plagaRepository.findAllByOrderByPlagaNombreAsc()
                 .stream()
                 .map(e -> modelMapper.map(e, PlagaListDTO.class))
                 .collect(Collectors.toList());
@@ -102,7 +102,7 @@ public class PlagaService implements IPlagaService {
 
     @Override
     public List<PlagaListDTO> ordenarDescendente() {
-        return plagaRepository.findAllByOrderByPlaganombreDesc()
+        return plagaRepository.findAllByOrderByPlagaNombreDesc()
                 .stream()
                 .map(e -> modelMapper.map(e, PlagaListDTO.class))
                 .collect(Collectors.toList());
