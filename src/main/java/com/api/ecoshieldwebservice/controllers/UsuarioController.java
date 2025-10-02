@@ -2,6 +2,7 @@ package com.api.ecoshieldwebservice.controllers;
 
 import com.api.ecoshieldwebservice.dtos.*;
 import com.api.ecoshieldwebservice.services.UsuarioService;
+import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
@@ -24,7 +25,7 @@ public class UsuarioController {
     }
 
     @PutMapping("/users/{id}")
-    public UsuarioProfileDTO updateProfile(@PathVariable Long id, @RequestBody UsuarioProfileDTO usuarioProfileDTO) {
+    public UsuarioProfileDTO updateProfile(@PathVariable Long id, @Valid @RequestBody UsuarioProfileDTO usuarioProfileDTO) {
         return usuarioService.updateProfile(id, usuarioProfileDTO);
     }
 

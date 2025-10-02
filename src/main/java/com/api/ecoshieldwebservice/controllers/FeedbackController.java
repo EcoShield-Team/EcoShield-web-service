@@ -4,6 +4,7 @@ import com.api.ecoshieldwebservice.dtos.request.FeedbackRequestDTO;
 import com.api.ecoshieldwebservice.dtos.FeedbackResponseDTO;
 import com.api.ecoshieldwebservice.entities.Usuario;
 import com.api.ecoshieldwebservice.services.FeedbackService;
+import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -18,14 +19,17 @@ public class FeedbackController {
     private FeedbackService feedbackService;
 
     @PostMapping
-    public ResponseEntity<FeedbackResponseDTO> registrar(@RequestBody FeedbackRequestDTO dto) {
-        var created = feedbackService.registrar(dto);
-        return ResponseEntity.status(HttpStatus.CREATED).body(created);
+    public ResponseEntity<FeedbackResponseDTO> registrar(@Valid @RequestBody FeedbackRequestDTO dto) {
+        FeedbackResponseDTO created = feedbackService.registrar(dto);
+        if (created != null) {
+            return ResponseEntity.status(HttpStatus.CREATED).body(created);
+        }
+        return ResponseEntity.badRequest().build();
     }
 
     @GetMapping
     public ResponseEntity<List<FeedbackResponseDTO>> findAll() {
-        var lista =  feedbackService.findAll();
+        List<FeedbackResponseDTO> lista =  feedbackService.findAll();
         if (lista.isEmpty()) {
             return ResponseEntity.noContent().build();
         }
@@ -34,8 +38,8 @@ public class FeedbackController {
 
     @GetMapping("/{id}")
     public ResponseEntity<FeedbackResponseDTO> findById(@PathVariable Long id) {
-        var founded = feedbackService.findById(id);
-        return ResponseEntity.status(HttpStatus.OK).body(founded);
+        FeedbackResponseDTO founded = feedbackService.findById(id);
+        return ResponseEntity.ok(founded);
     }
 
     @DeleteMapping("/{id}")
@@ -46,7 +50,7 @@ public class FeedbackController {
 
     @GetMapping("/usuario/{usuarioId}")
     public ResponseEntity<List<FeedbackResponseDTO>> findByUsuarioid(@PathVariable Usuario usuarioId) {
-        var lista = feedbackService.findByUsuarioid(usuarioId);
+        List<FeedbackResponseDTO> lista = feedbackService.findByUsuarioid(usuarioId);
         if (lista.isEmpty()) {
             return ResponseEntity.noContent().build();
         }
@@ -55,7 +59,7 @@ public class FeedbackController {
 
     @GetMapping("/tipo/{tipo}")
     public ResponseEntity<List<FeedbackResponseDTO>> findByTipo(@PathVariable String tipo) {
-        var lista = feedbackService.findByFeedbacktipo(tipo);
+        List<FeedbackResponseDTO> lista = feedbackService.findByFeedbacktipo(tipo);
         if  (lista.isEmpty()) {
             return ResponseEntity.noContent().build();
         }

@@ -66,10 +66,12 @@ public class BlogService implements IBlogServices {
     }
 
     @Override
-    public void borrar(Long id) {
+    public boolean borrar(Long id) {
         if (blogRepository.existsById(id)) {
             blogRepository.deleteById(id);
+            return true;
         }
+        return false;
     }
 
     @Override
