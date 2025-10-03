@@ -5,39 +5,67 @@ import com.api.ecoshieldwebservice.dtos.PostResponseDTO;
 import com.api.ecoshieldwebservice.entities.Usuario;
 import com.api.ecoshieldwebservice.services.PostService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpHeaders;
+import org.springframework.http.MediaType;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
 
+import java.io.IOException;
 import java.util.List;
 
 @RestController
+@RequestMapping("/posts")
 public class PostController {
+
     @Autowired
     private PostService postService;
 
-    @PostMapping("/posts")
-    public PostResponseDTO crearPost(@RequestBody PostRequestDTO dto) {
-        return postService.registrar(dto);
+    @PostMapping(consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
+    public PostResponseDTO crearPost(
+            @RequestParam Long usuarioId,
+            @RequestParam String postTitulo,
+            @RequestParam String postDescripcion,
+            @RequestPart(value = "file", required = false) MultipartFile file
+    ) throws IOException {
+        PostRequestDTO dto = new PostRequestDTO();
+        dto.setUsuarioId(usuarioId);
+        dto.setPostTitulo(postTitulo);
+        dto.setPostDescripcion(postDescripcion);
+        return postService.registrar(dto, file);
     }
 
-    @PutMapping("/posts/{id}")
-    public PostResponseDTO actualizarPost(@PathVariable Long id, @RequestBody PostRequestDTO dto) {
-        return postService.actualizar(id, dto);
+    @PutMapping(value = "/{id}", consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
+    public PostResponseDTO actualizarPost(
+            @PathVariable Long id,
+            @RequestParam Long usuarioId,
+            @RequestParam String postTitulo,
+            @RequestParam String postDescripcion,
+            @RequestPart(value = "file", required = false) MultipartFile file
+    ) throws IOException {
+        PostRequestDTO dto = new PostRequestDTO();
+        dto.setUsuarioId(usuarioId);
+        dto.setPostTitulo(postTitulo);
+        dto.setPostDescripcion(postDescripcion);
+        return postService.actualizar(id, dto, file);
     }
 
-    @GetMapping("/posts")
-    public List<PostResponseDTO> findAllPosts(@RequestParam(required = false) String titulo) {
-        if (titulo != null && !titulo.isBlank()) {
-            return postService.findByPosttitulo(titulo);
-        }
+    @GetMapping("/buscar")
+    public List<PostResponseDTO> buscarPorTitulo(@RequestParam String titulo) {
+        return postService.findByPosttitulo(titulo);
+    }
+
+    @GetMapping
+    public List<PostResponseDTO> listarPosts() {
         return postService.findAll();
     }
 
-    @GetMapping("/posts/{id}")
-    public PostResponseDTO findById(@PathVariable Long id) {
+    @GetMapping("/{id}")
+    public PostResponseDTO obtenerPost(@PathVariable Long id) {
         return postService.findById(id);
     }
 
-    @DeleteMapping("/posts/{id}")
+    @DeleteMapping("/{id}")
     public void borrarPost(@PathVariable Long id) {
         postService.borrar(id);
     }
@@ -47,4 +75,17 @@ public class PostController {
         return postService.findByUsuarioid(usuarioId);
     }
 
+    @GetMapping("/{id}/imagen")
+    public ResponseEntity<byte[]> verImagen(@PathVariable Long id) {
+        byte[] imagen = postService.obtenerImagenPorId(id);
+
+        if (imagen == null) {
+            return ResponseEntity.notFound().build();
+        }
+
+        return ResponseEntity.ok()
+                .header(HttpHeaders.CONTENT_DISPOSITION, "inline; filename=\"imagen.jpg\"")
+                .contentType(MediaType.IMAGE_JPEG)
+                .body(imagen);
+    }
 }
