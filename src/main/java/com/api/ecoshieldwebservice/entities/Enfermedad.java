@@ -29,24 +29,19 @@ public class Enfermedad {
     @Column(name = "enfermedadtipo", nullable = false, length = 30)
     private EnfermedadTipo enfermedadTipo;
 
-    @Lob
-    @Column(name = "enfermedaddescripcion")
+    @Column(name = "enfermedaddescripcion", columnDefinition = "text")
     private String enfermedadDescripcion;
 
-    @Lob
-    @Column(name = "enfermedadsintomas")
+    @Column(name = "enfermedadsintomas", columnDefinition = "text")
     private String enfermedadSintomas;
 
-    @Lob
-    @Column(name = "enfermedadtratamiento")
+    @Column(name = "enfermedadtratamiento", columnDefinition = "text")
     private String enfermedadTratamiento;
 
-    @Lob
-    @Column(name = "enfermedadcausas")
+    @Column(name = "enfermedadcausas", columnDefinition = "text")
     private String enfermedadCausas;
 
-    @Lob
-    @Column(name = "enfermedadprevenciones")
+    @Column(name = "enfermedadprevenciones", columnDefinition = "text")
     private String enfermedadPrevenciones;
 
     @Column(name = "enfermedadfoto", nullable = false, length = 255)

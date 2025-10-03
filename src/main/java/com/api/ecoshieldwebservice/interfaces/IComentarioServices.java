@@ -10,7 +10,7 @@ public interface IComentarioServices {
     public ComentarioResponseDTO actualizar(Long postId, Long comentarioid, ComentarioRequestDTO dto);
     public ComentarioResponseDTO findById(Long comentarioid);
     public List<ComentarioResponseDTO> findAll();
-    public boolean borrar(Long postId, Long comentarioId);
+    public void borrar(Long postId, Long comentarioId);
     public List<ComentarioResponseDTO> findByPostId(Long postId);
     public List<ComentarioResponseDTO> findByUsuarioid(Long usuarioId);
 }

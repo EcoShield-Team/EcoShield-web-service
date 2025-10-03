@@ -32,8 +32,7 @@ public class Deteccion {
     @JoinColumn(name = "enfermedadid")
     private Enfermedad enfermedad;
 
-    @Lob
-    @Column(name = "deteccionresultado", nullable = false)
+    @Column(name = "deteccionresultado", nullable = false, columnDefinition = "text")
     private String deteccionResultado;
 
     @CreationTimestamp

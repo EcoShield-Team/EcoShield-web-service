@@ -22,13 +22,13 @@ public class Comentario {
 
     @ManyToOne(fetch = FetchType.LAZY, optional = false)
     @JoinColumn(name = "postid", nullable = false)
-    private Post post;  // mejor que "postid"
+    private Post post;
 
     @ManyToOne(fetch = FetchType.LAZY, optional = false)
     @JoinColumn(name = "usuarioid", nullable = false)
-    private Usuario usuario;  // mejor que "usuarioid"
+    private Usuario usuario;
 
-    @Column(name = "comentariotexto", nullable = false, length = 3000)
+    @Column(name = "comentariotexto", nullable = false, columnDefinition = "text")
     private String comentarioTexto;
 
     @CreationTimestamp
