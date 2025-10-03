@@ -86,7 +86,7 @@ public class ComentarioService implements IComentarioServices {
     }
 
     @Override
-    public boolean borrar(Long postId, Long comentarioId) {
+    public void borrar(Long postId, Long comentarioId) {
         Comentario c = comentarioRepository.findById(comentarioId)
                 .orElseThrow(() -> new EntityNotFoundException("Comentario no encontrado"));
         if (!c.getPost().getPostId().equals(postId)) {

@@ -30,24 +30,19 @@ public class Plaga {
     @Column(name = "plagatipo", length = 30)
     private PlagaTipo plagaTipo;
 
-    @Lob
-    @Column(name = "plagadescripcion")
+    @Column(name = "plagadescripcion", columnDefinition = "text")
     private String plagaDescripcion;
 
-    @Lob
-    @Column(name = "plagasintomas")
+    @Column(name = "plagasintomas", columnDefinition = "text")
     private String plagaSintomas;
 
-    @Lob
-    @Column(name = "plagatratamiento")
+    @Column(name = "plagatratamiento", columnDefinition = "text")
     private String plagaTratamiento;
 
-    @Lob
-    @Column(name = "plagacausas")
+    @Column(name = "plagacausas", columnDefinition = "text")
     private String plagaCausas;
 
-    @Lob
-    @Column(name = "plagaprevenciones")
+    @Column(name = "plagaprevenciones", columnDefinition = "text")
     private String plagaPrevenciones;
 
     @Column(name = "plagafoto", length = 255)

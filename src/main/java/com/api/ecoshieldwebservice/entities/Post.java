@@ -28,8 +28,7 @@ public class Post {
     @Column(name = "posttitulo", nullable = false, length = 200)
     private String postTitulo;
 
-    @Lob
-    @Column(name = "postdescripcion", nullable = false)
+    @Column(name = "postdescripcion", nullable = false, columnDefinition = "text")
     private String postDescripcion;
 
     @Column(name = "postfoto", length = 255)

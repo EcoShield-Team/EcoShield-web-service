@@ -28,8 +28,7 @@ public class Feedback {
     @Column(name = "feedbacktipo", nullable = false, length = 50)
     private String feedbackTipo;
 
-    @Lob
-    @Column(name = "feedbackdescripcion", nullable = false)
+    @Column(name = "feedbackdescripcion", nullable = false, columnDefinition = "text")
     private String feedbackDescripcion;
 
     @Column(name = "feedbackrating")

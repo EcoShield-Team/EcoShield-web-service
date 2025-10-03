@@ -33,8 +33,7 @@ public class Blog {
     @Column(name = "blogtitulo", nullable = false, length = 200)
     private String blogTitulo;
 
-    @Lob
-    @Column(name = "blogdescripcion", nullable = false)
+    @Column(name = "blogdescripcion", nullable = false, columnDefinition = "text")
     private String blogDescripcion;
 
     @Column(name = "blogimagen", length = 255)
