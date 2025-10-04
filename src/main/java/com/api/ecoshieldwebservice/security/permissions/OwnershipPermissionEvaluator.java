@@ -5,9 +5,11 @@ import com.api.ecoshieldwebservice.interfaces.IPostService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.access.PermissionEvaluator;
 import org.springframework.security.core.Authentication;
+import org.springframework.stereotype.Component;
 
 import java.io.Serializable;
 
+@Component
 public class OwnershipPermissionEvaluator implements PermissionEvaluator {
 
     @Autowired
