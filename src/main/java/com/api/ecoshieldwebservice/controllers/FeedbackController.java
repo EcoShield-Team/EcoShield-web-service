@@ -1,9 +1,8 @@
 package com.api.ecoshieldwebservice.controllers;
 
 import com.api.ecoshieldwebservice.dtos.request.FeedbackRequestDTO;
-import com.api.ecoshieldwebservice.dtos.FeedbackResponseDTO;
-import com.api.ecoshieldwebservice.entities.Usuario;
-import com.api.ecoshieldwebservice.services.FeedbackService;
+import com.api.ecoshieldwebservice.dtos.response.FeedbackResponseDTO;
+import com.api.ecoshieldwebservice.interfaces.IFeedbackServices;
 import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -15,31 +14,25 @@ import java.util.List;
 @RestController
 @RequestMapping("/feedback")
 public class FeedbackController {
+
     @Autowired
-    private FeedbackService feedbackService;
+    private IFeedbackServices feedbackService;
+
 
     @PostMapping
     public ResponseEntity<FeedbackResponseDTO> registrar(@Valid @RequestBody FeedbackRequestDTO dto) {
         FeedbackResponseDTO created = feedbackService.registrar(dto);
-        if (created != null) {
-            return ResponseEntity.status(HttpStatus.CREATED).body(created);
-        }
-        return ResponseEntity.badRequest().build();
+        return ResponseEntity.status(HttpStatus.CREATED).body(created);
     }
 
     @GetMapping
     public ResponseEntity<List<FeedbackResponseDTO>> findAll() {
-        List<FeedbackResponseDTO> lista =  feedbackService.findAll();
-        if (lista.isEmpty()) {
-            return ResponseEntity.noContent().build();
-        }
-        return ResponseEntity.ok(lista);
+        return ResponseEntity.ok(feedbackService.findAll());
     }
 
     @GetMapping("/{id}")
     public ResponseEntity<FeedbackResponseDTO> findById(@PathVariable Long id) {
-        FeedbackResponseDTO founded = feedbackService.findById(id);
-        return ResponseEntity.ok(founded);
+        return ResponseEntity.ok(feedbackService.findById(id));
     }
 
     @DeleteMapping("/{id}")
@@ -49,20 +42,12 @@ public class FeedbackController {
     }
 
     @GetMapping("/usuario/{usuarioId}")
-    public ResponseEntity<List<FeedbackResponseDTO>> findByUsuarioid(@PathVariable Usuario usuarioId) {
-        List<FeedbackResponseDTO> lista = feedbackService.findByUsuarioid(usuarioId);
-        if (lista.isEmpty()) {
-            return ResponseEntity.noContent().build();
-        }
-        return ResponseEntity.ok(lista);
+    public ResponseEntity<List<FeedbackResponseDTO>> findByUsuarioid(@PathVariable Long usuarioId) {
+        return ResponseEntity.ok(feedbackService.findByUsuarioid(usuarioId));
     }
 
     @GetMapping("/tipo/{tipo}")
     public ResponseEntity<List<FeedbackResponseDTO>> findByTipo(@PathVariable String tipo) {
-        List<FeedbackResponseDTO> lista = feedbackService.findByFeedbacktipo(tipo);
-        if  (lista.isEmpty()) {
-            return ResponseEntity.noContent().build();
-        }
-        return ResponseEntity.ok(lista);
+        return ResponseEntity.ok(feedbackService.findByFeedbacktipo(tipo));
     }
 }

@@ -1,11 +1,13 @@
 package com.api.ecoshieldwebservice.interfaces;
 
-import com.api.ecoshieldwebservice.dtos.*;
+import com.api.ecoshieldwebservice.dtos.user.UsuarioProfileDTO;
+import com.api.ecoshieldwebservice.dtos.user.UsuarioResponseDTO;
+import com.api.ecoshieldwebservice.dtos.request.UsuarioUpdateDTO;
 
 import java.util.List;
 
 public interface IUsuarioServices {
-    public UsuarioProfileDTO findById(Long id);
-    public UsuarioProfileDTO updateProfile(Long id, UsuarioProfileDTO usuarioProfileDTO);
-    public List<UsuarioResponseDTO> findAll();
+    UsuarioProfileDTO findById(Long id);
+    UsuarioProfileDTO updateProfile(Long id, UsuarioUpdateDTO dto);
+    List<UsuarioResponseDTO> findAll();
 }

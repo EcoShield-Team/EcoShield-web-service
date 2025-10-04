@@ -1,23 +1,21 @@
 package com.api.ecoshieldwebservice.controllers;
 
-import com.api.ecoshieldwebservice.dtos.EnfermedadDetailDTO;
-import com.api.ecoshieldwebservice.dtos.EnfermedadListDTO;
-import com.api.ecoshieldwebservice.dtos.PlagaDetailDTO;
-import com.api.ecoshieldwebservice.dtos.PlagaListDTO;
+import com.api.ecoshieldwebservice.dtos.almanaque.EnfermedadDetailDTO;
+import com.api.ecoshieldwebservice.dtos.almanaque.EnfermedadListDTO;
+import com.api.ecoshieldwebservice.dtos.almanaque.PlagaDetailDTO;
+import com.api.ecoshieldwebservice.dtos.almanaque.PlagaListDTO;
 import com.api.ecoshieldwebservice.enums.EnfermedadTipo;
 import com.api.ecoshieldwebservice.enums.PlagaTipo;
 import com.api.ecoshieldwebservice.enums.Severidad;
 import com.api.ecoshieldwebservice.enums.Temporada;
 import com.api.ecoshieldwebservice.interfaces.IEnfermedadService;
 import com.api.ecoshieldwebservice.interfaces.IPlagaService;
-import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
-import java.util.Map;
 
 @RestController
 @RequestMapping("/almanaque")
@@ -29,7 +27,6 @@ public class AlmanaqueController {
 
     @Autowired
     private IPlagaService plagaService;
-
 
 
     @GetMapping("/enfermedades")
@@ -53,32 +50,22 @@ public class AlmanaqueController {
     }
 
     @GetMapping("/enfermedades/buscar")
-    public ResponseEntity<?> buscarEnfermedades(@Valid @RequestParam String nombre) {
-        if (nombre == null || nombre.isBlank()) {
-            return ResponseEntity.badRequest().body(Map.of("mensaje", "El parámetro 'nombre' es obligatorio"));
-        }
-
-        List<EnfermedadListDTO> lista = enfermedadService.buscarPorNombre(nombre.trim());
-
-        if (lista.isEmpty()) {
-            return ResponseEntity.ok(Map.of("mensaje", "No se encontraron resultados"));
-        }
-
-        return ResponseEntity.ok(lista);
+    public ResponseEntity<List<EnfermedadListDTO>> buscarEnfermedades(@RequestParam String nombre) {
+        return ResponseEntity.ok(enfermedadService.buscarPorNombre(nombre));
     }
 
     @GetMapping("/enfermedades/filtro/tipo")
-    public ResponseEntity<List<EnfermedadListDTO>> filtrarEnfermedadesPorTipo(@Valid @RequestParam EnfermedadTipo tipo) {
+    public ResponseEntity<List<EnfermedadListDTO>> filtrarEnfermedadesPorTipo(@RequestParam EnfermedadTipo tipo) {
         return ResponseEntity.ok(enfermedadService.filtrarPorTipo(tipo));
     }
 
     @GetMapping("/enfermedades/filtro/temporada")
-    public ResponseEntity<List<EnfermedadListDTO>> filtrarEnfermedadesPorTemporada(@Valid @RequestParam Temporada temporada) {
+    public ResponseEntity<List<EnfermedadListDTO>> filtrarEnfermedadesPorTemporada(@RequestParam Temporada temporada) {
         return ResponseEntity.ok(enfermedadService.filtrarPorTemporada(temporada));
     }
 
     @GetMapping("/enfermedades/filtro/severidad")
-    public ResponseEntity<List<EnfermedadListDTO>> filtrarEnfermedadesPorSeveridad(@Valid @RequestParam Severidad severidad) {
+    public ResponseEntity<List<EnfermedadListDTO>> filtrarEnfermedadesPorSeveridad(@RequestParam Severidad severidad) {
         return ResponseEntity.ok(enfermedadService.filtrarPorSeveridad(severidad));
     }
 
@@ -91,6 +78,8 @@ public class AlmanaqueController {
     public ResponseEntity<List<EnfermedadListDTO>> enfermedadesRelacionadas(@PathVariable Long id) {
         return ResponseEntity.ok(enfermedadService.enfermedadesRelacionadas(id));
     }
+
+    // ---------------- PLAGAS ----------------
 
     @GetMapping("/plagas")
     public ResponseEntity<List<PlagaListDTO>> listarPlagas() {
@@ -113,29 +102,22 @@ public class AlmanaqueController {
     }
 
     @GetMapping("/plagas/buscar")
-    public ResponseEntity<List<PlagaListDTO>> buscarPlagas(@Valid @RequestParam String nombre) {
-        if (nombre == null || nombre.isBlank()) {
-            return ResponseEntity.badRequest().build();
-        }
-        List<PlagaListDTO> lista = plagaService.buscarPorNombre(nombre.trim());
-        if (lista.isEmpty()) {
-            return ResponseEntity.noContent().build();
-        }
-        return ResponseEntity.ok(lista);
+    public ResponseEntity<List<PlagaListDTO>> buscarPlagas(@RequestParam String nombre) {
+        return ResponseEntity.ok(plagaService.buscarPorNombre(nombre));
     }
 
     @GetMapping("/plagas/filtro/tipo")
-    public ResponseEntity<List<PlagaListDTO>> filtrarPlagasPorTipo(@Valid @RequestParam PlagaTipo tipo) {
+    public ResponseEntity<List<PlagaListDTO>> filtrarPlagasPorTipo(@RequestParam PlagaTipo tipo) {
         return ResponseEntity.ok(plagaService.filtrarPorTipo(tipo));
     }
 
     @GetMapping("/plagas/filtro/temporada")
-    public ResponseEntity<List<PlagaListDTO>> filtrarPlagasPorTemporada(@Valid @RequestParam Temporada temporada) {
+    public ResponseEntity<List<PlagaListDTO>> filtrarPlagasPorTemporada(@RequestParam Temporada temporada) {
         return ResponseEntity.ok(plagaService.filtrarPorTemporada(temporada));
     }
 
     @GetMapping("/plagas/filtro/severidad")
-    public ResponseEntity<List<PlagaListDTO>> filtrarPlagasPorSeveridad(@Valid @RequestParam Severidad severidad) {
+    public ResponseEntity<List<PlagaListDTO>> filtrarPlagasPorSeveridad(@RequestParam Severidad severidad) {
         return ResponseEntity.ok(plagaService.filtrarPorSeveridad(severidad));
     }
 

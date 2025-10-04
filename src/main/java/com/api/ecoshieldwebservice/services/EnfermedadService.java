@@ -1,7 +1,7 @@
 package com.api.ecoshieldwebservice.services;
 
-import com.api.ecoshieldwebservice.dtos.EnfermedadDetailDTO;
-import com.api.ecoshieldwebservice.dtos.EnfermedadListDTO;
+import com.api.ecoshieldwebservice.dtos.almanaque.EnfermedadDetailDTO;
+import com.api.ecoshieldwebservice.dtos.almanaque.EnfermedadListDTO;
 import com.api.ecoshieldwebservice.entities.Enfermedad;
 import com.api.ecoshieldwebservice.enums.EnfermedadTipo;
 import com.api.ecoshieldwebservice.enums.Severidad;
@@ -28,42 +28,61 @@ public class EnfermedadService implements IEnfermedadService {
     @Autowired
     private ModelMapper modelMapper;
 
+
     @Override
     public List<EnfermedadListDTO> listarTodas() {
-        return enfermedadRepository.findAll()
-                .stream()
+        List<Enfermedad> lista = enfermedadRepository.findAll();
+        if (lista.isEmpty()) {
+            throw new ResponseStatusException(HttpStatus.NO_CONTENT, "No hay enfermedades disponibles");
+        }
+        return lista.stream()
                 .map(e -> modelMapper.map(e, EnfermedadListDTO.class))
                 .collect(Collectors.toList());
     }
 
     @Override
     public List<EnfermedadListDTO> buscarPorNombre(String nombre) {
-        return enfermedadRepository.findByEnfermedadNombreContainingIgnoreCase(nombre)
-                .stream()
+        if (nombre == null || nombre.isBlank()) {
+            throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "El parámetro 'nombre' es obligatorio");
+        }
+        List<Enfermedad> lista = enfermedadRepository.findByEnfermedadNombreContainingIgnoreCase(nombre.trim());
+        if (lista.isEmpty()) {
+            throw new ResponseStatusException(HttpStatus.NO_CONTENT, "No se encontraron resultados");
+        }
+        return lista.stream()
                 .map(e -> modelMapper.map(e, EnfermedadListDTO.class))
                 .collect(Collectors.toList());
     }
 
     @Override
     public List<EnfermedadListDTO> filtrarPorTipo(EnfermedadTipo tipo) {
-        return enfermedadRepository.findByEnfermedadTipo(tipo)
-                .stream()
+        List<Enfermedad> lista = enfermedadRepository.findByEnfermedadTipo(tipo);
+        if (lista.isEmpty()) {
+            throw new ResponseStatusException(HttpStatus.NO_CONTENT, "No se encontraron enfermedades de ese tipo");
+        }
+        return lista.stream()
                 .map(e -> modelMapper.map(e, EnfermedadListDTO.class))
                 .collect(Collectors.toList());
     }
 
     @Override
     public List<EnfermedadListDTO> filtrarPorTemporada(Temporada temporada) {
-        return enfermedadRepository.findByTemporada(temporada)
-                .stream()
+        List<Enfermedad> lista = enfermedadRepository.findByTemporada(temporada);
+        if (lista.isEmpty()) {
+            throw new ResponseStatusException(HttpStatus.NO_CONTENT, "No se encontraron enfermedades en esa temporada");
+        }
+        return lista.stream()
                 .map(e -> modelMapper.map(e, EnfermedadListDTO.class))
                 .collect(Collectors.toList());
     }
 
     @Override
     public List<EnfermedadListDTO> filtrarPorSeveridad(Severidad severidad) {
-        return enfermedadRepository.findBySeveridad(severidad)
-                .stream()
+        List<Enfermedad> lista = enfermedadRepository.findBySeveridad(severidad);
+        if (lista.isEmpty()) {
+            throw new ResponseStatusException(HttpStatus.NO_CONTENT, "No se encontraron enfermedades con esa severidad");
+        }
+        return lista.stream()
                 .map(e -> modelMapper.map(e, EnfermedadListDTO.class))
                 .collect(Collectors.toList());
     }
@@ -71,17 +90,19 @@ public class EnfermedadService implements IEnfermedadService {
     @Override
     public EnfermedadDetailDTO verDetalle(Long id) {
         Enfermedad enfermedad = enfermedadRepository.findById(id)
-                .orElseThrow(() -> new RuntimeException("Enfermedad no encontrada"));
+                .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "Enfermedad no encontrada"));
         return modelMapper.map(enfermedad, EnfermedadDetailDTO.class);
     }
 
     @Override
     public List<EnfermedadListDTO> enfermedadesRelacionadas(Long id) {
         Enfermedad enfermedad = enfermedadRepository.findById(id)
-                .orElseThrow(() -> new ResponseStatusException(
-                        HttpStatus.NOT_FOUND, "Enfermedades relacionadas no encontradas"));
-        return enfermedadRepository.findRelacionadas(enfermedad.getEnfermedadTipo(), id)
-                .stream()
+                .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "Enfermedad no encontrada"));
+        List<Enfermedad> relacionadas = enfermedadRepository.findRelacionadas(enfermedad.getEnfermedadTipo(), id);
+        if (relacionadas.isEmpty()) {
+            throw new ResponseStatusException(HttpStatus.NO_CONTENT, "No hay enfermedades relacionadas");
+        }
+        return relacionadas.stream()
                 .limit(4)
                 .map(e -> modelMapper.map(e, EnfermedadListDTO.class))
                 .collect(Collectors.toList());
@@ -89,8 +110,11 @@ public class EnfermedadService implements IEnfermedadService {
 
     @Override
     public List<EnfermedadListDTO> listarSeveridad() {
-        return enfermedadRepository.findAllOrderBySeveridad()
-                .stream()
+        List<Enfermedad> lista = enfermedadRepository.findAllOrderBySeveridad();
+        if (lista.isEmpty()) {
+            throw new ResponseStatusException(HttpStatus.NO_CONTENT, "No hay enfermedades disponibles");
+        }
+        return lista.stream()
                 .map(e -> modelMapper.map(e, EnfermedadListDTO.class))
                 .collect(Collectors.toList());
     }

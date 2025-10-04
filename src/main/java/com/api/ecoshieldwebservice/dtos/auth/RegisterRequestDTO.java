@@ -1,4 +1,4 @@
-package com.api.ecoshieldwebservice.dtos;
+package com.api.ecoshieldwebservice.dtos.auth;
 
 import jakarta.validation.constraints.Email;
 import jakarta.validation.constraints.NotBlank;
@@ -12,7 +12,7 @@ import lombok.Setter;
 @Setter
 @AllArgsConstructor
 @NoArgsConstructor
-public class UsuarioRegisterDTO {
+public class RegisterRequestDTO {
 
     @NotBlank(message = "El nombre es obligatorio")
     @Size(max = 100, message = "El nombre no debe superar los 100 caracteres")
@@ -27,4 +27,7 @@ public class UsuarioRegisterDTO {
     @Size(min = 8, max = 64, message = "La contraseña debe tener entre 8 y 64 caracteres")
     private String usuarioContrasena;
 
+    @NotBlank(message = "El país es obligatorio")
+    @Size(max = 100, message = "El país no debe superar los 100 caracteres")
+    private String usuarioPais;
 }

@@ -1,8 +1,9 @@
 package com.api.ecoshieldwebservice.controllers;
 
 import com.api.ecoshieldwebservice.dtos.request.PostRequestDTO;
-import com.api.ecoshieldwebservice.dtos.PostResponseDTO;
+import com.api.ecoshieldwebservice.dtos.response.PostResponseDTO;
 import com.api.ecoshieldwebservice.entities.Usuario;
+import com.api.ecoshieldwebservice.interfaces.IPostServices;
 import com.api.ecoshieldwebservice.services.PostService;
 import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -14,50 +15,34 @@ import java.util.List;
 
 @RestController
 public class PostController {
+
     @Autowired
-    private PostService postService;
+    private IPostServices postService;
+
 
     @PostMapping("/posts")
     public ResponseEntity<PostResponseDTO> crearPost(@Valid @RequestBody PostRequestDTO dto) {
         PostResponseDTO created = postService.registrar(dto);
-        if (created != null) {
-            return ResponseEntity.status(HttpStatus.CREATED).body(created);
-        }
-        return ResponseEntity.badRequest().build();
+        return ResponseEntity.status(HttpStatus.CREATED).body(created);
     }
 
     @PutMapping("/posts/{id}")
-    public ResponseEntity<PostResponseDTO> actualizarPost(@PathVariable Long id, @Valid @RequestBody PostRequestDTO dto) {
-        PostResponseDTO updated = postService.actualizar(id, dto);
-        if (updated != null) {
-            return ResponseEntity.status(HttpStatus.OK).body(updated);
-        }
-        return ResponseEntity.notFound().build();
+    public ResponseEntity<PostResponseDTO> actualizarPost(@PathVariable Long id,
+                                                          @Valid @RequestBody PostRequestDTO dto) {
+        return ResponseEntity.ok(postService.actualizar(id, dto));
     }
 
     @GetMapping("/posts")
-    public ResponseEntity<List<PostResponseDTO>> findAllPosts(@Valid @RequestParam(required = false) String titulo) {
+    public ResponseEntity<List<PostResponseDTO>> findAllPosts(@RequestParam(required = false) String titulo) {
         if (titulo != null && !titulo.isBlank()) {
-            List<PostResponseDTO> lista = postService.findByPosttitulo(titulo);
-            if (lista == null || lista.isEmpty()) {
-                return ResponseEntity.noContent().build();
-            }
-            return ResponseEntity.status(HttpStatus.OK).body(lista);
+            return ResponseEntity.ok(postService.findByPosttitulo(titulo));
         }
-        List<PostResponseDTO> lista = postService.findAll();
-        if (lista.isEmpty()) {
-            return ResponseEntity.noContent().build();
-        }
-        return ResponseEntity.status(HttpStatus.OK).body(lista);
+        return ResponseEntity.ok(postService.findAll());
     }
 
     @GetMapping("/posts/{id}")
     public ResponseEntity<PostResponseDTO> findById(@PathVariable Long id) {
-        PostResponseDTO post = postService.findById(id);
-        if (post == null) {
-            return ResponseEntity.noContent().build();
-        }
-        return ResponseEntity.status(HttpStatus.OK).body(post);
+        return ResponseEntity.ok(postService.findById(id));
     }
 
     @DeleteMapping("/posts/{id}")
@@ -67,12 +52,7 @@ public class PostController {
     }
 
     @GetMapping("/usuarios/{usuarioId}/posts")
-    public ResponseEntity<List<PostResponseDTO>> listarPorUsuario(@PathVariable Usuario usuarioId) {
-        List<PostResponseDTO> post = postService.findByUsuarioid(usuarioId);
-        if (post == null) {
-            return ResponseEntity.noContent().build();
-        }
-        return ResponseEntity.ok(post);
+    public ResponseEntity<List<PostResponseDTO>> listarPorUsuario(@PathVariable Long usuarioId) {
+        return ResponseEntity.ok(postService.findByUsuarioid(usuarioId));
     }
-
 }

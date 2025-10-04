@@ -1,13 +1,10 @@
 package com.api.ecoshieldwebservice.interfaces;
 
-import com.api.ecoshieldwebservice.dtos.PasswordChangeDTO;
-import com.api.ecoshieldwebservice.dtos.PasswordResetRequestDTO;
-import com.api.ecoshieldwebservice.dtos.UsuarioLoginDTO;
-import com.api.ecoshieldwebservice.dtos.UsuarioRegisterDTO;
+import com.api.ecoshieldwebservice.dtos.auth.*;
 
 public interface IAuthServices {
-    public UsuarioRegisterDTO register(UsuarioRegisterDTO usuarioRegisterDTO);
-    public UsuarioLoginDTO login(UsuarioLoginDTO usuarioLoginDTO);
-    public PasswordResetRequestDTO resetPassword(PasswordResetRequestDTO passwordResetRequestDTO);
-    public PasswordChangeDTO changePassword(PasswordChangeDTO passwordChangeDTO);
+    AuthResponseDTO login(LoginRequestDTO request);
+    AuthResponseDTO register(RegisterRequestDTO dto);
+    AuthResponseDTO changeMyPassword(String correo, ChangePasswordRequestDTO dto);
+    void adminResetPassword(Long usuarioId, ResetPasswordRequestDTO dto);
 }

@@ -1,4 +1,4 @@
-package com.api.ecoshieldwebservice.dtos;
+package com.api.ecoshieldwebservice.dtos.user;
 
 import lombok.AllArgsConstructor;
 import lombok.Getter;

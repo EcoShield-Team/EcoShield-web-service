@@ -1,7 +1,7 @@
 package com.api.ecoshieldwebservice.interfaces;
 
-import com.api.ecoshieldwebservice.dtos.EnfermedadDetailDTO;
-import com.api.ecoshieldwebservice.dtos.EnfermedadListDTO;
+import com.api.ecoshieldwebservice.dtos.almanaque.EnfermedadDetailDTO;
+import com.api.ecoshieldwebservice.dtos.almanaque.EnfermedadListDTO;
 import com.api.ecoshieldwebservice.enums.EnfermedadTipo;
 import com.api.ecoshieldwebservice.enums.Severidad;
 import com.api.ecoshieldwebservice.enums.Temporada;

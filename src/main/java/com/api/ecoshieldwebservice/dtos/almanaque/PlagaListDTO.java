@@ -1,6 +1,6 @@
-package com.api.ecoshieldwebservice.dtos;
+package com.api.ecoshieldwebservice.dtos.almanaque;
 
-import com.api.ecoshieldwebservice.enums.EnfermedadTipo;
+import com.api.ecoshieldwebservice.enums.PlagaTipo;
 import com.api.ecoshieldwebservice.enums.Severidad;
 import com.api.ecoshieldwebservice.enums.Temporada;
 import lombok.AllArgsConstructor;
@@ -12,11 +12,11 @@ import lombok.Setter;
 @Setter
 @AllArgsConstructor
 @NoArgsConstructor
-public class EnfermedadListDTO {
-    private Long enfermedadId;
-    private String enfermedadNombre;
-    private EnfermedadTipo enfermedadTipo;
-    private String enfermedadFoto;
+public class PlagaListDTO {
+    private Long plagaId;
+    private String plagaNombre;
+    private PlagaTipo plagaTipo;
+    private String plagaFoto;
     private Temporada temporada;
     private Severidad severidad;
 }
