@@ -1,19 +1,27 @@
 package com.api.ecoshieldwebservice.services;
 
-import com.api.ecoshieldwebservice.dtos.*;
+import com.api.ecoshieldwebservice.dtos.auth.*;
 import com.api.ecoshieldwebservice.entities.Rol;
 import com.api.ecoshieldwebservice.entities.Usuario;
+import com.api.ecoshieldwebservice.enums.RolNombre;
 import com.api.ecoshieldwebservice.enums.UsuarioEstado;
 import com.api.ecoshieldwebservice.interfaces.IAuthServices;
 import com.api.ecoshieldwebservice.repositories.RolRepository;
 import com.api.ecoshieldwebservice.repositories.UsuarioRepository;
+import com.api.ecoshieldwebservice.util.JwtUtil;
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
+import org.springframework.security.authentication.AuthenticationManager;
+import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
+import org.springframework.security.core.GrantedAuthority;
+import org.springframework.security.core.userdetails.UserDetails;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.server.ResponseStatusException;
 
-import java.time.OffsetDateTime;
+import java.time.Instant;
 
 @Service
 public class AuthService  implements IAuthServices {
@@ -21,66 +29,108 @@ public class AuthService  implements IAuthServices {
     private UsuarioRepository usuarioRepository;
 
     @Autowired
+    private RolRepository rolRepository;
+
+    @Autowired
     private ModelMapper modelMapper;
 
     @Autowired
-    private RolRepository rolRepository;
+    private AuthenticationManager authenticationManager;
+
+    @Autowired
+    private PasswordEncoder passwordEncoder;
+
+    @Autowired
+    private JwtUserDetailsService userDetailsService;
+
+    @Autowired
+    private JwtUtil jwtUtil;
 
     @Override
-    public UsuarioRegisterDTO register(UsuarioRegisterDTO usuarioRegisterDTO) {
+    public AuthResponseDTO login(LoginRequestDTO request) {
+        authenticationManager.authenticate(
+                new UsernamePasswordAuthenticationToken(request.getUsuarioCorreo(), request.getUsuarioContrasena())
+        );
 
-        if (usuarioRepository.existsByUsuarioCorreo(usuarioRegisterDTO.getUsuarioCorreo())) {
-            throw new ResponseStatusException(HttpStatus.CONFLICT, "Correo ya registrado");
-        }
+        Usuario u = usuarioRepository.findByUsuarioCorreo(request.getUsuarioCorreo())
+                .orElseThrow(() -> new ResponseStatusException(HttpStatus.UNAUTHORIZED, "Credenciales inválidas"));
 
-        Rol rolUser = rolRepository.findByRolNombre("ROLE_USER")
-                .orElseThrow(() -> new RuntimeException("Rol USUARIO no encontrado"));
+        String springRole = "ROLE_" + u.getRol().getRolNombre().name();
+        String token = jwtUtil.generateToken(u.getUsuarioCorreo(), springRole);
+        Instant expiresAt = jwtUtil.extractExpiration(token).toInstant();
 
-        Usuario usuario = modelMapper.map(usuarioRegisterDTO, Usuario.class);
+        UsuarioAuthResponseDTO usuarioDTO = modelMapper.map(u, UsuarioAuthResponseDTO.class);
+        usuarioDTO.setUsuarioRol(springRole);
 
-        usuario.setUsuarioEstado(UsuarioEstado.ACTIVO);
-        usuario.setUsuarioPais("PERU");
-        usuario.setUsuarioFechaRegistro(OffsetDateTime.now());
-        usuario.setRol(rolUser);
-
-        usuarioRepository.save(usuario);
-
-        return modelMapper.map(usuario, UsuarioRegisterDTO.class);
+        return new AuthResponseDTO(token, expiresAt, usuarioDTO);
     }
 
     @Override
-    public UsuarioLoginDTO login(UsuarioLoginDTO usuarioLoginDTO) {
-        Usuario usuario = usuarioRepository.findByUsuarioCorreo(usuarioLoginDTO.getUsuarioCorreo())
-                .orElseThrow(() -> new ResponseStatusException(HttpStatus.UNAUTHORIZED, "Correo o contraseña incorrectos"));
-
-        if (!usuario.getUsuarioContrasena().equals(usuarioLoginDTO.getUsuarioContrasena())) {
-            throw new ResponseStatusException(HttpStatus.UNAUTHORIZED, "Correo o contraseña incorrectos");
+    @Transactional
+    public AuthResponseDTO register(RegisterRequestDTO dto) {
+        if (usuarioRepository.existsByUsuarioCorreo(dto.getUsuarioCorreo())) {
+            throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "El correo ya está registrado");
         }
 
-        return modelMapper.map(usuario, UsuarioLoginDTO.class);
+        Rol rolUser = rolRepository.findByRolNombre(RolNombre.USER)
+                .orElseThrow(() -> new ResponseStatusException(HttpStatus.INTERNAL_SERVER_ERROR,
+                        "No existe el rol USER en la base de datos"));
+
+        if (dto.getUsuarioPais() == null || dto.getUsuarioPais().isBlank()) {
+            throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "El país es obligatorio");
+        }
+
+        Usuario nuevo = modelMapper.map(dto, Usuario.class);
+        nuevo.setUsuarioContrasena(passwordEncoder.encode(dto.getUsuarioContrasena()));
+        nuevo.setRol(rolUser);
+        nuevo.setUsuarioEstado(UsuarioEstado.ACTIVO);
+
+        Usuario saved = usuarioRepository.save(nuevo);
+
+        String springRole = "ROLE_" + saved.getRol().getRolNombre().name();
+        String token = jwtUtil.generateToken(saved.getUsuarioCorreo(), springRole);
+        Instant expiresAt = jwtUtil.extractExpiration(token).toInstant();
+
+        UsuarioAuthResponseDTO usuarioDTO = modelMapper.map(saved, UsuarioAuthResponseDTO.class);
+        usuarioDTO.setUsuarioRol(springRole);
+
+        return new AuthResponseDTO(token, expiresAt, usuarioDTO);
     }
 
     @Override
-    public PasswordResetRequestDTO resetPassword(PasswordResetRequestDTO passwordResetRequestDTO) {
-        Usuario usuario = usuarioRepository.findByUsuarioCorreo(passwordResetRequestDTO.getUsuarioCorreo())
+    public AuthResponseDTO changeMyPassword(String correo, ChangePasswordRequestDTO dto) {
+        Usuario u = usuarioRepository.findByUsuarioCorreo(correo)
                 .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "Usuario no encontrado"));
-        System.out.println("Enviando link de reseteo a: " + usuario.getUsuarioCorreo());
 
-        return passwordResetRequestDTO;
+        if (!passwordEncoder.matches(dto.getCurrentPassword(), u.getUsuarioContrasena())) {
+            throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "La contraseña actual es incorrecta");
+        }
+        if (!dto.getNewPassword().equals(dto.getConfirmNewPassword())) {
+            throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "La confirmación no coincide");
+        }
+        if (passwordEncoder.matches(dto.getNewPassword(), u.getUsuarioContrasena())) {
+            throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "La nueva contraseña no puede ser igual a la actual");
+        }
+
+        u.setUsuarioContrasena(passwordEncoder.encode(dto.getNewPassword()));
+        usuarioRepository.save(u);
+
+        String springRole = "ROLE_" + u.getRol().getRolNombre().name();
+        String token = jwtUtil.generateToken(u.getUsuarioCorreo(), springRole);
+        Instant expiresAt = jwtUtil.extractExpiration(token).toInstant();
+
+        UsuarioAuthResponseDTO usuarioDTO = modelMapper.map(u, UsuarioAuthResponseDTO.class);
+        usuarioDTO.setUsuarioRol(springRole);
+
+        return new AuthResponseDTO(token, expiresAt, usuarioDTO);
     }
 
     @Override
-    public PasswordChangeDTO changePassword(PasswordChangeDTO passwordChangeDTO) {
-        Usuario usuario = usuarioRepository.findByUsuarioCorreo(passwordChangeDTO.getUsuarioCorreo())
+    public void adminResetPassword(Long usuarioId, ResetPasswordRequestDTO dto) {
+        Usuario u = usuarioRepository.findById(usuarioId)
                 .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "Usuario no encontrado"));
 
-        if (!usuario.getUsuarioContrasena().equals(passwordChangeDTO.getActualContrasena())) {
-            throw new ResponseStatusException(HttpStatus.UNAUTHORIZED, "Contraseña actual incorrecta");
-        }
-
-        usuario.setUsuarioContrasena(passwordChangeDTO.getNuevaContrasena());
-        usuarioRepository.save(usuario);
-
-        return passwordChangeDTO;
+        u.setUsuarioContrasena(passwordEncoder.encode(dto.getNewPassword()));
+        usuarioRepository.save(u);
     }
 }

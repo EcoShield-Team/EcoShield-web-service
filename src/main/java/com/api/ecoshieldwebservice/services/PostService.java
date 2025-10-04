@@ -1,6 +1,5 @@
 package com.api.ecoshieldwebservice.services;
 
-import com.api.ecoshieldwebservice.dtos.UsuarioResponseForoDTO;
 import com.api.ecoshieldwebservice.dtos.request.PostRequestDTO;
 import com.api.ecoshieldwebservice.dtos.response.PostResponseDTO;
 import com.api.ecoshieldwebservice.entities.Post;
@@ -8,7 +7,6 @@ import com.api.ecoshieldwebservice.entities.Usuario;
 import com.api.ecoshieldwebservice.interfaces.IPostServices;
 import com.api.ecoshieldwebservice.repositories.PostRepository;
 import com.api.ecoshieldwebservice.repositories.UsuarioRepository;
-import jakarta.persistence.EntityNotFoundException;
 import lombok.RequiredArgsConstructor;
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;

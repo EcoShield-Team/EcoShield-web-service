@@ -1,19 +1,16 @@
 package com.api.ecoshieldwebservice.controllers;
 
-import com.api.ecoshieldwebservice.dtos.PasswordChangeDTO;
-import com.api.ecoshieldwebservice.dtos.PasswordResetRequestDTO;
-import com.api.ecoshieldwebservice.dtos.UsuarioLoginDTO;
-import com.api.ecoshieldwebservice.dtos.UsuarioRegisterDTO;
+import com.api.ecoshieldwebservice.dtos.auth.*;
 import com.api.ecoshieldwebservice.interfaces.IAuthServices;
-import com.api.ecoshieldwebservice.services.AuthService;
+import jakarta.annotation.security.PermitAll;
 import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.HttpStatus;
+import org.springframework.http.HttpHeaders;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.security.access.prepost.PreAuthorize;
+import org.springframework.security.core.annotation.AuthenticationPrincipal;
+import org.springframework.security.core.userdetails.UserDetails;
+import org.springframework.web.bind.annotation.*;
 
 @RestController
 @RequestMapping("/auth")
@@ -22,28 +19,38 @@ public class AuthController {
     @Autowired
     private IAuthServices authService;
 
-
     @PostMapping("/register")
-    public ResponseEntity<UsuarioRegisterDTO> register(@Valid @RequestBody UsuarioRegisterDTO usuarioRegisterDTO) {
-        UsuarioRegisterDTO createdUser = authService.register(usuarioRegisterDTO);
-        return ResponseEntity.status(HttpStatus.CREATED).body(createdUser);
+    @PermitAll
+    public ResponseEntity<AuthResponseDTO> register(@Valid @RequestBody RegisterRequestDTO dto) {
+        AuthResponseDTO res = authService.register(dto);
+        return ResponseEntity.ok()
+                .header(HttpHeaders.AUTHORIZATION, "Bearer " + res.getToken())
+                .body(res);
     }
 
     @PostMapping("/login")
-    public ResponseEntity<UsuarioLoginDTO> login(@Valid @RequestBody UsuarioLoginDTO usuarioLoginDTO) {
-        UsuarioLoginDTO loggedUser = authService.login(usuarioLoginDTO);
-        return ResponseEntity.status(HttpStatus.OK).body(loggedUser);
+    @PermitAll
+    public ResponseEntity<AuthResponseDTO> login(@Valid @RequestBody LoginRequestDTO dto) {
+        AuthResponseDTO res = authService.login(dto);
+        return ResponseEntity.ok()
+                .header(HttpHeaders.AUTHORIZATION, "Bearer " + res.getToken())
+                .body(res);
     }
 
-    @PostMapping("/reset-password")
-    public ResponseEntity<PasswordResetRequestDTO> resetPassword(@Valid @RequestBody PasswordResetRequestDTO passwordResetRequestDTO) {
-        PasswordResetRequestDTO response = authService.resetPassword(passwordResetRequestDTO);
-        return ResponseEntity.status(HttpStatus.OK).body(response);
+    @GetMapping("/me")
+    @PreAuthorize("isAuthenticated()")
+    public ResponseEntity<UsuarioAuthResponseDTO> me(@AuthenticationPrincipal UserDetails user) {
+        UsuarioAuthResponseDTO dto = new UsuarioAuthResponseDTO();
+        dto.setUsuarioCorreo(user.getUsername());
+        return ResponseEntity.ok(dto);
     }
 
-    @PostMapping("/change-password")
-    public ResponseEntity<PasswordChangeDTO> changePassword(@Valid @RequestBody PasswordChangeDTO passwordChangeDTO) {
-        PasswordChangeDTO response = authService.changePassword(passwordChangeDTO);
-        return ResponseEntity.status(HttpStatus.OK).body(response);
+    @PutMapping("/password")
+    @PreAuthorize("isAuthenticated()")
+    public ResponseEntity<AuthResponseDTO> changePassword(@AuthenticationPrincipal UserDetails user, @Valid @RequestBody ChangePasswordRequestDTO dto) {
+        AuthResponseDTO res = authService.changeMyPassword(user.getUsername(), dto);
+        return ResponseEntity.ok()
+                .header(HttpHeaders.AUTHORIZATION, "Bearer " + res.getToken())
+                .body(res);
     }
 }

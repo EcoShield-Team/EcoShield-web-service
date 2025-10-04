@@ -1,23 +1,21 @@
 package com.api.ecoshieldwebservice.controllers;
 
-import com.api.ecoshieldwebservice.dtos.EnfermedadDetailDTO;
-import com.api.ecoshieldwebservice.dtos.EnfermedadListDTO;
-import com.api.ecoshieldwebservice.dtos.PlagaDetailDTO;
-import com.api.ecoshieldwebservice.dtos.PlagaListDTO;
+import com.api.ecoshieldwebservice.dtos.almanaque.EnfermedadDetailDTO;
+import com.api.ecoshieldwebservice.dtos.almanaque.EnfermedadListDTO;
+import com.api.ecoshieldwebservice.dtos.almanaque.PlagaDetailDTO;
+import com.api.ecoshieldwebservice.dtos.almanaque.PlagaListDTO;
 import com.api.ecoshieldwebservice.enums.EnfermedadTipo;
 import com.api.ecoshieldwebservice.enums.PlagaTipo;
 import com.api.ecoshieldwebservice.enums.Severidad;
 import com.api.ecoshieldwebservice.enums.Temporada;
 import com.api.ecoshieldwebservice.interfaces.IEnfermedadService;
 import com.api.ecoshieldwebservice.interfaces.IPlagaService;
-import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
-import java.util.Map;
 
 @RestController
 @RequestMapping("/almanaque")

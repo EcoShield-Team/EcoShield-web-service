@@ -1,4 +1,4 @@
-package com.api.ecoshieldwebservice.dtos;
+package com.api.ecoshieldwebservice.dtos.almanaque;
 
 import com.api.ecoshieldwebservice.enums.PlagaTipo;
 import com.api.ecoshieldwebservice.enums.Severidad;

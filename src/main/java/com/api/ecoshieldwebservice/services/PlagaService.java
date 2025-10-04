@@ -1,7 +1,7 @@
 package com.api.ecoshieldwebservice.services;
 
-import com.api.ecoshieldwebservice.dtos.PlagaDetailDTO;
-import com.api.ecoshieldwebservice.dtos.PlagaListDTO;
+import com.api.ecoshieldwebservice.dtos.almanaque.PlagaDetailDTO;
+import com.api.ecoshieldwebservice.dtos.almanaque.PlagaListDTO;
 import com.api.ecoshieldwebservice.entities.Plaga;
 import com.api.ecoshieldwebservice.enums.PlagaTipo;
 import com.api.ecoshieldwebservice.enums.Severidad;

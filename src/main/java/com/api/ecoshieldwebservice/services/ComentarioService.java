@@ -1,6 +1,5 @@
 package com.api.ecoshieldwebservice.services;
 
-import com.api.ecoshieldwebservice.dtos.UsuarioResponseForoDTO;
 import com.api.ecoshieldwebservice.dtos.request.ComentarioRequestDTO;
 import com.api.ecoshieldwebservice.dtos.response.ComentarioResponseDTO;
 import com.api.ecoshieldwebservice.entities.Comentario;
@@ -10,7 +9,6 @@ import com.api.ecoshieldwebservice.interfaces.IComentarioServices;
 import com.api.ecoshieldwebservice.repositories.ComentarioRepository;
 import com.api.ecoshieldwebservice.repositories.PostRepository;
 import com.api.ecoshieldwebservice.repositories.UsuarioRepository;
-import jakarta.persistence.EntityNotFoundException;
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;

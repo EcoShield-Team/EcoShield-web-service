@@ -1,7 +1,8 @@
 package com.api.ecoshieldwebservice.services;
 
-import com.api.ecoshieldwebservice.dtos.*;
-import com.api.ecoshieldwebservice.dtos.response.UsuarioResponseDTO;
+import com.api.ecoshieldwebservice.dtos.user.UsuarioProfileDTO;
+import com.api.ecoshieldwebservice.dtos.user.UsuarioResponseDTO;
+import com.api.ecoshieldwebservice.dtos.request.UsuarioUpdateDTO;
 import com.api.ecoshieldwebservice.entities.Usuario;
 import com.api.ecoshieldwebservice.interfaces.IUsuarioServices;
 import com.api.ecoshieldwebservice.repositories.UsuarioRepository;
@@ -28,10 +29,10 @@ public class UsuarioService implements IUsuarioServices {
     }
 
     @Override
-    public UsuarioProfileDTO updateProfile(Long id, UsuarioProfileDTO usuarioProfileDTO) {
+    public UsuarioProfileDTO updateProfile(Long id, UsuarioUpdateDTO dto) {
         Usuario usuario = usuarioRepository.findById(id).orElse(null);
-        usuario.setUsuarioFotoPerfil(usuarioProfileDTO.getUsuarioFotoPerfil());
-        usuario.setUsuarioPais(usuarioProfileDTO.getUsuarioPais());
+        usuario.setUsuarioFotoPerfil(dto.getUsuarioFotoPerfil());
+        usuario.setUsuarioPais(dto.getUsuarioPais());
 
         Usuario usuarioUpdated = usuarioRepository.save(usuario);
         return modelMapper.map(usuarioUpdated, UsuarioProfileDTO.class);

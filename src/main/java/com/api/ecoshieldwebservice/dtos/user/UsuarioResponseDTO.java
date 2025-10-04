@@ -1,4 +1,4 @@
-package com.api.ecoshieldwebservice.dtos.response;
+package com.api.ecoshieldwebservice.dtos.user;
 
 import com.api.ecoshieldwebservice.enums.UsuarioEstado;
 import lombok.AllArgsConstructor;

@@ -1,4 +1,4 @@
-package com.api.ecoshieldwebservice.dtos;
+package com.api.ecoshieldwebservice.dtos.auth;
 
 import jakarta.validation.constraints.Email;
 import jakarta.validation.constraints.NotBlank;
@@ -12,7 +12,7 @@ import lombok.Setter;
 @Setter
 @AllArgsConstructor
 @NoArgsConstructor
-public class UsuarioLoginDTO {
+public class LoginRequestDTO {
 
     @NotBlank(message = "El correo es obligatorio")
     @Email(message = "El correo no es válido")
