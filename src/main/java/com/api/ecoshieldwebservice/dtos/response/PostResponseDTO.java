@@ -1,6 +1,7 @@
-package com.api.ecoshieldwebservice.dtos;
+package com.api.ecoshieldwebservice.dtos.response;
 
 
+import com.api.ecoshieldwebservice.dtos.UsuarioResponseForoDTO;
 import lombok.Getter;
 import lombok.Setter;
 

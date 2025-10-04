@@ -1,6 +1,8 @@
 package com.api.ecoshieldwebservice.controllers;
 
 import com.api.ecoshieldwebservice.dtos.*;
+import com.api.ecoshieldwebservice.dtos.response.UsuarioResponseDTO;
+import com.api.ecoshieldwebservice.interfaces.IUsuarioServices;
 import com.api.ecoshieldwebservice.services.UsuarioService;
 import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -12,7 +14,8 @@ import java.util.List;
 public class UsuarioController {
 
     @Autowired
-    private UsuarioService usuarioService;
+    private IUsuarioServices usuarioService;
+
 
     @GetMapping("/users")
     public List<UsuarioResponseDTO> findAll() {

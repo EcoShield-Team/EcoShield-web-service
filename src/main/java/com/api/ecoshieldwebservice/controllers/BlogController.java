@@ -1,7 +1,8 @@
 package com.api.ecoshieldwebservice.controllers;
 
 import com.api.ecoshieldwebservice.dtos.request.BlogRequestDTO;
-import com.api.ecoshieldwebservice.dtos.BlogResponseDTO;
+import com.api.ecoshieldwebservice.dtos.response.BlogResponseDTO;
+import com.api.ecoshieldwebservice.interfaces.IBlogServices;
 import com.api.ecoshieldwebservice.services.BlogService;
 import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -12,68 +13,48 @@ import org.springframework.web.bind.annotation.*;
 import java.util.List;
 
 @RestController
+@RequestMapping("/blogs")
 public class BlogController {
 
     @Autowired
-    private BlogService blogService;
+    private IBlogServices blogService;
 
-    @GetMapping("/blogs/{id}")
+
+    @GetMapping("/{id}")
     public ResponseEntity<BlogResponseDTO> findById(@PathVariable Long id) {
-        BlogResponseDTO blog = blogService.findById(id);
-        if (blog != null) {
-            return ResponseEntity.ok(blog);
-        } else {
-            return ResponseEntity.notFound().build();
-        }
+        return ResponseEntity.ok(blogService.findById(id));
     }
 
-    @PostMapping("/blogs")
+    @PostMapping
     public ResponseEntity<BlogResponseDTO> registrar(@Valid @RequestBody BlogRequestDTO blogRequestDTO) {
         BlogResponseDTO nuevoBlog = blogService.registrar(blogRequestDTO);
-        if (nuevoBlog != null) {
-            return ResponseEntity.status(HttpStatus.CREATED).body(nuevoBlog);
-        } else {
-            return ResponseEntity.badRequest().build();
-        }
+        return ResponseEntity.status(HttpStatus.CREATED).body(nuevoBlog);
     }
 
-    @PutMapping("/blogs/{id}")
-    public ResponseEntity<BlogResponseDTO> actualizar(@PathVariable Long id, @Valid @RequestBody BlogRequestDTO blogRequestDTO) {
-        BlogResponseDTO blogActualizado = blogService.actualizar(id, blogRequestDTO);
-        if (blogActualizado != null) {
-            return ResponseEntity.ok(blogActualizado);
-        } else {
-            return ResponseEntity.notFound().build();
-        }
+    @PutMapping("/{id}")
+    public ResponseEntity<BlogResponseDTO> actualizar(@PathVariable Long id,
+                                                      @Valid @RequestBody BlogRequestDTO blogRequestDTO) {
+        return ResponseEntity.ok(blogService.actualizar(id, blogRequestDTO));
     }
 
-    @DeleteMapping("/blogs/{id}")
+    @DeleteMapping("/{id}")
     public ResponseEntity<Void> borrar(@PathVariable Long id) {
-        boolean borrado = blogService.borrar(id);
-        if (!borrado) {
-            return ResponseEntity.notFound().build();
-        }
+        blogService.borrar(id);
         return ResponseEntity.noContent().build();
     }
 
-    @GetMapping("/blogs")
+    @GetMapping
     public ResponseEntity<List<BlogResponseDTO>> findAll() {
-        List<BlogResponseDTO> blogs = blogService.findAll();
-        return ResponseEntity.ok(blogs);
+        return ResponseEntity.ok(blogService.findAll());
     }
 
-    @GetMapping("/blogs/tip")
+    @GetMapping("/tip")
     public ResponseEntity<BlogResponseDTO> findTipDelDia() {
-        BlogResponseDTO tip = blogService.findTipDelDia();
-        if (tip == null) {
-            return ResponseEntity.noContent().build();
-        }
-        return ResponseEntity.ok(tip);
+        return ResponseEntity.ok(blogService.findTipDelDia());
     }
 
-    @GetMapping("/blogs/news")
+    @GetMapping("/news")
     public ResponseEntity<List<BlogResponseDTO>> findAllNews() {
-        List<BlogResponseDTO> news = blogService.findAllNews();
-        return ResponseEntity.ok(news);
+        return ResponseEntity.ok(blogService.findAllNews());
     }
 }

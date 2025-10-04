@@ -1,4 +1,4 @@
-package com.api.ecoshieldwebservice.dtos;
+package com.api.ecoshieldwebservice.dtos.response;
 
 import lombok.AllArgsConstructor;
 import lombok.Getter;
@@ -11,14 +11,12 @@ import java.time.OffsetDateTime;
 @Setter
 @AllArgsConstructor
 @NoArgsConstructor
-public class UsuarioResponseDTO {
-
+public class FeedbackResponseDTO {
+    private Long feedbackId;
     private Long usuarioId;
     private String usuarioNombre;
-    private String usuarioCorreo;
-    private String usuarioPais;
-    private String usuarioFotoPerfil;
-    private String usuarioEstado;
-    private OffsetDateTime usuarioFechaRegistro;
-
+    private String feedbackTipo;
+    private String feedbackDescripcion;
+    private Integer feedbackRating;
+    private OffsetDateTime feedbackFecha;
 }

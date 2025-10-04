@@ -6,8 +6,8 @@ import com.api.ecoshieldwebservice.dtos.UsuarioLoginDTO;
 import com.api.ecoshieldwebservice.dtos.UsuarioRegisterDTO;
 
 public interface IAuthServices {
-    public UsuarioRegisterDTO register(UsuarioRegisterDTO usuarioRegisterDTO);
-    public UsuarioLoginDTO login(UsuarioLoginDTO usuarioLoginDTO);
-    public PasswordResetRequestDTO resetPassword(PasswordResetRequestDTO passwordResetRequestDTO);
-    public PasswordChangeDTO changePassword(PasswordChangeDTO passwordChangeDTO);
+    UsuarioRegisterDTO register(UsuarioRegisterDTO usuarioRegisterDTO);
+    UsuarioLoginDTO login(UsuarioLoginDTO usuarioLoginDTO);
+    PasswordResetRequestDTO resetPassword(PasswordResetRequestDTO passwordResetRequestDTO);
+    PasswordChangeDTO changePassword(PasswordChangeDTO passwordChangeDTO);
 }

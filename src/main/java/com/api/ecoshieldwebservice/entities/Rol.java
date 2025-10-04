@@ -1,5 +1,6 @@
 package com.api.ecoshieldwebservice.entities;
 
+import com.api.ecoshieldwebservice.enums.RolNombre;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Size;
@@ -19,7 +20,8 @@ public class Rol {
     private Long rolId;
 
     @Column(name = "rolnombre", nullable = false, length = 50)
-    private String rolNombre;
+    @Enumerated(EnumType.STRING)
+    private RolNombre rolNombre;
 
     @Column(name = "roldescripcion", length = 100)
     private String rolDescripcion;

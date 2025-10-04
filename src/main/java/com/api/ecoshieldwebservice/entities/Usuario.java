@@ -1,5 +1,6 @@
 package com.api.ecoshieldwebservice.entities;
 
+import com.api.ecoshieldwebservice.enums.UsuarioEstado;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Size;
@@ -35,7 +36,8 @@ public class Usuario {
     private String usuarioContrasena;
 
     @Column(name = "usuarioestado", nullable = false, length = 20)
-    private String usuarioEstado;
+    @Enumerated(EnumType.STRING)
+    private UsuarioEstado usuarioEstado;
 
     @Column(name = "usuariofotoperfil", length = 500)
     private String usuarioFotoPerfil;

@@ -33,12 +33,12 @@ public class AuthService  implements IAuthServices {
             throw new ResponseStatusException(HttpStatus.CONFLICT, "Correo ya registrado");
         }
 
-        Rol rolUser = rolRepository.findByRolNombre("USUARIO")
+        Rol rolUser = rolRepository.findByRolNombre("ROLE_USER")
                 .orElseThrow(() -> new RuntimeException("Rol USUARIO no encontrado"));
 
         Usuario usuario = modelMapper.map(usuarioRegisterDTO, Usuario.class);
 
-        usuario.setUsuarioEstado(UsuarioEstado.ACTIVO.name());
+        usuario.setUsuarioEstado(UsuarioEstado.ACTIVO);
         usuario.setUsuarioPais("PERU");
         usuario.setUsuarioFechaRegistro(OffsetDateTime.now());
         usuario.setRol(rolUser);

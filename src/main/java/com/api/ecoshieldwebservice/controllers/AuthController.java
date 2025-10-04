@@ -4,6 +4,7 @@ import com.api.ecoshieldwebservice.dtos.PasswordChangeDTO;
 import com.api.ecoshieldwebservice.dtos.PasswordResetRequestDTO;
 import com.api.ecoshieldwebservice.dtos.UsuarioLoginDTO;
 import com.api.ecoshieldwebservice.dtos.UsuarioRegisterDTO;
+import com.api.ecoshieldwebservice.interfaces.IAuthServices;
 import com.api.ecoshieldwebservice.services.AuthService;
 import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -19,7 +20,8 @@ import org.springframework.web.bind.annotation.RestController;
 public class AuthController {
 
     @Autowired
-    private AuthService authService;
+    private IAuthServices authService;
+
 
     @PostMapping("/register")
     public ResponseEntity<UsuarioRegisterDTO> register(@Valid @RequestBody UsuarioRegisterDTO usuarioRegisterDTO) {

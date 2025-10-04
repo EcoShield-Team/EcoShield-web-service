@@ -1,6 +1,7 @@
 package com.api.ecoshieldwebservice.services;
 
 import com.api.ecoshieldwebservice.dtos.*;
+import com.api.ecoshieldwebservice.dtos.response.UsuarioResponseDTO;
 import com.api.ecoshieldwebservice.entities.Usuario;
 import com.api.ecoshieldwebservice.interfaces.IUsuarioServices;
 import com.api.ecoshieldwebservice.repositories.UsuarioRepository;

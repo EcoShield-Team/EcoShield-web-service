@@ -1,16 +1,16 @@
 package com.api.ecoshieldwebservice.interfaces;
 
 import com.api.ecoshieldwebservice.dtos.request.ComentarioRequestDTO;
-import com.api.ecoshieldwebservice.dtos.ComentarioResponseDTO;
+import com.api.ecoshieldwebservice.dtos.response.ComentarioResponseDTO;
 
 import java.util.List;
 
 public interface IComentarioServices {
-    public ComentarioResponseDTO registrar(ComentarioRequestDTO comentarioRequestDTO);
-    public ComentarioResponseDTO actualizar(Long postId, Long comentarioid, ComentarioRequestDTO dto);
-    public ComentarioResponseDTO findById(Long comentarioid);
-    public List<ComentarioResponseDTO> findAll();
-    public void borrar(Long postId, Long comentarioId);
-    public List<ComentarioResponseDTO> findByPostId(Long postId);
-    public List<ComentarioResponseDTO> findByUsuarioid(Long usuarioId);
+    ComentarioResponseDTO registrar(ComentarioRequestDTO comentarioRequestDTO);
+    ComentarioResponseDTO actualizar(Long postId, Long comentarioid, ComentarioRequestDTO dto);
+    ComentarioResponseDTO findById(Long comentarioid);
+    List<ComentarioResponseDTO> findAll();
+    void borrar(Long postId, Long comentarioId);
+    List<ComentarioResponseDTO> findByPostId(Long postId);
+    List<ComentarioResponseDTO> findByUsuarioid(Long usuarioId);
 }
