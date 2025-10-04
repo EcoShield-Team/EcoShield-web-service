@@ -9,4 +9,5 @@ import java.util.List;
 public interface PostRepository extends JpaRepository<Post,Long> {
     List<Post> findByUsuario(Usuario usuario);
     List<Post> findByPostTitulo(String titulo);
+    boolean existsByPostIdAndUsuario_UsuarioCorreo(Long id, String usuarioCorreo);
 }

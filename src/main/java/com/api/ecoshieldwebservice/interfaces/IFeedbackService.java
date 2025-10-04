@@ -5,7 +5,7 @@ import com.api.ecoshieldwebservice.dtos.response.FeedbackResponseDTO;
 
 import java.util.List;
 
-public interface IFeedbackServices {
+public interface IFeedbackService {
     FeedbackResponseDTO findById(Long id);
     FeedbackResponseDTO registrar(FeedbackRequestDTO dto);
     void borrar(Long id);

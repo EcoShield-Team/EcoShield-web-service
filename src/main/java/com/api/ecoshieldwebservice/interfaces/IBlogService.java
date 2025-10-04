@@ -5,7 +5,7 @@ import com.api.ecoshieldwebservice.dtos.response.BlogResponseDTO;
 
 import java.util.List;
 
-public interface IBlogServices {
+public interface IBlogService {
     BlogResponseDTO findById(Long id);
     BlogResponseDTO registrar(BlogRequestDTO blogRequestDTO);
     BlogResponseDTO actualizar(Long id, BlogRequestDTO blogRequestDTO);

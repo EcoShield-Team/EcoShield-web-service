@@ -4,7 +4,7 @@ import com.api.ecoshieldwebservice.dtos.user.UsuarioProfileDTO;
 import com.api.ecoshieldwebservice.dtos.user.UsuarioResponseDTO;
 import com.api.ecoshieldwebservice.dtos.request.UsuarioUpdateDTO;
 import com.api.ecoshieldwebservice.entities.Usuario;
-import com.api.ecoshieldwebservice.interfaces.IUsuarioServices;
+import com.api.ecoshieldwebservice.interfaces.IUsuarioService;
 import com.api.ecoshieldwebservice.repositories.UsuarioRepository;
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -13,7 +13,7 @@ import org.springframework.stereotype.Service;
 import java.util.List;
 
 @Service
-public class UsuarioService implements IUsuarioServices {
+public class UsuarioService implements IUsuarioService {
 
     @Autowired
     private UsuarioRepository usuarioRepository;

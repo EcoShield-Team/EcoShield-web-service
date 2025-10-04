@@ -5,17 +5,15 @@ import com.api.ecoshieldwebservice.entities.Rol;
 import com.api.ecoshieldwebservice.entities.Usuario;
 import com.api.ecoshieldwebservice.enums.RolNombre;
 import com.api.ecoshieldwebservice.enums.UsuarioEstado;
-import com.api.ecoshieldwebservice.interfaces.IAuthServices;
+import com.api.ecoshieldwebservice.interfaces.IAuthService;
 import com.api.ecoshieldwebservice.repositories.RolRepository;
 import com.api.ecoshieldwebservice.repositories.UsuarioRepository;
-import com.api.ecoshieldwebservice.util.JwtUtil;
+import com.api.ecoshieldwebservice.security.jwt.JwtUtil;
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
-import org.springframework.security.core.GrantedAuthority;
-import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -24,7 +22,7 @@ import org.springframework.web.server.ResponseStatusException;
 import java.time.Instant;
 
 @Service
-public class AuthService  implements IAuthServices {
+public class AuthService  implements IAuthService {
     @Autowired
     private UsuarioRepository usuarioRepository;
 
