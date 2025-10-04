@@ -5,7 +5,7 @@ import com.api.ecoshieldwebservice.dtos.response.ComentarioResponseDTO;
 
 import java.util.List;
 
-public interface IComentarioServices {
+public interface IComentarioService {
     ComentarioResponseDTO registrar(ComentarioRequestDTO comentarioRequestDTO);
     ComentarioResponseDTO actualizar(Long postId, Long comentarioid, ComentarioRequestDTO dto);
     ComentarioResponseDTO findById(Long comentarioid);
@@ -13,4 +13,5 @@ public interface IComentarioServices {
     void borrar(Long postId, Long comentarioId);
     List<ComentarioResponseDTO> findByPostId(Long postId);
     List<ComentarioResponseDTO> findByUsuarioid(Long usuarioId);
+    boolean esAutorDelComentario(Long comentarioId, String correo);
 }

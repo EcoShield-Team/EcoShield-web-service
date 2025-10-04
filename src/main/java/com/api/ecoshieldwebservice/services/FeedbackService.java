@@ -4,7 +4,7 @@ import com.api.ecoshieldwebservice.dtos.request.FeedbackRequestDTO;
 import com.api.ecoshieldwebservice.dtos.response.FeedbackResponseDTO;
 import com.api.ecoshieldwebservice.entities.Feedback;
 import com.api.ecoshieldwebservice.entities.Usuario;
-import com.api.ecoshieldwebservice.interfaces.IFeedbackServices;
+import com.api.ecoshieldwebservice.interfaces.IFeedbackService;
 import com.api.ecoshieldwebservice.repositories.FeedbackRepository;
 import com.api.ecoshieldwebservice.repositories.UsuarioRepository;
 import lombok.RequiredArgsConstructor;
@@ -19,7 +19,7 @@ import java.util.List;
 
 @Service
 @RequiredArgsConstructor
-public class FeedbackService implements IFeedbackServices {
+public class FeedbackService implements IFeedbackService {
 
     @Autowired
     private FeedbackRepository feedbackRepository;

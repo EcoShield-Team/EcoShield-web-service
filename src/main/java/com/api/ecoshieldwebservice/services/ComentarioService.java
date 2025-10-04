@@ -5,7 +5,7 @@ import com.api.ecoshieldwebservice.dtos.response.ComentarioResponseDTO;
 import com.api.ecoshieldwebservice.entities.Comentario;
 import com.api.ecoshieldwebservice.entities.Post;
 import com.api.ecoshieldwebservice.entities.Usuario;
-import com.api.ecoshieldwebservice.interfaces.IComentarioServices;
+import com.api.ecoshieldwebservice.interfaces.IComentarioService;
 import com.api.ecoshieldwebservice.repositories.ComentarioRepository;
 import com.api.ecoshieldwebservice.repositories.PostRepository;
 import com.api.ecoshieldwebservice.repositories.UsuarioRepository;
@@ -19,7 +19,7 @@ import java.time.OffsetDateTime;
 import java.util.List;
 
 @Service
-public class ComentarioService implements IComentarioServices {
+public class ComentarioService implements IComentarioService {
 
     @Autowired
     private ComentarioRepository comentarioRepository;
@@ -121,5 +121,10 @@ public class ComentarioService implements IComentarioServices {
             throw new ResponseStatusException(HttpStatus.NO_CONTENT, "No hay comentarios de este usuario");
         }
         return lista.stream().map(c -> modelMapper.map(c, ComentarioResponseDTO.class)).toList();
+    }
+
+    @Override
+    public boolean esAutorDelComentario(Long comentarioId, String correo) {
+        return comentarioRepository.existsByComentarioIdAndUsuario_UsuarioCorreo(comentarioId, correo);
     }
 }

@@ -6,7 +6,7 @@ import com.api.ecoshieldwebservice.dtos.request.UsuarioUpdateDTO;
 
 import java.util.List;
 
-public interface IUsuarioServices {
+public interface IUsuarioService {
     UsuarioProfileDTO findById(Long id);
     UsuarioProfileDTO updateProfile(Long id, UsuarioUpdateDTO dto);
     List<UsuarioResponseDTO> findAll();

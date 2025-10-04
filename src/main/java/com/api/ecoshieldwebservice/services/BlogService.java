@@ -5,7 +5,7 @@ import com.api.ecoshieldwebservice.dtos.response.BlogResponseDTO;
 import com.api.ecoshieldwebservice.entities.Blog;
 import com.api.ecoshieldwebservice.entities.Usuario;
 import com.api.ecoshieldwebservice.enums.BlogTipo;
-import com.api.ecoshieldwebservice.interfaces.IBlogServices;
+import com.api.ecoshieldwebservice.interfaces.IBlogService;
 import com.api.ecoshieldwebservice.repositories.BlogRepository;
 import com.api.ecoshieldwebservice.repositories.UsuarioRepository;
 import org.modelmapper.ModelMapper;
@@ -18,7 +18,7 @@ import java.time.OffsetDateTime;
 import java.util.List;
 
 @Service
-public class BlogService implements IBlogServices {
+public class BlogService implements IBlogService {
 
     @Autowired
     private BlogRepository blogRepository;

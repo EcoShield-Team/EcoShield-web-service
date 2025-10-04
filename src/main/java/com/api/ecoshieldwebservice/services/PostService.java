@@ -4,7 +4,7 @@ import com.api.ecoshieldwebservice.dtos.request.PostRequestDTO;
 import com.api.ecoshieldwebservice.dtos.response.PostResponseDTO;
 import com.api.ecoshieldwebservice.entities.Post;
 import com.api.ecoshieldwebservice.entities.Usuario;
-import com.api.ecoshieldwebservice.interfaces.IPostServices;
+import com.api.ecoshieldwebservice.interfaces.IPostService;
 import com.api.ecoshieldwebservice.repositories.PostRepository;
 import com.api.ecoshieldwebservice.repositories.UsuarioRepository;
 import lombok.RequiredArgsConstructor;
@@ -19,7 +19,7 @@ import java.util.List;
 
 @Service
 @RequiredArgsConstructor
-public class PostService implements IPostServices {
+public class PostService implements IPostService {
 
     @Autowired
     private PostRepository postRepository;
@@ -113,5 +113,10 @@ public class PostService implements IPostServices {
             throw new ResponseStatusException(HttpStatus.NOT_FOUND, "Post no encontrado");
         }
         postRepository.deleteById(id);
+    }
+
+    @Override
+    public boolean esAutorDelPost(Long postId, String correo) {
+        return postRepository.existsByPostIdAndUsuario_UsuarioCorreo(postId, correo);
     }
 }
