@@ -1,5 +1,6 @@
 package com.api.ecoshieldwebservice.dtos.user;
 
+import com.api.ecoshieldwebservice.enums.RolNombre;
 import com.api.ecoshieldwebservice.enums.UsuarioEstado;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
@@ -20,6 +21,7 @@ public class UsuarioResponseDTO {
     private String usuarioPais;
     private String usuarioFotoPerfil;
     private UsuarioEstado usuarioEstado;
+    private RolNombre rolNombre;
     private OffsetDateTime usuarioFechaRegistro;
 
 }

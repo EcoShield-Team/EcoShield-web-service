@@ -27,40 +27,24 @@ public class PostController {
     @PostMapping(value = "/posts",consumes = {MediaType.MULTIPART_FORM_DATA_VALUE})
     @PreAuthorize("hasAnyRole('USER','ADMIN')")
     public ResponseEntity<PostResponseDTO> crearPost(
-            @Valid @RequestPart("data") String dataJson,
+            @Valid @RequestPart("data") PostRequestDTO dto,
             @RequestPart(value = "imagen", required = false) MultipartFile imagen,
             Authentication authentication) {
 
-        try {
-            ObjectMapper mapper = new ObjectMapper();
-            PostRequestDTO dto = mapper.readValue(dataJson, PostRequestDTO.class);
-
-            PostResponseDTO created = postService.registrar(dto, imagen, authentication.getName());
-            return ResponseEntity.status(HttpStatus.CREATED).body(created);
-
-        } catch (Exception e) {
-            throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "Formato inválido de JSON en 'data'");
-        }
+        PostResponseDTO created = postService.registrar(dto, imagen, authentication.getName());
+        return ResponseEntity.status(HttpStatus.CREATED).body(created);
     }
 
     @PutMapping(value = "/posts/{id}", consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
     @PreAuthorize("hasAnyRole('USER','ADMIN')")
     public ResponseEntity<PostResponseDTO> actualizarPost(
             @PathVariable Long id,
-            @Valid @RequestPart("data") String dataJson,
+            @Valid @RequestPart("data") PostRequestDTO dto,
             @RequestPart(value = "imagen", required = false) MultipartFile imagen,
             Authentication authentication) {
 
-        try {
-            ObjectMapper mapper = new ObjectMapper();
-            PostRequestDTO dto = mapper.readValue(dataJson, PostRequestDTO.class);
-
-            PostResponseDTO updated = postService.actualizar(id, dto, imagen, authentication.getName());
-            return ResponseEntity.ok(updated);
-
-        } catch (Exception e) {
-            throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "Formato inválido de JSON en 'data'");
-        }
+        PostResponseDTO updated = postService.actualizar(id, dto, imagen, authentication.getName());
+        return ResponseEntity.ok(updated);
     }
 
     @GetMapping("/posts")

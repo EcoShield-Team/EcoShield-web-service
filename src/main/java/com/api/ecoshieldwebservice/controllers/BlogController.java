@@ -25,43 +25,27 @@ public class BlogController {
     private IBlogService blogService;
 
 
-    @PostMapping(consumes = { MediaType.MULTIPART_FORM_DATA_VALUE })
+    @PostMapping(consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
     @PreAuthorize("hasRole('ADMIN')")
     public ResponseEntity<BlogResponseDTO> registrar(
-            @Valid @RequestPart("data") String dataJson,
+            @Valid @RequestPart("data") BlogRequestDTO dto,
             @RequestPart(value = "imagen", required = false) MultipartFile imagen,
             Authentication authentication) {
 
-        try {
-            ObjectMapper mapper = new ObjectMapper();
-            BlogRequestDTO dto = mapper.readValue(dataJson, BlogRequestDTO.class);
-
-            BlogResponseDTO nuevoBlog = blogService.registrar(dto, imagen, authentication.getName());
-            return ResponseEntity.status(HttpStatus.CREATED).body(nuevoBlog);
-
-        } catch (Exception e) {
-            throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "Formato inválido de JSON en 'data'");
-        }
+        BlogResponseDTO nuevoBlog = blogService.registrar(dto, imagen, authentication.getName());
+        return ResponseEntity.status(HttpStatus.CREATED).body(nuevoBlog);
     }
 
     @PutMapping(value = "/{id}", consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
     @PreAuthorize("hasRole('ADMIN')")
     public ResponseEntity<BlogResponseDTO> actualizar(
             @PathVariable Long id,
-            @Valid @RequestPart("data") String dataJson,
+            @Valid @RequestPart("data") BlogRequestDTO dto,
             @RequestPart(value = "imagen", required = false) MultipartFile imagen,
             Authentication authentication) {
 
-        try {
-            ObjectMapper mapper = new ObjectMapper();
-            BlogRequestDTO dto = mapper.readValue(dataJson, BlogRequestDTO.class);
-
-            BlogResponseDTO actualizado = blogService.actualizar(id, dto, imagen, authentication.getName());
-            return ResponseEntity.ok(actualizado);
-
-        } catch (Exception e) {
-            throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "Formato inválido de JSON en 'data'");
-        }
+        BlogResponseDTO actualizado = blogService.actualizar(id, dto, imagen, authentication.getName());
+        return ResponseEntity.ok(actualizado);
     }
 
     @DeleteMapping("/{id}")
