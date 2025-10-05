@@ -11,6 +11,7 @@ import com.api.ecoshieldwebservice.repositories.UsuarioRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
+import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.server.ResponseStatusException;
 
 import java.time.OffsetDateTime;
@@ -25,9 +26,12 @@ public class BlogService implements IBlogService {
     @Autowired
     private UsuarioRepository usuarioRepository;
 
+    @Autowired
+    private CloudinaryService cloudinaryService;
+
 
     @Override
-    public BlogResponseDTO registrar(BlogRequestDTO dto, String correo) {
+    public BlogResponseDTO registrar(BlogRequestDTO dto, MultipartFile imagen, String correo) {
         validarCampos(dto);
 
         Usuario usuario = usuarioRepository.findByUsuarioCorreo(correo)
@@ -37,17 +41,22 @@ public class BlogService implements IBlogService {
         blog.setBlogTipo(dto.getBlogTipo());
         blog.setBlogTitulo(dto.getBlogTitulo());
         blog.setBlogDescripcion(dto.getBlogDescripcion());
-        blog.setBlogImagen(dto.getBlogImagen());
         blog.setBlogEstado(dto.getBlogEstado());
         blog.setUsuario(usuario);
         blog.setBlogFechaPublicacion(OffsetDateTime.now());
+
+        // 👇 Subir la imagen si se envió
+        if (imagen != null && !imagen.isEmpty()) {
+            String url = cloudinaryService.uploadImage(imagen);
+            blog.setBlogImagen(url);
+        }
 
         Blog guardado = blogRepository.save(blog);
         return toResponseDTO(guardado);
     }
 
     @Override
-    public BlogResponseDTO actualizar(Long id, BlogRequestDTO dto, String correo) {
+    public BlogResponseDTO actualizar(Long id, BlogRequestDTO dto, MultipartFile imagen, String correo) {
         validarCampos(dto);
 
         Blog existente = blogRepository.findById(id)
@@ -59,10 +68,14 @@ public class BlogService implements IBlogService {
         existente.setBlogTipo(dto.getBlogTipo());
         existente.setBlogTitulo(dto.getBlogTitulo());
         existente.setBlogDescripcion(dto.getBlogDescripcion());
-        existente.setBlogImagen(dto.getBlogImagen());
         existente.setBlogEstado(dto.getBlogEstado());
         existente.setUsuario(usuario);
         existente.setBlogFechaPublicacion(OffsetDateTime.now());
+
+        if (imagen != null && !imagen.isEmpty()) {
+            String url = cloudinaryService.uploadImage(imagen);
+            existente.setBlogImagen(url);
+        }
 
         Blog actualizado = blogRepository.save(existente);
         return toResponseDTO(actualizado);

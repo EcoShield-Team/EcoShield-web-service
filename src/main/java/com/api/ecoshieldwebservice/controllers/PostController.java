@@ -3,13 +3,17 @@ package com.api.ecoshieldwebservice.controllers;
 import com.api.ecoshieldwebservice.dtos.request.PostRequestDTO;
 import com.api.ecoshieldwebservice.dtos.response.PostResponseDTO;
 import com.api.ecoshieldwebservice.interfaces.IPostService;
+import com.fasterxml.jackson.databind.ObjectMapper;
 import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
+import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.core.Authentication;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
+import org.springframework.web.server.ResponseStatusException;
 
 import java.util.List;
 
@@ -20,21 +24,43 @@ public class PostController {
     private IPostService postService;
 
 
-    @PostMapping("/posts")
+    @PostMapping(value = "/posts",consumes = {MediaType.MULTIPART_FORM_DATA_VALUE})
     @PreAuthorize("hasAnyRole('USER','ADMIN')")
-    public ResponseEntity<PostResponseDTO> crearPost(@Valid @RequestBody PostRequestDTO dto,
-                                                     Authentication authentication) {
-        PostResponseDTO created = postService.registrar(dto, authentication.getName());
-        return ResponseEntity.status(HttpStatus.CREATED).body(created);
+    public ResponseEntity<PostResponseDTO> crearPost(
+            @Valid @RequestPart("data") String dataJson,
+            @RequestPart(value = "imagen", required = false) MultipartFile imagen,
+            Authentication authentication) {
+
+        try {
+            ObjectMapper mapper = new ObjectMapper();
+            PostRequestDTO dto = mapper.readValue(dataJson, PostRequestDTO.class);
+
+            PostResponseDTO created = postService.registrar(dto, imagen, authentication.getName());
+            return ResponseEntity.status(HttpStatus.CREATED).body(created);
+
+        } catch (Exception e) {
+            throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "Formato inválido de JSON en 'data'");
+        }
     }
 
-    @PutMapping("/posts/{id}")
+    @PutMapping(value = "/posts/{id}", consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
     @PreAuthorize("hasAnyRole('USER','ADMIN')")
-    public ResponseEntity<PostResponseDTO> actualizarPost(@PathVariable Long id,
-                                                          @Valid @RequestBody PostRequestDTO dto,
-                                                          Authentication authentication) {
-        PostResponseDTO updated = postService.actualizar(id, dto, authentication.getName());
-        return ResponseEntity.ok(updated);
+    public ResponseEntity<PostResponseDTO> actualizarPost(
+            @PathVariable Long id,
+            @Valid @RequestPart("data") String dataJson,
+            @RequestPart(value = "imagen", required = false) MultipartFile imagen,
+            Authentication authentication) {
+
+        try {
+            ObjectMapper mapper = new ObjectMapper();
+            PostRequestDTO dto = mapper.readValue(dataJson, PostRequestDTO.class);
+
+            PostResponseDTO updated = postService.actualizar(id, dto, imagen, authentication.getName());
+            return ResponseEntity.ok(updated);
+
+        } catch (Exception e) {
+            throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "Formato inválido de JSON en 'data'");
+        }
     }
 
     @GetMapping("/posts")
