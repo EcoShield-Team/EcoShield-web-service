@@ -42,6 +42,7 @@ public class PostService implements IPostService {
                 .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "Usuario no encontrado"));
 
         Post post = modelMapper.map(dto, Post.class);
+        post.setPostId(null);
         post.setUsuario(usuario);
         post.setPostFecha(OffsetDateTime.now());
 
