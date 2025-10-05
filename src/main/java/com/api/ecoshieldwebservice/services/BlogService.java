@@ -8,7 +8,6 @@ import com.api.ecoshieldwebservice.enums.BlogTipo;
 import com.api.ecoshieldwebservice.interfaces.IBlogService;
 import com.api.ecoshieldwebservice.repositories.BlogRepository;
 import com.api.ecoshieldwebservice.repositories.UsuarioRepository;
-import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
@@ -26,9 +25,6 @@ public class BlogService implements IBlogService {
     @Autowired
     private UsuarioRepository usuarioRepository;
 
-    @Autowired
-    private ModelMapper modelMapper;
-
 
     @Override
     public BlogResponseDTO registrar(BlogRequestDTO dto, String correo) {
@@ -37,12 +33,17 @@ public class BlogService implements IBlogService {
         Usuario usuario = usuarioRepository.findByUsuarioCorreo(correo)
                 .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "Usuario no encontrado"));
 
-        Blog blog = modelMapper.map(dto, Blog.class);
+        Blog blog = new Blog();
+        blog.setBlogTipo(dto.getBlogTipo());
+        blog.setBlogTitulo(dto.getBlogTitulo());
+        blog.setBlogDescripcion(dto.getBlogDescripcion());
+        blog.setBlogImagen(dto.getBlogImagen());
+        blog.setBlogEstado(dto.getBlogEstado());
         blog.setUsuario(usuario);
         blog.setBlogFechaPublicacion(OffsetDateTime.now());
 
         Blog guardado = blogRepository.save(blog);
-        return modelMapper.map(guardado, BlogResponseDTO.class);
+        return toResponseDTO(guardado);
     }
 
     @Override
@@ -55,12 +56,16 @@ public class BlogService implements IBlogService {
         Usuario usuario = usuarioRepository.findByUsuarioCorreo(correo)
                 .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "Usuario no encontrado"));
 
-        modelMapper.map(dto, existente);
+        existente.setBlogTipo(dto.getBlogTipo());
+        existente.setBlogTitulo(dto.getBlogTitulo());
+        existente.setBlogDescripcion(dto.getBlogDescripcion());
+        existente.setBlogImagen(dto.getBlogImagen());
+        existente.setBlogEstado(dto.getBlogEstado());
         existente.setUsuario(usuario);
         existente.setBlogFechaPublicacion(OffsetDateTime.now());
 
         Blog actualizado = blogRepository.save(existente);
-        return modelMapper.map(actualizado, BlogResponseDTO.class);
+        return toResponseDTO(actualizado);
     }
 
     @Override
@@ -72,30 +77,31 @@ public class BlogService implements IBlogService {
 
     @Override
     public List<BlogResponseDTO> findAll() {
-        List<Blog> lista = blogRepository.findAll();
-        if (lista.isEmpty()) return List.of();
-        return lista.stream().map(b -> modelMapper.map(b, BlogResponseDTO.class)).toList();
+        return blogRepository.findAll().stream()
+                .map(this::toResponseDTO)
+                .toList();
     }
 
     @Override
     public BlogResponseDTO findTipDelDia() {
         Blog blog = blogRepository.findFirstByBlogTipoOrderByBlogFechaPublicacionDesc(BlogTipo.TIP);
-        if (blog == null) throw new ResponseStatusException(HttpStatus.NO_CONTENT, "No hay tip del día disponible");
-        return modelMapper.map(blog, BlogResponseDTO.class);
+        if (blog == null)
+            throw new ResponseStatusException(HttpStatus.NO_CONTENT, "No hay tip del día disponible");
+        return toResponseDTO(blog);
     }
 
     @Override
     public List<BlogResponseDTO> findAllNews() {
-        List<Blog> lista = blogRepository.findAllNews();
-        if (lista.isEmpty()) return List.of();
-        return lista.stream().map(b -> modelMapper.map(b, BlogResponseDTO.class)).toList();
+        return blogRepository.findAllNews().stream()
+                .map(this::toResponseDTO)
+                .toList();
     }
 
     @Override
     public BlogResponseDTO findById(Long id) {
         Blog blog = blogRepository.findById(id)
                 .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "Blog no encontrado"));
-        return modelMapper.map(blog, BlogResponseDTO.class);
+        return toResponseDTO(blog);
     }
 
     private void validarCampos(BlogRequestDTO dto) {
@@ -103,5 +109,18 @@ public class BlogService implements IBlogService {
                 dto.getBlogDescripcion() == null || dto.getBlogDescripcion().isBlank()) {
             throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "Título y descripción son obligatorios");
         }
+    }
+
+    private BlogResponseDTO toResponseDTO(Blog blog) {
+        BlogResponseDTO dto = new BlogResponseDTO();
+        dto.setBlogId(blog.getBlogId());
+        dto.setUsuarioId(blog.getUsuario() != null ? blog.getUsuario().getUsuarioId() : null);
+        dto.setBlogTipo(blog.getBlogTipo());
+        dto.setBlogTitulo(blog.getBlogTitulo());
+        dto.setBlogDescripcion(blog.getBlogDescripcion());
+        dto.setBlogImagen(blog.getBlogImagen());
+        dto.setBlogEstado(blog.getBlogEstado());
+        dto.setBlogFechaPublicacion(blog.getBlogFechaPublicacion());
+        return dto;
     }
 }

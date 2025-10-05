@@ -1,11 +1,9 @@
 package com.api.ecoshieldwebservice.entities;
 
+import com.api.ecoshieldwebservice.enums.FeedbackTipo;
 import jakarta.persistence.*;
-import jakarta.validation.constraints.NotNull;
-import jakarta.validation.constraints.Size;
 import lombok.Getter;
 import lombok.Setter;
-import org.hibernate.annotations.ColumnDefault;
 import org.hibernate.annotations.CreationTimestamp;
 
 import java.time.OffsetDateTime;
@@ -26,7 +24,8 @@ public class Feedback {
     private Usuario usuario;
 
     @Column(name = "feedbacktipo", nullable = false, length = 50)
-    private String feedbackTipo;
+    @Enumerated(EnumType.STRING)
+    private FeedbackTipo feedbackTipo;
 
     @Column(name = "feedbackdescripcion", nullable = false, columnDefinition = "text")
     private String feedbackDescripcion;

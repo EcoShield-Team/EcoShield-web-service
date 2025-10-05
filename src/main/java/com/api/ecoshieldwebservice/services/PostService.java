@@ -7,8 +7,6 @@ import com.api.ecoshieldwebservice.entities.Usuario;
 import com.api.ecoshieldwebservice.interfaces.IPostService;
 import com.api.ecoshieldwebservice.repositories.PostRepository;
 import com.api.ecoshieldwebservice.repositories.UsuarioRepository;
-import lombok.RequiredArgsConstructor;
-import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.security.core.GrantedAuthority;
@@ -20,7 +18,6 @@ import java.util.Collection;
 import java.util.List;
 
 @Service
-@RequiredArgsConstructor
 public class PostService implements IPostService {
 
     @Autowired
@@ -28,9 +25,6 @@ public class PostService implements IPostService {
 
     @Autowired
     private UsuarioRepository usuarioRepository;
-
-    @Autowired
-    private ModelMapper modelMapper;
 
 
     @Override
@@ -40,13 +34,15 @@ public class PostService implements IPostService {
         Usuario usuario = usuarioRepository.findByUsuarioCorreo(correo)
                 .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "Usuario no encontrado"));
 
-        Post post = modelMapper.map(dto, Post.class);
-        post.setPostId(null);
+        Post post = new Post();
+        post.setPostTitulo(dto.getPostTitulo());
+        post.setPostDescripcion(dto.getPostDescripcion());
+        post.setPostFoto(dto.getPostFoto());
         post.setUsuario(usuario);
         post.setPostFecha(OffsetDateTime.now());
 
         Post guardado = postRepository.save(post);
-        return modelMapper.map(guardado, PostResponseDTO.class);
+        return convertirAPostResponseDTO(guardado);
     }
 
     @Override
@@ -60,11 +56,13 @@ public class PostService implements IPostService {
             throw new ResponseStatusException(HttpStatus.FORBIDDEN, "No puedes editar este post");
         }
 
-        modelMapper.map(dto, existente);
+        existente.setPostTitulo(dto.getPostTitulo());
+        existente.setPostDescripcion(dto.getPostDescripcion());
+        existente.setPostFoto(dto.getPostFoto());
         existente.setPostFecha(OffsetDateTime.now());
 
         Post actualizado = postRepository.save(existente);
-        return modelMapper.map(actualizado, PostResponseDTO.class);
+        return convertirAPostResponseDTO(actualizado);
     }
 
     @Override
@@ -88,7 +86,7 @@ public class PostService implements IPostService {
         if (lista.isEmpty()) {
             return List.of();
         }
-        return lista.stream().map(p -> modelMapper.map(p, PostResponseDTO.class)).toList();
+        return lista.stream().map(this::convertirAPostResponseDTO).toList();
     }
 
     @Override
@@ -97,14 +95,14 @@ public class PostService implements IPostService {
         if (lista.isEmpty()) {
             return List.of();
         }
-        return lista.stream().map(p -> modelMapper.map(p, PostResponseDTO.class)).toList();
+        return lista.stream().map(this::convertirAPostResponseDTO).toList();
     }
 
     @Override
     public PostResponseDTO findById(Long id) {
         Post post = postRepository.findById(id)
                 .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "Post no encontrado"));
-        return modelMapper.map(post, PostResponseDTO.class);
+        return convertirAPostResponseDTO(post);
     }
 
     @Override
@@ -117,7 +115,7 @@ public class PostService implements IPostService {
             return List.of();
         }
 
-        return lista.stream().map(p -> modelMapper.map(p, PostResponseDTO.class)).toList();
+        return lista.stream().map(this::convertirAPostResponseDTO).toList();
     }
 
     private void validarCampos(PostRequestDTO dto) {
@@ -133,13 +131,32 @@ public class PostService implements IPostService {
         if (lista.isEmpty()) {
             return List.of();
         }
-        return lista.stream()
-                .map(post -> modelMapper.map(post, PostResponseDTO.class))
-                .toList();
+        return lista.stream().map(this::convertirAPostResponseDTO).toList();
     }
 
     @Override
     public boolean esAutorDelPost(Long postId, String correo) {
         return postRepository.existsByPostIdAndUsuario_UsuarioCorreo(postId, correo);
     }
+
+    private PostResponseDTO convertirAPostResponseDTO(Post post) {
+        PostResponseDTO dto = new PostResponseDTO();
+        dto.setPostId(post.getPostId());
+        dto.setPostTitulo(post.getPostTitulo());
+        dto.setPostDescripcion(post.getPostDescripcion());
+        dto.setPostFoto(post.getPostFoto());
+        dto.setPostFecha(post.getPostFecha());
+
+        if (post.getUsuario() != null) {
+            var usuarioDTO = new com.api.ecoshieldwebservice.dtos.user.UsuarioResponseForoDTO();
+            usuarioDTO.setUsuarioId(post.getUsuario().getUsuarioId());
+            usuarioDTO.setUsuarioNombre(post.getUsuario().getUsuarioNombre());
+            usuarioDTO.setUsuarioFotoPerfil(post.getUsuario().getUsuarioFotoPerfil());
+            usuarioDTO.setUsuarioPais(post.getUsuario().getUsuarioPais());
+            dto.setUsuario(usuarioDTO);
+        }
+
+        return dto;
+    }
+
 }
