@@ -12,10 +12,12 @@ import com.api.ecoshieldwebservice.repositories.UsuarioRepository;
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
+import org.springframework.security.core.GrantedAuthority;
 import org.springframework.stereotype.Service;
 import org.springframework.web.server.ResponseStatusException;
 
 import java.time.OffsetDateTime;
+import java.util.Collection;
 import java.util.List;
 
 @Service
@@ -35,15 +37,13 @@ public class ComentarioService implements IComentarioService {
 
 
     @Override
-    public ComentarioResponseDTO registrar(ComentarioRequestDTO dto) {
-        if (dto.getComentarioTexto() == null || dto.getComentarioTexto().isBlank()) {
-            throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "El comentario no puede estar vacío");
-        }
+    public ComentarioResponseDTO registrar(ComentarioRequestDTO dto, String correo) {
+        validarComentario(dto);
 
         Post post = postRepository.findById(dto.getPostId())
                 .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "Post no encontrado"));
 
-        Usuario usuario = usuarioRepository.findById(dto.getUsuarioId())
+        Usuario usuario = usuarioRepository.findByUsuarioCorreo(correo)
                 .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "Usuario no encontrado"));
 
         Comentario comentario = new Comentario();
@@ -57,7 +57,9 @@ public class ComentarioService implements IComentarioService {
     }
 
     @Override
-    public ComentarioResponseDTO actualizar(Long postId, Long comentarioId, ComentarioRequestDTO dto) {
+    public ComentarioResponseDTO actualizar(Long postId, Long comentarioId, ComentarioRequestDTO dto, String correo) {
+        validarComentario(dto);
+
         Comentario comentario = comentarioRepository.findById(comentarioId)
                 .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "Comentario no encontrado"));
 
@@ -65,13 +67,32 @@ public class ComentarioService implements IComentarioService {
             throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "El comentario no pertenece al post indicado");
         }
 
-        if (dto.getComentarioTexto() == null || dto.getComentarioTexto().isBlank()) {
-            throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "El comentario no puede estar vacío");
+        if (!esAutorDelComentario(comentarioId, correo)) {
+            throw new ResponseStatusException(HttpStatus.FORBIDDEN, "No puedes editar este comentario");
         }
 
         comentario.setComentarioTexto(dto.getComentarioTexto());
         Comentario actualizado = comentarioRepository.save(comentario);
         return modelMapper.map(actualizado, ComentarioResponseDTO.class);
+    }
+
+    @Override
+    public void borrar(Long postId, Long comentarioId, String correo, Collection<? extends GrantedAuthority> roles) {
+        Comentario comentario = comentarioRepository.findById(comentarioId)
+                .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "Comentario no encontrado"));
+
+        if (!comentario.getPost().getPostId().equals(postId)) {
+            throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "El comentario no pertenece al post indicado");
+        }
+
+        boolean esAutor = esAutorDelComentario(comentarioId, correo);
+        boolean esAdmin = roles.stream().anyMatch(a -> a.getAuthority().equals("ROLE_ADMIN"));
+
+        if (!esAutor && !esAdmin) {
+            throw new ResponseStatusException(HttpStatus.FORBIDDEN, "No tienes permiso para eliminar este comentario");
+        }
+
+        comentarioRepository.delete(comentario);
     }
 
     @Override
@@ -85,28 +106,16 @@ public class ComentarioService implements IComentarioService {
     public List<ComentarioResponseDTO> findAll() {
         List<Comentario> lista = comentarioRepository.findAll();
         if (lista.isEmpty()) {
-            throw new ResponseStatusException(HttpStatus.NO_CONTENT, "No hay comentarios disponibles");
+            return List.of();
         }
         return lista.stream().map(c -> modelMapper.map(c, ComentarioResponseDTO.class)).toList();
-    }
-
-    @Override
-    public void borrar(Long postId, Long comentarioId) {
-        Comentario comentario = comentarioRepository.findById(comentarioId)
-                .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "Comentario no encontrado"));
-
-        if (!comentario.getPost().getPostId().equals(postId)) {
-            throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "El comentario no pertenece al post indicado");
-        }
-
-        comentarioRepository.delete(comentario);
     }
 
     @Override
     public List<ComentarioResponseDTO> findByPostId(Long postId) {
         List<Comentario> lista = comentarioRepository.findByPost_PostIdOrderByComentarioFechaAsc(postId);
         if (lista.isEmpty()) {
-            throw new ResponseStatusException(HttpStatus.NO_CONTENT, "No hay comentarios para este post");
+            return List.of();
         }
         return lista.stream().map(c -> modelMapper.map(c, ComentarioResponseDTO.class)).toList();
     }
@@ -118,9 +127,15 @@ public class ComentarioService implements IComentarioService {
 
         List<Comentario> lista = comentarioRepository.findByUsuario(usuario);
         if (lista.isEmpty()) {
-            throw new ResponseStatusException(HttpStatus.NO_CONTENT, "No hay comentarios de este usuario");
+            return List.of();
         }
         return lista.stream().map(c -> modelMapper.map(c, ComentarioResponseDTO.class)).toList();
+    }
+
+    private void validarComentario(ComentarioRequestDTO dto) {
+        if (dto.getComentarioTexto() == null || dto.getComentarioTexto().isBlank()) {
+            throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "El comentario no puede estar vacío");
+        }
     }
 
     @Override

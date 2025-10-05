@@ -21,7 +21,7 @@ public class FeedbackController {
 
 
     @PostMapping
-    @PreAuthorize("hasAnyRole('USER','ADMIN')")
+    @PreAuthorize("hasRole('USER')")
     public ResponseEntity<FeedbackResponseDTO> registrar(@Valid @RequestBody FeedbackRequestDTO dto) {
         FeedbackResponseDTO created = feedbackService.registrar(dto);
         return ResponseEntity.status(HttpStatus.CREATED).body(created);

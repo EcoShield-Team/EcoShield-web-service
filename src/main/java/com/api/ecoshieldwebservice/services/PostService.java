@@ -11,10 +11,12 @@ import lombok.RequiredArgsConstructor;
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
+import org.springframework.security.core.GrantedAuthority;
 import org.springframework.stereotype.Service;
 import org.springframework.web.server.ResponseStatusException;
 
 import java.time.OffsetDateTime;
+import java.util.Collection;
 import java.util.List;
 
 @Service
@@ -32,13 +34,10 @@ public class PostService implements IPostService {
 
 
     @Override
-    public PostResponseDTO registrar(PostRequestDTO dto) {
-        if (dto.getPostTitulo() == null || dto.getPostTitulo().isBlank()
-                || dto.getPostDescripcion() == null || dto.getPostDescripcion().isBlank()) {
-            throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "El título y la descripción son obligatorios");
-        }
+    public PostResponseDTO registrar(PostRequestDTO dto, String correo) {
+        validarCampos(dto);
 
-        Usuario usuario = usuarioRepository.findById(dto.getUsuarioId())
+        Usuario usuario = usuarioRepository.findByUsuarioCorreo(correo)
                 .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "Usuario no encontrado"));
 
         Post post = modelMapper.map(dto, Post.class);
@@ -51,19 +50,17 @@ public class PostService implements IPostService {
     }
 
     @Override
-    public PostResponseDTO actualizar(Long id, PostRequestDTO dto) {
+    public PostResponseDTO actualizar(Long id, PostRequestDTO dto, String correo) {
+        validarCampos(dto);
+
         Post existente = postRepository.findById(id)
                 .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "Post no encontrado"));
 
-        if (dto.getPostTitulo() == null || dto.getPostTitulo().isBlank()
-                || dto.getPostDescripcion() == null || dto.getPostDescripcion().isBlank()) {
-            throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "El título y la descripción son obligatorios");
+        if (!esAutorDelPost(id, correo)) {
+            throw new ResponseStatusException(HttpStatus.FORBIDDEN, "No puedes editar este post");
         }
 
-        Usuario usuario = existente.getUsuario();
-
         modelMapper.map(dto, existente);
-        existente.setUsuario(usuario);
         existente.setPostFecha(OffsetDateTime.now());
 
         Post actualizado = postRepository.save(existente);
@@ -71,10 +68,25 @@ public class PostService implements IPostService {
     }
 
     @Override
+    public void borrar(Long id, String correo, Collection<? extends GrantedAuthority> roles) {
+        Post post = postRepository.findById(id)
+                .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "Post no encontrado"));
+
+        boolean esAutor = esAutorDelPost(id, correo);
+        boolean esAdmin = roles.stream().anyMatch(r -> r.getAuthority().equals("ROLE_ADMIN"));
+
+        if (!esAutor && !esAdmin) {
+            throw new ResponseStatusException(HttpStatus.FORBIDDEN, "No tienes permiso para eliminar este post");
+        }
+
+        postRepository.delete(post);
+    }
+
+    @Override
     public List<PostResponseDTO> findByPosttitulo(String titulo) {
         List<Post> lista = postRepository.findByPostTitulo(titulo);
         if (lista.isEmpty()) {
-            throw new ResponseStatusException(HttpStatus.NO_CONTENT, "No se encontraron posts con ese título");
+            return List.of();
         }
         return lista.stream().map(p -> modelMapper.map(p, PostResponseDTO.class)).toList();
     }
@@ -83,7 +95,7 @@ public class PostService implements IPostService {
     public List<PostResponseDTO> findAll() {
         List<Post> lista = postRepository.findAll();
         if (lista.isEmpty()) {
-            throw new ResponseStatusException(HttpStatus.NO_CONTENT, "No hay posts disponibles");
+            return List.of();
         }
         return lista.stream().map(p -> modelMapper.map(p, PostResponseDTO.class)).toList();
     }
@@ -102,18 +114,28 @@ public class PostService implements IPostService {
 
         List<Post> lista = postRepository.findByUsuario(usuario);
         if (lista.isEmpty()) {
-            throw new ResponseStatusException(HttpStatus.NO_CONTENT, "No hay posts de este usuario");
+            return List.of();
         }
 
         return lista.stream().map(p -> modelMapper.map(p, PostResponseDTO.class)).toList();
     }
 
-    @Override
-    public void borrar(Long id) {
-        if (!postRepository.existsById(id)) {
-            throw new ResponseStatusException(HttpStatus.NOT_FOUND, "Post no encontrado");
+    private void validarCampos(PostRequestDTO dto) {
+        if (dto.getPostTitulo() == null || dto.getPostTitulo().isBlank() ||
+                dto.getPostDescripcion() == null || dto.getPostDescripcion().isBlank()) {
+            throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "El título y la descripción son obligatorios");
         }
-        postRepository.deleteById(id);
+    }
+
+    @Override
+    public List<PostResponseDTO> findByCorreo(String correo) {
+        List<Post> lista = postRepository.listarPostsPorCorreo(correo);
+        if (lista.isEmpty()) {
+            return List.of();
+        }
+        return lista.stream()
+                .map(post -> modelMapper.map(post, PostResponseDTO.class))
+                .toList();
     }
 
     @Override

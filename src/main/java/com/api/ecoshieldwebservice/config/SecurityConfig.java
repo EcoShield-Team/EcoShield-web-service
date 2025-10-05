@@ -2,6 +2,7 @@ package com.api.ecoshieldwebservice.config;
 
 import com.api.ecoshieldwebservice.security.jwt.JwtRequestFilter;
 import com.api.ecoshieldwebservice.security.permissions.OwnershipPermissionEvaluator;
+import jakarta.servlet.http.HttpServletResponse;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.http.HttpMethod;
@@ -16,6 +17,8 @@ import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.web.SecurityFilterChain;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
+
+import java.io.PrintWriter;
 
 @Configuration
 @EnableMethodSecurity
@@ -52,14 +55,28 @@ public class SecurityConfig {
                 .authorizeHttpRequests(auth -> auth
                         .requestMatchers(HttpMethod.POST, "/auth/login", "/auth/register").permitAll()
                         .requestMatchers("/swagger-ui/**", "/swagger-ui.html", "/v3/api-docs/**", "/swagger-resources/**", "/webjars/**").permitAll()
+                        .requestMatchers("/error").permitAll()
                         .anyRequest().authenticated()
                 )
                 .exceptionHandling(ex -> ex
-                        .authenticationEntryPoint((req,res,e) -> res.sendError(401))
-                        .accessDeniedHandler((req,res,e) -> res.sendError(403))
+                        .authenticationEntryPoint((req, res, e) -> {
+                            res.setContentType("application/json");
+                            res.setStatus(HttpServletResponse.SC_UNAUTHORIZED);
+                            try (PrintWriter out = res.getWriter()) {
+                                out.write("{\"error\": \"No autorizado o token inválido\"}");
+                            }
+                        })
+                        .accessDeniedHandler((req, res, e) -> {
+                            res.setContentType("application/json");
+                            res.setStatus(HttpServletResponse.SC_FORBIDDEN);
+                            try (PrintWriter out = res.getWriter()) {
+                                out.write("{\"error\": \"Acceso denegado. No tienes permisos para acceder a este recurso.\"}");
+                            }
+                        })
                 )
                 .addFilterBefore(jwtRequestFilter, UsernamePasswordAuthenticationFilter.class)
                 .cors(Customizer.withDefaults());
+
         return http.build();
     }
 }

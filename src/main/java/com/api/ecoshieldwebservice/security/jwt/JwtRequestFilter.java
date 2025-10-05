@@ -1,5 +1,6 @@
 package com.api.ecoshieldwebservice.security.jwt;
 
+import io.jsonwebtoken.JwtException;
 import jakarta.servlet.FilterChain;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.http.HttpServletRequest;
@@ -31,8 +32,8 @@ public class JwtRequestFilter extends OncePerRequestFilter {
             throws ServletException, IOException {
 
         String auth = request.getHeader(HttpHeaders.AUTHORIZATION);
-        if (auth != null && auth.startsWith("Bearer ")) {
 
+        if (auth != null && auth.startsWith("Bearer ")) {
             String token = auth.substring(7);
             try {
                 String correo = jwtUtil.extractCorreo(token);
@@ -45,9 +46,12 @@ public class JwtRequestFilter extends OncePerRequestFilter {
                         SecurityContextHolder.getContext().setAuthentication(authToken);
                     }
                 }
-            } catch (Exception ignored) {
+            } catch (JwtException e) {
+            } catch (Exception e) {
+                throw e;
             }
         }
+
         chain.doFilter(request, response);
     }
 }

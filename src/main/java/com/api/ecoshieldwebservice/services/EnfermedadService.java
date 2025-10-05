@@ -47,7 +47,7 @@ public class EnfermedadService implements IEnfermedadService {
         }
         List<Enfermedad> lista = enfermedadRepository.findByEnfermedadNombreContainingIgnoreCase(nombre.trim());
         if (lista.isEmpty()) {
-            throw new ResponseStatusException(HttpStatus.NO_CONTENT, "No se encontraron resultados");
+            throw new ResponseStatusException(HttpStatus.NOT_FOUND, "No se encontraron resultados");
         }
         return lista.stream()
                 .map(e -> modelMapper.map(e, EnfermedadListDTO.class))
