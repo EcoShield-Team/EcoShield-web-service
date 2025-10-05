@@ -8,6 +8,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
+import org.springframework.security.core.Authentication;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -19,7 +20,6 @@ public class BlogController {
     @Autowired
     private IBlogService blogService;
 
-
     @GetMapping("/{id}")
     @PreAuthorize("hasRole('ADMIN')")
     public ResponseEntity<BlogResponseDTO> findById(@PathVariable Long id) {
@@ -28,16 +28,18 @@ public class BlogController {
 
     @PostMapping
     @PreAuthorize("hasRole('ADMIN')")
-    public ResponseEntity<BlogResponseDTO> registrar(@Valid @RequestBody BlogRequestDTO blogRequestDTO) {
-        BlogResponseDTO nuevoBlog = blogService.registrar(blogRequestDTO);
+    public ResponseEntity<BlogResponseDTO> registrar(@Valid @RequestBody BlogRequestDTO dto,
+                                                     Authentication authentication) {
+        BlogResponseDTO nuevoBlog = blogService.registrar(dto, authentication.getName());
         return ResponseEntity.status(HttpStatus.CREATED).body(nuevoBlog);
     }
 
     @PutMapping("/{id}")
     @PreAuthorize("hasRole('ADMIN')")
     public ResponseEntity<BlogResponseDTO> actualizar(@PathVariable Long id,
-                                                      @Valid @RequestBody BlogRequestDTO blogRequestDTO) {
-        return ResponseEntity.ok(blogService.actualizar(id, blogRequestDTO));
+                                                      @Valid @RequestBody BlogRequestDTO dto,
+                                                      Authentication authentication) {
+        return ResponseEntity.ok(blogService.actualizar(id, dto, authentication.getName()));
     }
 
     @DeleteMapping("/{id}")
@@ -65,3 +67,4 @@ public class BlogController {
         return ResponseEntity.ok(blogService.findAllNews());
     }
 }
+

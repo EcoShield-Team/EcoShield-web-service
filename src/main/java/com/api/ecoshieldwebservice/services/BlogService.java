@@ -29,24 +29,15 @@ public class BlogService implements IBlogService {
     @Autowired
     private ModelMapper modelMapper;
 
-    @Override
-    public BlogResponseDTO findById(Long id) {
-        Blog blog = blogRepository.findById(id)
-                .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "Blog no encontrado"));
-        return modelMapper.map(blog, BlogResponseDTO.class);
-    }
 
     @Override
-    public BlogResponseDTO registrar(BlogRequestDTO blogRequestDTO) {
-        if (blogRequestDTO.getBlogTitulo() == null || blogRequestDTO.getBlogTitulo().isBlank()
-                || blogRequestDTO.getBlogDescripcion() == null || blogRequestDTO.getBlogDescripcion().isBlank()) {
-            throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "Título y contenido son obligatorios");
-        }
+    public BlogResponseDTO registrar(BlogRequestDTO dto, String correo) {
+        validarCampos(dto);
 
-        Usuario usuario = usuarioRepository.findById(blogRequestDTO.getUsuarioId())
+        Usuario usuario = usuarioRepository.findByUsuarioCorreo(correo)
                 .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "Usuario no encontrado"));
 
-        Blog blog = modelMapper.map(blogRequestDTO, Blog.class);
+        Blog blog = modelMapper.map(dto, Blog.class);
         blog.setUsuario(usuario);
         blog.setBlogFechaPublicacion(OffsetDateTime.now());
 
@@ -55,64 +46,62 @@ public class BlogService implements IBlogService {
     }
 
     @Override
-    public BlogResponseDTO actualizar(Long id, BlogRequestDTO blogRequestDTO) {
-        Blog blogExistente = blogRepository.findById(id)
+    public BlogResponseDTO actualizar(Long id, BlogRequestDTO dto, String correo) {
+        validarCampos(dto);
+
+        Blog existente = blogRepository.findById(id)
                 .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "Blog no encontrado"));
 
-        if (blogRequestDTO.getBlogTitulo() == null || blogRequestDTO.getBlogTitulo().isBlank()
-                || blogRequestDTO.getBlogDescripcion() == null || blogRequestDTO.getBlogDescripcion().isBlank()) {
-            throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "Título y contenido son obligatorios");
-        }
-
-        Usuario usuario = usuarioRepository.findById(blogRequestDTO.getUsuarioId())
+        Usuario usuario = usuarioRepository.findByUsuarioCorreo(correo)
                 .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "Usuario no encontrado"));
 
-        modelMapper.map(blogRequestDTO, blogExistente);
+        modelMapper.map(dto, existente);
+        existente.setUsuario(usuario);
+        existente.setBlogFechaPublicacion(OffsetDateTime.now());
 
-        blogExistente.setUsuario(usuario);
-        blogExistente.setBlogFechaPublicacion(OffsetDateTime.now());
-
-        Blog actualizado = blogRepository.save(blogExistente);
+        Blog actualizado = blogRepository.save(existente);
         return modelMapper.map(actualizado, BlogResponseDTO.class);
     }
 
-
     @Override
     public void borrar(Long id) {
-        if (!blogRepository.existsById(id)) {
-            throw new ResponseStatusException(HttpStatus.NOT_FOUND, "Blog no encontrado");
-        }
-        blogRepository.deleteById(id);
+        Blog blog = blogRepository.findById(id)
+                .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "Blog no encontrado"));
+        blogRepository.delete(blog);
     }
 
     @Override
     public List<BlogResponseDTO> findAll() {
         List<Blog> lista = blogRepository.findAll();
-        if (lista.isEmpty()) {
-            throw new ResponseStatusException(HttpStatus.NO_CONTENT, "No hay blogs disponibles");
-        }
-        return lista.stream()
-                .map(blog -> modelMapper.map(blog, BlogResponseDTO.class))
-                .toList();
+        if (lista.isEmpty()) return List.of();
+        return lista.stream().map(b -> modelMapper.map(b, BlogResponseDTO.class)).toList();
     }
 
     @Override
     public BlogResponseDTO findTipDelDia() {
         Blog blog = blogRepository.findFirstByBlogTipoOrderByBlogFechaPublicacionDesc(BlogTipo.TIP);
-        if (blog == null) {
-            throw new ResponseStatusException(HttpStatus.NO_CONTENT, "No hay tip del día disponible");
-        }
+        if (blog == null) throw new ResponseStatusException(HttpStatus.NO_CONTENT, "No hay tip del día disponible");
         return modelMapper.map(blog, BlogResponseDTO.class);
     }
 
     @Override
     public List<BlogResponseDTO> findAllNews() {
         List<Blog> lista = blogRepository.findAllNews();
-        if (lista.isEmpty()) {
-            throw new ResponseStatusException(HttpStatus.NO_CONTENT, "No hay noticias disponibles");
+        if (lista.isEmpty()) return List.of();
+        return lista.stream().map(b -> modelMapper.map(b, BlogResponseDTO.class)).toList();
+    }
+
+    @Override
+    public BlogResponseDTO findById(Long id) {
+        Blog blog = blogRepository.findById(id)
+                .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "Blog no encontrado"));
+        return modelMapper.map(blog, BlogResponseDTO.class);
+    }
+
+    private void validarCampos(BlogRequestDTO dto) {
+        if (dto.getBlogTitulo() == null || dto.getBlogTitulo().isBlank() ||
+                dto.getBlogDescripcion() == null || dto.getBlogDescripcion().isBlank()) {
+            throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "Título y descripción son obligatorios");
         }
-        return lista.stream()
-                .map(blog -> modelMapper.map(blog, BlogResponseDTO.class))
-                .toList();
     }
 }
