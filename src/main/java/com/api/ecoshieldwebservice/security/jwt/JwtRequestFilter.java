@@ -1,6 +1,6 @@
-package com.api.ecoshieldwebservice.filters;
+package com.api.ecoshieldwebservice.security.jwt;
 
-import com.api.ecoshieldwebservice.util.JwtUtil;
+import io.jsonwebtoken.JwtException;
 import jakarta.servlet.FilterChain;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.http.HttpServletRequest;
@@ -32,23 +32,26 @@ public class JwtRequestFilter extends OncePerRequestFilter {
             throws ServletException, IOException {
 
         String auth = request.getHeader(HttpHeaders.AUTHORIZATION);
-        if (auth != null && auth.startsWith("Bearer ")) {
 
+        if (auth != null && auth.startsWith("Bearer ")) {
             String token = auth.substring(7);
             try {
                 String correo = jwtUtil.extractCorreo(token);
                 if (correo != null && SecurityContextHolder.getContext().getAuthentication() == null) {
                     UserDetails user = userDetailsService.loadUserByUsername(correo);
-                    if (jwtUtil.validateToken(token, user.getUsername())) {
+                    if (jwtUtil.validateToken(token, correo)) {
                         UsernamePasswordAuthenticationToken authToken =
                                 new UsernamePasswordAuthenticationToken(user, null, user.getAuthorities());
                         authToken.setDetails(new WebAuthenticationDetailsSource().buildDetails(request));
                         SecurityContextHolder.getContext().setAuthentication(authToken);
                     }
                 }
-            } catch (Exception ignored) {
+            } catch (JwtException e) {
+            } catch (Exception e) {
+                throw e;
             }
         }
+
         chain.doFilter(request, response);
     }
 }

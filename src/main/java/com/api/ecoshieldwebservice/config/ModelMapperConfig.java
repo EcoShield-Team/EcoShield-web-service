@@ -1,39 +1,21 @@
 package com.api.ecoshieldwebservice.config;
 
-import com.api.ecoshieldwebservice.dtos.response.ComentarioResponseDTO;
-import com.api.ecoshieldwebservice.dtos.response.FeedbackResponseDTO;
-import com.api.ecoshieldwebservice.dtos.response.PostResponseDTO;
-import com.api.ecoshieldwebservice.entities.Comentario;
-import com.api.ecoshieldwebservice.entities.Feedback;
-import com.api.ecoshieldwebservice.entities.Post;
+import org.modelmapper.Condition;
 import org.modelmapper.ModelMapper;
+import org.modelmapper.convention.MatchingStrategies;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 
 @Configuration
 public class ModelMapperConfig {
+
     @Bean
-    public ModelMapper modelMapper(){
+    public ModelMapper modelMapper() {
         ModelMapper mapper = new ModelMapper();
 
-        mapper.typeMap(Feedback.class, FeedbackResponseDTO.class).addMappings(map -> {
-            map.map(src -> src.getUsuario().getUsuarioId(), FeedbackResponseDTO::setUsuarioId);
-            map.map(src -> src.getUsuario().getUsuarioNombre(), FeedbackResponseDTO::setUsuarioNombre);
-        });
-
-        mapper.typeMap(Comentario.class, ComentarioResponseDTO.class).addMappings(map -> {
-            map.map(src -> src.getUsuario().getUsuarioId(), (dest, v) -> dest.getUsuario().setUsuarioId((Long) v));
-            map.map(src -> src.getUsuario().getUsuarioNombre(), (dest, v) -> dest.getUsuario().setUsuarioNombre((String) v));
-            map.map(src -> src.getUsuario().getUsuarioFotoPerfil(), (dest, v) -> dest.getUsuario().setUsuarioFotoPerfil((String) v));
-            map.map(src -> src.getUsuario().getUsuarioPais(), (dest, v) -> dest.getUsuario().setUsuarioPais((String) v));
-        });
-
-        mapper.typeMap(Post.class, PostResponseDTO.class).addMappings(map -> {
-            map.map(src -> src.getUsuario().getUsuarioId(), (dest, v) -> dest.getUsuario().setUsuarioId((Long) v));
-            map.map(src -> src.getUsuario().getUsuarioNombre(), (dest, v) -> dest.getUsuario().setUsuarioNombre((String) v));
-            map.map(src -> src.getUsuario().getUsuarioFotoPerfil(), (dest, v) -> dest.getUsuario().setUsuarioFotoPerfil((String) v));
-            map.map(src -> src.getUsuario().getUsuarioPais(), (dest, v) -> dest.getUsuario().setUsuarioPais((String) v));
-        });
+        mapper.getConfiguration()
+                .setMatchingStrategy(MatchingStrategies.STRICT)
+                .setPropertyCondition((Condition<?, ?>) ctx -> ctx.getSource() != null);
 
         return mapper;
     }

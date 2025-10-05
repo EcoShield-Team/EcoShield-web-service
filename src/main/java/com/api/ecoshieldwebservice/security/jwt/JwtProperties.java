@@ -1,4 +1,4 @@
-package com.api.ecoshieldwebservice.config;
+package com.api.ecoshieldwebservice.security.jwt;
 
 import lombok.Getter;
 import lombok.Setter;

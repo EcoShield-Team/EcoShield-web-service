@@ -1,5 +1,6 @@
 package com.api.ecoshieldwebservice.dtos.response;
 
+import com.api.ecoshieldwebservice.enums.FeedbackTipo;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -15,7 +16,7 @@ public class FeedbackResponseDTO {
     private Long feedbackId;
     private Long usuarioId;
     private String usuarioNombre;
-    private String feedbackTipo;
+    private FeedbackTipo feedbackTipo;
     private String feedbackDescripcion;
     private Integer feedbackRating;
     private OffsetDateTime feedbackFecha;

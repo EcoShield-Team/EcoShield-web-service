@@ -2,22 +2,18 @@ package com.api.ecoshieldwebservice.dtos.request;
 
 import com.api.ecoshieldwebservice.enums.BlogEstado;
 import com.api.ecoshieldwebservice.enums.BlogTipo;
+import io.swagger.v3.oas.annotations.media.Schema;
 import jakarta.validation.constraints.*;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
-import org.hibernate.validator.constraints.URL;
 
 @Setter
 @Getter
 @AllArgsConstructor
 @NoArgsConstructor
 public class BlogRequestDTO {
-
-    @NotNull(message = "Usuario obligatorio")
-    @Positive(message = "UsuarioId debe ser positivo")
-    private Long usuarioId;
 
     @NotNull(message = "Tipo obligatorio")
     private BlogTipo blogTipo;
@@ -31,9 +27,11 @@ public class BlogRequestDTO {
     private String blogDescripcion;
 
     @Size(max = 255, message = "Imagen: máximo 255 caracteres")
-    @URL(message = "URL de imagen inválida")
     private String blogImagen;
 
     @NotNull(message = "Estado obligatorio")
     private BlogEstado blogEstado;
+
+    @Schema(hidden = true)
+    private Long usuarioId;
 }

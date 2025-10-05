@@ -14,10 +14,6 @@ import lombok.Setter;
 @AllArgsConstructor
 @NoArgsConstructor
 public class PostRequestDTO {
-    @NotNull(message = "El usuario es obligatorio")
-    @Positive(message = "El id de usuario debe ser positivo")
-    private Long usuarioId;
-
     @NotBlank(message = "El título es obligatorio")
     @Size(min = 3, max = 200, message = "El título debe tener entre 3 y 200 caracteres")
     private String postTitulo;

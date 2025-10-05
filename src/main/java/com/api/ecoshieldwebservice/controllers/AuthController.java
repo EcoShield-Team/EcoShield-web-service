@@ -1,8 +1,7 @@
 package com.api.ecoshieldwebservice.controllers;
 
 import com.api.ecoshieldwebservice.dtos.auth.*;
-import com.api.ecoshieldwebservice.interfaces.IAuthServices;
-import jakarta.annotation.security.PermitAll;
+import com.api.ecoshieldwebservice.interfaces.IAuthService;
 import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpHeaders;
@@ -17,10 +16,9 @@ import org.springframework.web.bind.annotation.*;
 public class AuthController {
 
     @Autowired
-    private IAuthServices authService;
+    private IAuthService authService;
 
     @PostMapping("/register")
-    @PermitAll
     public ResponseEntity<AuthResponseDTO> register(@Valid @RequestBody RegisterRequestDTO dto) {
         AuthResponseDTO res = authService.register(dto);
         return ResponseEntity.ok()
@@ -29,7 +27,6 @@ public class AuthController {
     }
 
     @PostMapping("/login")
-    @PermitAll
     public ResponseEntity<AuthResponseDTO> login(@Valid @RequestBody LoginRequestDTO dto) {
         AuthResponseDTO res = authService.login(dto);
         return ResponseEntity.ok()

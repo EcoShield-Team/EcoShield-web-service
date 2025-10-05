@@ -1,6 +1,5 @@
-package com.api.ecoshieldwebservice.util;
+package com.api.ecoshieldwebservice.security.jwt;
 
-import com.api.ecoshieldwebservice.config.JwtProperties;
 import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.SignatureAlgorithm;
