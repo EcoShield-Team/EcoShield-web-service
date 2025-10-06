@@ -1,4 +1,4 @@
-package com.api.ecoshieldwebservice.dtos.auth;
+package com.api.ecoshieldwebservice.dtos.auth.password;
 
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.Size;

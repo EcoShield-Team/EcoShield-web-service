@@ -25,8 +25,8 @@ public class JwtUserDetailsService implements UserDetailsService {
 
         String springRole = "ROLE_" + u.getRol().getRolNombre().name();
 
-        boolean disabled = u.getUsuarioEstado() != UsuarioEstado.ACTIVO;
         boolean locked = u.getUsuarioEstado() == UsuarioEstado.BLOQUEADO;
+        boolean disabled = false;
 
         return User.withUsername(u.getUsuarioCorreo())
                 .password(u.getUsuarioContrasena())

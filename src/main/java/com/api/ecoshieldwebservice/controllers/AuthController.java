@@ -1,6 +1,7 @@
 package com.api.ecoshieldwebservice.controllers;
 
 import com.api.ecoshieldwebservice.dtos.auth.*;
+import com.api.ecoshieldwebservice.dtos.auth.password.ChangePasswordRequestDTO;
 import com.api.ecoshieldwebservice.interfaces.IAuthService;
 import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -42,7 +43,7 @@ public class AuthController {
         return ResponseEntity.ok(dto);
     }
 
-    @PutMapping("/password")
+    @PutMapping("/changePassword")
     @PreAuthorize("isAuthenticated()")
     public ResponseEntity<AuthResponseDTO> changePassword(@AuthenticationPrincipal UserDetails user, @Valid @RequestBody ChangePasswordRequestDTO dto) {
         AuthResponseDTO res = authService.changeMyPassword(user.getUsername(), dto);

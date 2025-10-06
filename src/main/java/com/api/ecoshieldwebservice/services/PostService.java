@@ -11,6 +11,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.stereotype.Service;
+import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.server.ResponseStatusException;
 
 import java.time.OffsetDateTime;
@@ -26,9 +27,12 @@ public class PostService implements IPostService {
     @Autowired
     private UsuarioRepository usuarioRepository;
 
+    @Autowired
+    private CloudinaryService cloudinaryService;
+
 
     @Override
-    public PostResponseDTO registrar(PostRequestDTO dto, String correo) {
+    public PostResponseDTO registrar(PostRequestDTO dto, MultipartFile imagen, String correo) {
         validarCampos(dto);
 
         Usuario usuario = usuarioRepository.findByUsuarioCorreo(correo)
@@ -37,16 +41,20 @@ public class PostService implements IPostService {
         Post post = new Post();
         post.setPostTitulo(dto.getPostTitulo());
         post.setPostDescripcion(dto.getPostDescripcion());
-        post.setPostFoto(dto.getPostFoto());
         post.setUsuario(usuario);
         post.setPostFecha(OffsetDateTime.now());
+
+        if (imagen != null && !imagen.isEmpty()) {
+            String url = cloudinaryService.uploadImage(imagen);
+            post.setPostFoto(url);
+        }
 
         Post guardado = postRepository.save(post);
         return convertirAPostResponseDTO(guardado);
     }
 
     @Override
-    public PostResponseDTO actualizar(Long id, PostRequestDTO dto, String correo) {
+    public PostResponseDTO actualizar(Long id, PostRequestDTO dto, MultipartFile imagen, String correo) {
         validarCampos(dto);
 
         Post existente = postRepository.findById(id)
@@ -58,8 +66,12 @@ public class PostService implements IPostService {
 
         existente.setPostTitulo(dto.getPostTitulo());
         existente.setPostDescripcion(dto.getPostDescripcion());
-        existente.setPostFoto(dto.getPostFoto());
         existente.setPostFecha(OffsetDateTime.now());
+
+        if (imagen != null && !imagen.isEmpty()) {
+            String url = cloudinaryService.uploadImage(imagen);
+            existente.setPostFoto(url);
+        }
 
         Post actualizado = postRepository.save(existente);
         return convertirAPostResponseDTO(actualizado);
