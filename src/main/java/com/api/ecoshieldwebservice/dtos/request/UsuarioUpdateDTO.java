@@ -13,8 +13,6 @@ import lombok.Setter;
 @NoArgsConstructor
 public class UsuarioUpdateDTO {
 
-    private Long usuarioId;
-
     @NotBlank(message = "El nombre es obligatorio")
     @Size(max = 100, message = "El nombre no debe superar los 100 caracteres")
     private String usuarioNombre;

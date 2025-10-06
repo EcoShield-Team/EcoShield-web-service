@@ -3,13 +3,14 @@ package com.api.ecoshieldwebservice.interfaces;
 import com.api.ecoshieldwebservice.dtos.request.PostRequestDTO;
 import com.api.ecoshieldwebservice.dtos.response.PostResponseDTO;
 import org.springframework.security.core.GrantedAuthority;
+import org.springframework.web.multipart.MultipartFile;
 
 import java.util.Collection;
 import java.util.List;
 
 public interface IPostService {
-    PostResponseDTO registrar(PostRequestDTO dto, String correo);
-    PostResponseDTO actualizar(Long id, PostRequestDTO dto, String correo);
+    PostResponseDTO registrar(PostRequestDTO dto, MultipartFile imagen, String correo);
+    PostResponseDTO actualizar(Long id, PostRequestDTO dto, MultipartFile imagen, String correo);
     List<PostResponseDTO> findByPosttitulo(String titulo);
     List<PostResponseDTO> findAll();
     PostResponseDTO findById(Long id);
