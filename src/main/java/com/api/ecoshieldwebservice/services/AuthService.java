@@ -1,6 +1,8 @@
 package com.api.ecoshieldwebservice.services;
 
 import com.api.ecoshieldwebservice.dtos.auth.*;
+import com.api.ecoshieldwebservice.dtos.auth.password.ChangePasswordRequestDTO;
+import com.api.ecoshieldwebservice.dtos.auth.password.ResetPasswordRequestDTO;
 import com.api.ecoshieldwebservice.entities.Rol;
 import com.api.ecoshieldwebservice.entities.Usuario;
 import com.api.ecoshieldwebservice.enums.RolNombre;
@@ -121,14 +123,5 @@ public class AuthService  implements IAuthService {
         usuarioDTO.setUsuarioRol(springRole);
 
         return new AuthResponseDTO(token, expiresAt, usuarioDTO);
-    }
-
-    @Override
-    public void adminResetPassword(Long usuarioId, ResetPasswordRequestDTO dto) {
-        Usuario u = usuarioRepository.findById(usuarioId)
-                .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "Usuario no encontrado"));
-
-        u.setUsuarioContrasena(passwordEncoder.encode(dto.getNewPassword()));
-        usuarioRepository.save(u);
     }
 }
