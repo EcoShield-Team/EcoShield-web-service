@@ -11,8 +11,8 @@ import java.util.concurrent.ConcurrentHashMap;
 @Component
 public class SimpleRateLimiter {
     private final Map<String, Deque<Long>> requests = new ConcurrentHashMap<>();
-    private final int limit = 10;          // 10 req
-    private final long windowMs = 60_000; // por 60s
+    private final int limit = 10;
+    private final long windowMs = 60_000;
 
     public boolean allow(String key) {
         long now = Instant.now().toEpochMilli();

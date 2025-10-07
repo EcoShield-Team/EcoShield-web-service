@@ -45,7 +45,6 @@ public class BlogService implements IBlogService {
         blog.setUsuario(usuario);
         blog.setBlogFechaPublicacion(OffsetDateTime.now());
 
-        // 👇 Subir la imagen si se envió
         if (imagen != null && !imagen.isEmpty()) {
             String url = cloudinaryService.uploadImage(imagen);
             blog.setBlogImagen(url);
