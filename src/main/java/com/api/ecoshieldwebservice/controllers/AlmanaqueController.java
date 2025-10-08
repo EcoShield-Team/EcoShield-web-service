@@ -90,7 +90,6 @@ public class AlmanaqueController {
         return ResponseEntity.ok(enfermedadService.enfermedadesRelacionadas(id));
     }
 
-    // ---------------- PLAGAS ----------------
 
     @GetMapping("/plagas")
     @PreAuthorize("hasAnyRole('USER','ADMIN')")

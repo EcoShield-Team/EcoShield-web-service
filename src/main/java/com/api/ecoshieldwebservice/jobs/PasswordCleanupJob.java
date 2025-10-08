@@ -14,7 +14,6 @@ public class PasswordCleanupJob {
 
     @Scheduled(cron = "0 0 3 * * *")
     public void purgeExpiredTokens() {
-        // Borra todos los tokens cuya fecha de expiración fue hace más de 1 día
         passwordRepository.deleteAllByExpiresAtBefore(OffsetDateTime.now().minusDays(1));
     }
 }
