@@ -6,14 +6,14 @@ A continuación se listan los módulos (`feature/*`) asignados a cada integrante
 - `feature/authentication` → login, registro y recuperación de cuenta.
 - `feature/user-management` → gestión de perfil de usuario y roles.
 
-### 🔹 Integrante 2
+### 🔹 Irvin Vergara
 - `feature/almanaque` → gestión de enfermedades y plagas (listado y detalle).
 - `feature/crop-detection` → simulación de detección de cultivos a partir de fotos.
 
-### 🔹 Integrante 3
+### 🔹 Diego Ricra
 - `feature/community-forum` → foro de comunidad (posts y comentarios).
 
-### 🔹 Integrante 4
+### 🔹 Erik Ochoa
 - `feature/recommendations` → módulo de recomendaciones: blogs, noticias y tips diarios.
 
 ### 🔹 Camilo Parraga
