@@ -10,6 +10,7 @@ import com.api.ecoshieldwebservice.enums.Severidad;
 import com.api.ecoshieldwebservice.enums.Temporada;
 import com.api.ecoshieldwebservice.interfaces.IEnfermedadService;
 import com.api.ecoshieldwebservice.interfaces.IPlagaService;
+import io.swagger.v3.oas.annotations.tags.Tag;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
@@ -18,6 +19,7 @@ import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
+@Tag(name = "Almanaque", description = "Catálogo de plagas y enfermedades agrícolas con filtros de búsqueda")
 @RestController
 @RequestMapping("/almanaque")
 @RequiredArgsConstructor

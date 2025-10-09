@@ -19,7 +19,11 @@ public class SwaggerConfig {
         return new OpenAPI()
                 .info(new Info()
                         .title("🌿 EcoShield Web Service API")
-                        .description("API para gestión de usuarios, blogs, posts, comentarios y feedback del sistema EcoShield.")
+                        .description("""
+                                API para la plataforma EcoShield 🌱  
+                                Incluye gestión de usuarios, blogs, posts, comentarios, feedback y el almanaque de plagas y enfermedades.  
+                                Autenticación mediante JWT Bearer Token.
+                                """)
                         .version("1.0.0"))
                 .addSecurityItem(new SecurityRequirement().addList(securitySchemeName))
                 .components(new Components().addSecuritySchemes(securitySchemeName,
@@ -29,8 +33,12 @@ public class SwaggerConfig {
                                 .scheme("bearer")
                                 .bearerFormat("JWT")
                                 .description("Coloca aquí tu token JWT obtenido desde /auth/login")))
-                .addTagsItem(new Tag().name("Auth").description("Endpoints públicos para autenticación y registro"))
-                .addTagsItem(new Tag().name("Blog").description("Gestión de blogs y subida de imágenes a Cloudinary"))
-                .addTagsItem(new Tag().name("Feedback").description("Gestión de comentarios y sugerencias"));
+                .addTagsItem(new Tag().name("Auth").description("🔐 Endpoints de autenticación, registro y recuperación de contraseñas"))
+                .addTagsItem(new Tag().name("Usuario").description("👤 Gestión de usuarios: consulta, edición, eliminación y asignación de roles"))
+                .addTagsItem(new Tag().name("Post").description("📝 Creación, edición y consulta de publicaciones de los usuarios"))
+                .addTagsItem(new Tag().name("Comentario").description("💬 Gestión de comentarios asociados a los posts"))
+                .addTagsItem(new Tag().name("Blog").description("📚 Blogs informativos: tips y noticias sobre agricultura sostenible"))
+                .addTagsItem(new Tag().name("Feedback").description("🗣️ Opiniones, sugerencias y calificaciones del sistema"))
+                .addTagsItem(new Tag().name("Almanaque").description("🌾 Catálogo de plagas y enfermedades agrícolas con filtros y búsquedas"));
     }
 }

@@ -4,6 +4,7 @@ import com.api.ecoshieldwebservice.dtos.request.FeedbackRequestDTO;
 import com.api.ecoshieldwebservice.dtos.response.FeedbackResponseDTO;
 import com.api.ecoshieldwebservice.enums.FeedbackTipo;
 import com.api.ecoshieldwebservice.interfaces.IFeedbackService;
+import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -14,6 +15,7 @@ import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
+@Tag(name = "Feedback", description = "Opiniones y sugerencias de los usuarios sobre el sistema")
 @RestController
 @RequestMapping("/feedback")
 public class FeedbackController {
