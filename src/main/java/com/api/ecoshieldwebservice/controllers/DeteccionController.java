@@ -7,6 +7,7 @@ import com.api.ecoshieldwebservice.repositories.UsuarioRepository;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.core.Authentication;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
@@ -25,6 +26,7 @@ public class DeteccionController {
 
 
     @PostMapping(consumes = "multipart/form-data")
+    @PreAuthorize("hasAnyRole('USER','ADMIN')")
     public ResponseEntity<DeteccionResponseDTO> analizar(
             @RequestPart("imagen") MultipartFile imagen,
             Authentication authentication) {
