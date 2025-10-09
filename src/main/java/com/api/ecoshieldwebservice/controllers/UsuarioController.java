@@ -5,6 +5,7 @@ import com.api.ecoshieldwebservice.dtos.user.UsuarioResponseDTO;
 import com.api.ecoshieldwebservice.dtos.request.UsuarioUpdateDTO;
 import com.api.ecoshieldwebservice.enums.RolNombre;
 import com.api.ecoshieldwebservice.interfaces.IUsuarioService;
+import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.MediaType;
@@ -15,6 +16,7 @@ import org.springframework.web.multipart.MultipartFile;
 
 import java.util.List;
 
+@Tag(name = "Usuario", description = "Gestión de usuarios y roles dentro del sistema")
 @RestController
 @RequestMapping("/users")
 public class UsuarioController {

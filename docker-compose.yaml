@@ -1,0 +1,34 @@
+services:
+  api:
+    build: .
+    image: ecoshield-api:latest
+    container_name: ecoshield-api
+    ports:
+      - "6868:8080"
+    networks:
+      - springcloud
+    depends_on:
+      - db
+    env_file:
+      - .env
+    restart: unless-stopped
+
+  db:
+    image: postgres:16-alpine
+    container_name: ecoshield-db
+    volumes:
+      - db_data:/var/lib/postgresql/data
+    networks:
+      - springcloud
+    env_file:
+      - .env
+    restart: always
+    ports:
+      - "5433:5432"
+
+volumes:
+  db_data:
+
+networks:
+  springcloud:
+    driver: bridge

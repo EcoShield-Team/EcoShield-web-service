@@ -3,6 +3,7 @@ package com.api.ecoshieldwebservice.controllers;
 import com.api.ecoshieldwebservice.dtos.request.ComentarioRequestDTO;
 import com.api.ecoshieldwebservice.dtos.response.ComentarioResponseDTO;
 import com.api.ecoshieldwebservice.interfaces.IComentarioService;
+import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -13,6 +14,7 @@ import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
+@Tag(name = "Comentario", description = "Gestión de comentarios sobre posts")
 @RestController
 public class ComentarioController {
 

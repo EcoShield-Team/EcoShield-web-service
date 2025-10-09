@@ -5,6 +5,7 @@ import com.api.ecoshieldwebservice.dtos.auth.password.*;
 import com.api.ecoshieldwebservice.interfaces.IAuthService;
 import com.api.ecoshieldwebservice.interfaces.IPasswordService;
 import com.api.ecoshieldwebservice.util.SimpleRateLimiter;
+import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -15,6 +16,7 @@ import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.web.bind.annotation.*;
 
+@Tag(name = "Auth", description = "Endpoints públicos para autenticación y registro de usuarios")
 @RestController
 @RequestMapping("/auth")
 public class AuthController {
