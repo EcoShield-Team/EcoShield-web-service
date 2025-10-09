@@ -21,10 +21,10 @@ public class SwaggerConfig {
                         .title("🌿 EcoShield Web Service API")
                         .description("""
                                 API para la plataforma EcoShield 🌱  
-                                Incluye gestión de usuarios, blogs, posts, comentarios, feedback y el almanaque de plagas y enfermedades.  
+                                Incluye gestión de usuarios, blogs, posts, comentarios, feedback y el almanaque de plagas y enfermedades y detección IA.  
                                 Autenticación mediante JWT Bearer Token.
                                 """)
-                        .version("1.1.0"))
+                        .version("1.0.0"))
                 .addSecurityItem(new SecurityRequirement().addList(securitySchemeName))
                 .components(new Components().addSecuritySchemes(securitySchemeName,
                         new SecurityScheme()
