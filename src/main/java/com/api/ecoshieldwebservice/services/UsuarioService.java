@@ -67,8 +67,6 @@ public class UsuarioService implements IUsuarioService {
         if (imagen != null && !imagen.isEmpty()) {
             String url = cloudinaryService.uploadImage(imagen);
             usuario.setUsuarioFotoPerfil(url);
-        } else if (dto.getUsuarioFotoPerfil() != null && !dto.getUsuarioFotoPerfil().isBlank()) {
-            usuario.setUsuarioFotoPerfil(dto.getUsuarioFotoPerfil());
         }
 
         Usuario actualizado = usuarioRepository.save(usuario);

@@ -1,58 +1,92 @@
 package com.api.ecoshieldwebservice.services;
 
-import org.springframework.beans.factory.annotation.Value;
-import org.springframework.http.*;
+import com.api.ecoshieldwebservice.dtos.response.DeteccionResponseDTO;
+import com.api.ecoshieldwebservice.dtos.response.GeminiResponseDTO;
+import com.api.ecoshieldwebservice.entities.*;
+import com.api.ecoshieldwebservice.interfaces.ICloudinaryService;
+import com.api.ecoshieldwebservice.interfaces.IDeteccionService;
+import com.api.ecoshieldwebservice.interfaces.IGeminiService;
+import com.api.ecoshieldwebservice.repositories.DeteccionRepository;
+import com.api.ecoshieldwebservice.repositories.EnfermedadRepository;
+import com.api.ecoshieldwebservice.repositories.FotoRepository;
+import com.api.ecoshieldwebservice.repositories.PlagaRepository;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-import org.springframework.web.client.RestTemplate;
+import org.springframework.web.multipart.MultipartFile;
 
-import java.util.*;
 
-public class DeteccionService {
-    private final RestTemplate restTemplate;
+@Service
+public class DeteccionService implements IDeteccionService {
 
-    @Value("${gemini.apiKey}")
-    private String apiKey;
+    @Autowired
+    private FotoRepository fotoRepository;
 
-    private static final String MODEL = "gemini-2.5-flash";
-    private static final String BASE_URL = "https://generativelanguage.googleapis.com/v1";
+    @Autowired
+    private DeteccionRepository deteccionRepository;
 
-    public DeteccionService(RestTemplate restTemplate) {
-        this.restTemplate = restTemplate;
-    }
+    @Autowired
+    private EnfermedadRepository  enfermedadRepository;
 
-    public String analyze(String prompt, byte[] imageBytes, String mimeType) {
-        Map<String, Object> inlineData = Map.of(
-                "mimeType", mimeType,
-                "data", Base64.getEncoder().encodeToString(imageBytes)
-        );
+    @Autowired
+    private PlagaRepository  plagaRepository;
 
-        Map<String, Object> partText = Map.of("text", prompt);
-        Map<String, Object> partImage = Map.of("inlineData", inlineData);
-        Map<String, Object> content = Map.of("parts", List.of(partText, partImage));
+    @Autowired
+    private IGeminiService geminiService;
 
-        Map<String, Object> requestBody = Map.of("contents", List.of(content));
+    @Autowired
+    private ICloudinaryService cloudinaryService;
 
-        HttpHeaders headers = new HttpHeaders();
-        headers.setContentType(MediaType.APPLICATION_JSON);
-
-        HttpEntity<Map<String, Object>> request = new HttpEntity<>(requestBody, headers);
-
-        String url = String.format("%s/models/%s:generateContent?key=%s", BASE_URL, MODEL, apiKey);
-
-        ResponseEntity<Map> response = restTemplate.exchange(
-                url, HttpMethod.POST, request, Map.class);
-
-        Map body = response.getBody();
-        if (body == null) return "Respuesta vacía";
-
+    @Override
+    public DeteccionResponseDTO analizarCultivo(MultipartFile imagen, Usuario usuario) {
         try {
-            List<Map<String, Object>> candidates = (List<Map<String, Object>>) body.get("candidates");
-            Map<String, Object> first = candidates != null && !candidates.isEmpty() ? candidates.get(0) : Map.of();
-            Map<String, Object> contentMap = (Map<String, Object>) first.get("content");
-            List<Map<String, Object>> parts = (List<Map<String, Object>>) contentMap.get("parts");
-            return parts.get(0).get("text").toString();
+            String url = cloudinaryService.uploadImage(imagen);
+
+            Foto foto = new Foto();
+            foto.setUsuario(usuario);
+            foto.setFotoRuta(url);
+            fotoRepository.save(foto);
+
+            GeminiResponseDTO aiResult = geminiService.analyze(imagen);
+
+            Deteccion deteccion = new Deteccion();
+            deteccion.setFoto(foto);
+            deteccion.setDeteccionResultado(aiResult.getDescripcion());
+            deteccion.setConfianza(aiResult.getConfianza());
+            deteccion.setRegionX(aiResult.getX());
+            deteccion.setRegionY(aiResult.getY());
+            deteccion.setRegionAncho(aiResult.getAncho());
+            deteccion.setRegionAlto(aiResult.getAlto());
+
+            if ("PLAGA".equalsIgnoreCase(aiResult.getTipo()) && aiResult.getNombre() != null) {
+                Plaga plaga = plagaRepository.findByPlagaNombreIgnoreCase(aiResult.getNombre())
+                        .orElse(null);
+                deteccion.setPlaga(plaga);
+            } else if ("ENFERMEDAD".equalsIgnoreCase(aiResult.getTipo()) && aiResult.getNombre() != null) {
+                Enfermedad enfermedad = enfermedadRepository.findByEnfermedadNombreIgnoreCase(aiResult.getNombre())
+                        .orElse(null);
+                deteccion.setEnfermedad(enfermedad);
+            }
+
+            deteccionRepository.save(deteccion);
+
+            DeteccionResponseDTO.RegionDTO region = new DeteccionResponseDTO.RegionDTO(
+                    aiResult.getX(), aiResult.getY(), aiResult.getAncho(), aiResult.getAlto()
+            );
+
+            DeteccionResponseDTO dto = new DeteccionResponseDTO();
+            dto.setDeteccionId(deteccion.getDeteccionId());
+            dto.setFotoUrl(foto.getFotoRuta());
+            dto.setDescripcion(aiResult.getDescripcion());
+            dto.setConfianza(deteccion.getConfianza());
+            dto.setTipo(aiResult.getTipo());
+            dto.setNombreDetectado(aiResult.getNombre());
+            dto.setCoordenadas(region);
+            dto.setFecha(deteccion.getDeteccionFecha());
+
+            return dto;
+
         } catch (Exception e) {
-            return "Error procesando respuesta: " + e.getMessage();
+            throw new RuntimeException("Error al analizar la imagen con IA: " + e.getMessage(), e);
         }
     }
 }

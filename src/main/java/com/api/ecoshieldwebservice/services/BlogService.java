@@ -6,6 +6,7 @@ import com.api.ecoshieldwebservice.entities.Blog;
 import com.api.ecoshieldwebservice.entities.Usuario;
 import com.api.ecoshieldwebservice.enums.BlogTipo;
 import com.api.ecoshieldwebservice.interfaces.IBlogService;
+import com.api.ecoshieldwebservice.interfaces.ICloudinaryService;
 import com.api.ecoshieldwebservice.repositories.BlogRepository;
 import com.api.ecoshieldwebservice.repositories.UsuarioRepository;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -27,7 +28,7 @@ public class BlogService implements IBlogService {
     private UsuarioRepository usuarioRepository;
 
     @Autowired
-    private CloudinaryService cloudinaryService;
+    private ICloudinaryService cloudinaryService;
 
 
     @Override

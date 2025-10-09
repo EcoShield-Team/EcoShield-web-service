@@ -4,6 +4,7 @@ import com.api.ecoshieldwebservice.dtos.request.PostRequestDTO;
 import com.api.ecoshieldwebservice.dtos.response.PostResponseDTO;
 import com.api.ecoshieldwebservice.entities.Post;
 import com.api.ecoshieldwebservice.entities.Usuario;
+import com.api.ecoshieldwebservice.interfaces.ICloudinaryService;
 import com.api.ecoshieldwebservice.interfaces.IPostService;
 import com.api.ecoshieldwebservice.repositories.PostRepository;
 import com.api.ecoshieldwebservice.repositories.UsuarioRepository;
@@ -28,7 +29,7 @@ public class PostService implements IPostService {
     private UsuarioRepository usuarioRepository;
 
     @Autowired
-    private CloudinaryService cloudinaryService;
+    private ICloudinaryService cloudinaryService;
 
 
     @Override

@@ -8,6 +8,7 @@ import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 
 import java.util.List;
+import java.util.Optional;
 
 public interface EnfermedadRepository extends JpaRepository<Enfermedad, Long> {
 
@@ -35,4 +36,5 @@ public interface EnfermedadRepository extends JpaRepository<Enfermedad, Long> {
     List<Enfermedad> findAllOrderBySeveridad();
     List<Enfermedad> findAllByOrderByEnfermedadNombreAsc();
     List<Enfermedad> findAllByOrderByEnfermedadNombreDesc();
+    Optional<Enfermedad> findByEnfermedadNombreIgnoreCase(String nombre);
 }

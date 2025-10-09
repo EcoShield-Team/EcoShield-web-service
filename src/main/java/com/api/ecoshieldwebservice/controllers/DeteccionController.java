@@ -1,38 +1,39 @@
 package com.api.ecoshieldwebservice.controllers;
-import com.api.ecoshieldwebservice.services.AIDiagnosisService;
-import io.swagger.v3.oas.annotations.Operation;
-import io.swagger.v3.oas.annotations.media.Content;
-import io.swagger.v3.oas.annotations.responses.ApiResponse;
-import io.swagger.v3.oas.annotations.responses.ApiResponses;
-import lombok.RequiredArgsConstructor;
-import org.springframework.http.MediaType;
+
+import com.api.ecoshieldwebservice.dtos.response.DeteccionResponseDTO;
+import com.api.ecoshieldwebservice.entities.Usuario;
+import com.api.ecoshieldwebservice.interfaces.IDeteccionService;
+import com.api.ecoshieldwebservice.repositories.UsuarioRepository;
+import io.swagger.v3.oas.annotations.tags.Tag;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.Authentication;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
-import java.io.IOException;
 
+@Tag(name = "Deteccion", description = "Deteccion de enfermedades y plagas en plantas")
 @RestController
-@RequestMapping("/api/deteccion")
-@RequiredArgsConstructor
+@RequestMapping("/deteccion")
 public class DeteccionController {
 
-    private final AIDiagnosisService diagnosisService;
+    @Autowired
+    private UsuarioRepository usuarioRepository;
 
-    @Operation(summary = "Analiza una imagen de cultivo (sin prompt)")
-    @ApiResponses({
-            @ApiResponse(responseCode = "200", description = "Diagnóstico generado",
-                    content = @Content(mediaType = "text/plain"))
-    })
-    @PostMapping(
-            value = "/analyze",
-            consumes = MediaType.MULTIPART_FORM_DATA_VALUE,
-            produces = MediaType.TEXT_PLAIN_VALUE
-    )
-    public ResponseEntity<String> analyze(
-            @RequestPart("image") MultipartFile image) throws IOException {
+    @Autowired
+    private IDeteccionService deteccionService;
 
-        String result = diagnosisService.analyze(image);
+
+    @PostMapping(consumes = "multipart/form-data")
+    public ResponseEntity<DeteccionResponseDTO> analizar(
+            @RequestPart("imagen") MultipartFile imagen,
+            Authentication authentication) {
+
+        String correo = authentication.getName();
+        Usuario usuario = usuarioRepository.findByUsuarioCorreo(correo)
+                .orElseThrow(() -> new RuntimeException("Usuario no encontrado"));
+
+        DeteccionResponseDTO result = deteccionService.analizarCultivo(imagen, usuario);
         return ResponseEntity.ok(result);
     }
 }

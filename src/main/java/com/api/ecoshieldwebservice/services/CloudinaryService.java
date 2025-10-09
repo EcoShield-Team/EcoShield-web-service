@@ -1,5 +1,6 @@
 package com.api.ecoshieldwebservice.services;
 
+import com.api.ecoshieldwebservice.interfaces.ICloudinaryService;
 import com.cloudinary.Cloudinary;
 import com.cloudinary.utils.ObjectUtils;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -12,7 +13,7 @@ import java.util.List;
 import java.util.Map;
 
 @Service
-public class CloudinaryService {
+public class CloudinaryService implements ICloudinaryService {
 
     @Autowired
     private Cloudinary cloudinary;

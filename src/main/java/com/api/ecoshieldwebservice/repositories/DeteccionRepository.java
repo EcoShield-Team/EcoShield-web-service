@@ -1,4 +1,7 @@
 package com.api.ecoshieldwebservice.repositories;
 
-public interface DeteccionRepository {
+import com.api.ecoshieldwebservice.entities.Deteccion;
+import org.springframework.data.jpa.repository.JpaRepository;
+
+public interface DeteccionRepository extends JpaRepository<Deteccion, Long> {
 }
