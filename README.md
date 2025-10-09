@@ -59,7 +59,7 @@ src/
  │   └─ EcoShieldWebServiceApplication.java
  └─ resources/
      ├─ application.properties
-     ├─ import.sql   
+     ├─ data.sql   
      ├─ static/
      └─ templates/
 ```

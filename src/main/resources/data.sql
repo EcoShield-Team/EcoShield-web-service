@@ -1,0 +1,350 @@
+-- ===== ROLES =====
+INSERT INTO rol (rolnombre, roldescripcion) VALUES ('ADMIN', 'Rol por defecto para administradores');
+INSERT INTO rol (rolnombre, roldescripcion) VALUES ('USER', 'Rol por defecto de usuarios');
+
+
+-- ========================
+-- 👤 TABLA: USUARIO                 contraseña: password / admin123
+-- ========================
+INSERT INTO usuario (usuarioid, rolid, usuarionombre, usuariocorreo, usuariocontrasena, usuarioestado, usuariofotoperfil, usuariopais, usuariofecharegistro)
+VALUES
+    (1, 1, 'Gerardo Chávez', 'gerardo@ecoshield.com', '$2a$12$0eZ.w9rAEsY9bzl00.uLte4mE5.agTRH7T1qvrRE54BqNDVk6EE1K', 'ACTIVO', 'https://res.cloudinary.com/dsm9krdik/image/upload/v1759996306/profile1_ctpzyg.png', 'Perú', CURRENT_TIMESTAMP),
+    (2, 2, 'Alexander Aquino', 'alexander@ecoshield.com', '$2a$12$VJXI.hPUM5V2AbMr65TrWeFrzmobKsTVRCVpyPdzRrCXs90.2guRO', 'ACTIVO', 'https://res.cloudinary.com/dsm9krdik/image/upload/v1759996306/profile2_hrkoiy.jpg', 'Perú', CURRENT_TIMESTAMP),
+    (3, 2, 'Camilo Párraga', 'camilo@ecoshield.com', '$2a$12$1OzGZWejEJgRSyRa4A8eWO0daHZxn6cbs/Szi8M0AqDHGDw8nItEC', 'ACTIVO', 'https://res.cloudinary.com/dsm9krdik/image/upload/v1759996306/profile3_uj5yw6.jpg', 'Ecuador', CURRENT_TIMESTAMP),
+    (4, 2, 'Mauricio Mantilla', 'mauricio@ecoshield.com', '$2a$12$neGxzUr.6lIi0jjfq9YpCuX8Dkr1koPeTVtJ2jurBGAVi3Q9dep5G', 'ACTIVO', 'https://res.cloudinary.com/dsm9krdik/image/upload/v1759996306/profile10_oks6ue.avif', 'Colombia', CURRENT_TIMESTAMP),
+    (5, 2, 'Marcelo Rotta', 'marcelo@ecoshield.com', '$2a$12$wixOkszU53ysbHbbd0jTqefl0tzsLAID26asnMXf0J8Dp/UxX4CG2', 'INACTIVO', 'https://res.cloudinary.com/dsm9krdik/image/upload/v1759996307/profile4_ojix5z.jpg', 'Bolivia', CURRENT_TIMESTAMP),
+    (6, 2, 'Hadisha Ludeña', 'hadisha@ecoshield.com', '$2a$12$QqpEspFg0P7BHhHisLP9bObe2zqT2l8y.I8JZCAPxHEwWjo3pHc7S', 'ACTIVO', 'https://res.cloudinary.com/dsm9krdik/image/upload/v1759996307/profile12_vusbwz.jpg', 'Perú', CURRENT_TIMESTAMP),
+    (7, 2, 'Diego Castro', 'diego@ecoshield.com', '$2a$12$1lGdcDgxB3v4.sB9fq/u.OC9XpC5m5X93ztJzhIomMCPJ/HM.hri2', 'BLOQUEADO', 'https://res.cloudinary.com/dsm9krdik/image/upload/v1759996307/profile7_mpxppf.jpg', 'Chile', CURRENT_TIMESTAMP),
+    (8, 1, 'Admin Global', 'admin@ecoshield.com', '$2a$12$zUO15GSNu.N6LrphgchVCeVAGsoXYI/wx9c896S7uxppJVeoqMckG', 'ACTIVO', 'https://res.cloudinary.com/dsm9krdik/image/upload/v1759996306/profile11_xrllds.jpg', 'Argentina', CURRENT_TIMESTAMP),
+    (9, 2, 'Laura Llanos', 'laura@ecoshield.com', '$2a$12$mPv1EvkquPNAMneSsPT2de2ydAHuDkf8GNGSilnQLqxITYD9xtGv6', 'ACTIVO', 'https://res.cloudinary.com/dsm9krdik/image/upload/v1759996307/profile6_olmnjd.jpg', 'México', CURRENT_TIMESTAMP),
+    (10, 2, 'César Rodríguez', 'cesar@ecoshield.com', '$2a$12$Gwsl2eZFOinAqPT5meCUhusPP1Wk6BTsPfaFzlL4PXy/xFEjNEuDe', 'ACTIVO', 'https://res.cloudinary.com/dsm9krdik/image/upload/v1759996307/profile5_c41umt.jpg', 'Perú', CURRENT_TIMESTAMP),
+    (11, 2, 'Gonzalo Morales', 'gonzalo@ecoshield.com', '$2a$12$6ct3ioca2w8wPcsCmCGhduzjyEoB5pS8LWWZZRml45rU9lcBjWVQi', 'ACTIVO', 'https://res.cloudinary.com/dsm9krdik/image/upload/v1759996307/profile8_bfc0ao.jpg', 'Colombia', CURRENT_TIMESTAMP),
+    (12, 2, 'Andrea Paredes', 'andrea@ecoshield.com', '$2a$12$LNpYpl/9WSV6LWhnnCUaruk4aRVSDWJsGlak7FXPtU0Kzd1tB7bOq', 'ACTIVO', 'https://res.cloudinary.com/dsm9krdik/image/upload/v1759996311/profile9_aibspy.jpg', 'Perú', CURRENT_TIMESTAMP);
+
+
+-- ========================
+-- 🪲 TABLA: PLAGA
+-- ========================
+INSERT INTO plaga (plagaid, plaganombre, plaganombrecientifico, plagatipo, plagadescripcion, plagasintomas, plagatratamiento, plagacausas, plagaprevenciones, plagafoto, temporada, severidad)
+VALUES
+    (1, 'Pulgón verde del duraznero', 'Myzus persicae', 'INSECTO',
+     'Insecto chupador que se alimenta de la savia de las hojas tiernas.',
+     'Hojas enrolladas y amarillentas, presencia de melaza y hormigas.',
+     'Aplicar jabón potásico o extracto de neem.',
+     'Temperaturas templadas y exceso de nitrógeno.',
+     'Podar brotes infestados y fomentar enemigos naturales.',
+     'https://res.cloudinary.com/dsm9krdik/image/upload/v1759998735/plaga1_dmtlo3.jpg', 'PRIMAVERA', 'LEVE'),
+
+    (2, 'Mosca blanca', 'Bemisia tabaci', 'INSECTO',
+     'Insecto que debilita la planta al alimentarse de su savia.',
+     'Hojas amarillas, caída prematura y melaza pegajosa.',
+     'Uso de trampas cromáticas amarillas y liberación de Encarsia formosa.',
+     'Climas cálidos y secos.',
+     'Evitar exceso de abono y controlar malezas.',
+     'https://res.cloudinary.com/dsm9krdik/image/upload/v1759998735/plaga2_vpyz7k.jpg', 'VERANO', 'MODERADA'),
+
+    (3, 'Ácaro rojo', 'Tetranychus urticae', 'ACARO',
+     'Ácaro diminuto que causa decoloración y necrosis en hojas.',
+     'Manchas amarillas, telarañas finas en el envés.',
+     'Azufre micronizado o extractos de ajo.',
+     'Alta temperatura y baja humedad.',
+     'Mantener humedad adecuada y revisar el envés de hojas.',
+     'https://res.cloudinary.com/dsm9krdik/image/upload/v1759998737/plaga3_ta4wyh.jpg', 'VERANO', 'GRAVE'),
+
+    (4, 'Gusano cogollero', 'Spodoptera frugiperda', 'INSECTO',
+     'Oruga que ataca el cogollo de maíz y otros cultivos.',
+     'Hojas perforadas y cogollos destruidos.',
+     'Aplicar Bacillus thuringiensis o control biológico.',
+     'Alta humedad y monocultivo.',
+     'Rotación de cultivos y trampas de feromonas.',
+     'https://res.cloudinary.com/dsm9krdik/image/upload/v1759998734/plaga4_oicvmz.jpg', 'TODO_EL_AÑO', 'GRAVE'),
+
+    (5, 'Nematodo de las raíces', 'Meloidogyne spp.', 'NEMATODO',
+     'Parásito microscópico que deforma raíces y reduce crecimiento.',
+     'Nódulos o agallas en raíces.',
+     'Solarización y uso de extractos de neem.',
+     'Suelos infectados mal drenados.',
+     'Usar semillas certificadas y rotar cultivos.',
+     'https://res.cloudinary.com/dsm9krdik/image/upload/v1759998734/plaga5_uq3k15.jpg', 'VERANO', 'MODERADA'),
+
+    (6, 'Trips del tomate', 'Frankliniella occidentalis', 'INSECTO',
+     'Insecto que succiona el contenido celular de hojas y flores.',
+     'Deformaciones, manchas plateadas, flores caídas.',
+     'Aplicar jabón potásico y mantener humedad.',
+     'Alta densidad de siembra y calor.',
+     'Desinfectar herramientas y eliminar restos vegetales.',
+     'https://res.cloudinary.com/dsm9krdik/image/upload/v1759998735/plaga6_kvrq7k.jpg', 'PRIMAVERA', 'LEVE'),
+
+    (7, 'Minador de hojas', 'Liriomyza trifolii', 'INSECTO',
+     'Larvas que excavan galerías en el interior de las hojas.',
+     'Líneas serpenteantes en hojas.',
+     'Poda de hojas afectadas y trampas pegajosas.',
+     'Alta temperatura y exceso de riego.',
+     'Rotación de cultivos y control biológico.',
+     'https://res.cloudinary.com/dsm9krdik/image/upload/v1759998735/plaga7_vi3xqb.jpg', 'OTOÑO', 'LEVE'),
+
+    (8, 'Cochinilla algodonosa', 'Planococcus citri', 'INSECTO',
+     'Insecto cubierto de cera blanca que afecta cítricos y ornamentales.',
+     'Pérdida de vigor, hojas deformadas y melaza.',
+     'Control biológico con Cryptolaemus montrouzieri.',
+     'Climas cálidos y secos.',
+     'Mantener ventilación y limpieza del cultivo.',
+     'https://res.cloudinary.com/dsm9krdik/image/upload/v1759998735/plaga8_bu7mtx.jpg', 'TODO_EL_AÑO', 'MODERADA'),
+
+    (9, 'Araña amarilla', 'Polyphagotarsonemus latus', 'ACARO',
+     'Causa deformación en hojas y brotes.',
+     'Hojas enrolladas y clorosis.',
+     'Aplicar extracto de ajo o jabón insecticida.',
+     'Altas temperaturas y baja humedad.',
+     'Controlar riego y aplicar biocontroladores.',
+     'https://res.cloudinary.com/dsm9krdik/image/upload/v1759998737/plaga9_ot5ian.jpg', 'VERANO', 'LEVE'),
+
+    (10, 'Escarabajo del pepino', 'Diabrotica balteata', 'INSECTO',
+     'Se alimenta de hojas y transmite virus.',
+     'Agujeros en hojas y tallos.',
+     'Control con trampas y Beauveria bassiana.',
+     'Alta temperatura y malezas cercanas.',
+     'Rotar cultivos y eliminar residuos.',
+     'https://res.cloudinary.com/dsm9krdik/image/upload/v1759998735/plaga10_g87yzj.jpg', 'PRIMAVERA', 'MODERADA');
+
+
+-- ========================
+-- 🌱 TABLA: ENFERMEDAD
+-- ========================
+INSERT INTO enfermedad (enfermedadid, enfermedadnombre, enfermedadnombrecientifico, enfermedadtipo, enfermedaddescripcion, enfermedadsintomas, enfermedadtratamiento, enfermedadcausas, enfermedadprevenciones, enfermedadfoto, temporada, severidad)
+VALUES
+    (1, 'Tizón tardío del tomate', 'Phytophthora infestans', 'HONGO',
+     'Afecta hojas, tallos y frutos causando necrosis.',
+     'Manchas oscuras y moho gris.',
+     'Aplicar cobre o Trichoderma harzianum.',
+     'Alta humedad y bajas temperaturas.',
+     'Rotar cultivos y eliminar restos infectados.',
+     'https://res.cloudinary.com/dsm9krdik/image/upload/v1759999177/enf1_mbcgfd.jpg', 'INVIERNO', 'GRAVE'),
+
+    (2, 'Roya del café', 'Hemileia vastatrix', 'HONGO',
+     'Hongo que afecta las hojas del cafeto causando pérdidas severas.',
+     'Manchas amarillas en el envés.',
+     'Fungicidas naturales o biocontrol.',
+     'Lluvia y humedad constante.',
+     'Podas y variedades resistentes.',
+     'https://res.cloudinary.com/dsm9krdik/image/upload/v1759999178/enf2_ukmwv0.jpg', 'OTOÑO', 'GRAVE'),
+
+    (3, 'Marchitez bacteriana del plátano', 'Ralstonia solanacearum', 'BACTERIA',
+     'Provoca marchitez general de la planta.',
+     'Hojas caídas y tallo ennegrecido.',
+     'Desinfección del suelo y control biológico.',
+     'Alta temperatura y suelo infectado.',
+     'Rotación y material libre de patógenos.',
+     'https://res.cloudinary.com/dsm9krdik/image/upload/v1759999178/enf3_qrtnvz.jpg', 'VERANO', 'GRAVE'),
+
+    (4, 'Virus del mosaico del pepino', 'Cucumber mosaic virus', 'VIRUS',
+     'Virus transmitido por pulgones que afecta hortalizas.',
+     'Mosaicos amarillos en hojas.',
+     'Eliminar plantas afectadas.',
+     'Presencia de vectores.',
+     'Uso de semillas certificadas.',
+     'https://res.cloudinary.com/dsm9krdik/image/upload/v1759999178/enf4_vgrwsp.jpg', 'PRIMAVERA', 'MODERADA'),
+
+    (5, 'Mancha negra de la rosa', 'Diplocarpon rosae', 'HONGO',
+     'Causa defoliación prematura en rosales.',
+     'Manchas negras en hojas.',
+     'Poda y tratamiento con cobre.',
+     'Exceso de humedad.',
+     'Mejorar aireación y riego controlado.',
+     'https://res.cloudinary.com/dsm9krdik/image/upload/v1759999178/enf5_wv1uvr.jpg', 'PRIMAVERA', 'LEVE'),
+
+    (6, 'Pudrición de raíz', 'Fusarium oxysporum', 'HONGO',
+     'Destruye el sistema radicular y causa marchitez.',
+     'Amarillamiento y marchitez.',
+     'Aplicar Trichoderma y mejorar drenaje.',
+     'Suelos mal drenados.',
+     'Evitar riegos excesivos.',
+     'https://res.cloudinary.com/dsm9krdik/image/upload/v1759999178/enf6_vetcgi.jpg', 'TODO_EL_AÑO', 'GRAVE'),
+
+    (7, 'Agalla bacteriana', 'Agrobacterium tumefaciens', 'BACTERIA',
+     'Genera tumores en raíces y tallos.',
+     'Protuberancias en cuello de raíz.',
+     'Desinfectar herramientas.',
+     'Contaminación cruzada.',
+     'Rotación y control sanitario.',
+     'https://res.cloudinary.com/dsm9krdik/image/upload/v1759999179/enf7_vxruvk.jpg', 'VERANO', 'LEVE'),
+
+    (8, 'Mildiu polvoriento', 'Erysiphe cichoracearum', 'HONGO',
+     'Polvo blanco sobre hojas y tallos.',
+     'Deformación foliar y caída prematura.',
+     'Azufre micronizado.',
+     'Alta humedad y poca luz.',
+     'Evitar hacinamiento.',
+     'https://res.cloudinary.com/dsm9krdik/image/upload/v1759999178/enf8_biqrrx.jpg', 'PRIMAVERA', 'MODERADA'),
+
+    (9, 'Virus del enrollamiento de la hoja del tomate', 'Tomato leaf curl virus', 'VIRUS',
+     'Transmisión por mosca blanca en climas cálidos.',
+     'Hojas rizadas y crecimiento atrofiado.',
+     'Eliminar plantas infectadas.',
+     'Vector no controlado.',
+     'Control de insectos.',
+     'https://res.cloudinary.com/dsm9krdik/image/upload/v1759999179/enf9_vd22gh.png', 'VERANO', 'MODERADA'),
+
+    (10, 'Nematodo de la raíz del café', 'Pratylenchus coffeae', 'NEMATODO',
+     'Daña raíces de café y otras plantas causando pérdida de vigor.',
+     'Raíces ennegrecidas y necrosadas.',
+     'Solarización del suelo.',
+     'Suelo contaminado.',
+     'Rotación y control biológico.',
+     'https://res.cloudinary.com/dsm9krdik/image/upload/v1759999179/enf10_taos3y.jpg', 'OTOÑO', 'LEVE');
+
+
+-- ===========================================
+-- 📰 TABLA: BLOG
+-- ===========================================
+
+INSERT INTO blog (blogid, usuarioid, blogtipo, blogtitulo, blogdescripcion, blogimagen, blogestado, blogfechapublicacion)
+VALUES
+    (1, 1, 'NEWS', 'EcoShield lanza su nueva IA para detección de plagas',
+     'La última actualización de EcoShield integra un modelo de inteligencia artificial capaz de identificar plagas y enfermedades agrícolas con un 95% de precisión. Este avance busca optimizar los recursos del agricultor y reducir el uso de pesticidas químicos.',
+     'https://res.cloudinary.com/dsm9krdik/image/upload/v1759997490/blog1_ku9zsf.jpg',
+     'ACTIVO', CURRENT_TIMESTAMP),
+
+    (2, 1, 'TIP', '5 prácticas sostenibles para proteger tus cultivos',
+     'Adoptar prácticas agrícolas sostenibles como el riego por goteo, la rotación de cultivos y el uso de biopesticidas no solo mejora el rendimiento, sino que protege la biodiversidad del suelo. Descubre cómo aplicarlas en tu parcela.',
+     'https://res.cloudinary.com/dsm9krdik/image/upload/v1759997490/blog2_eyalkf.jpg',
+     'ACTIVO', CURRENT_TIMESTAMP),
+
+    (3, 8, 'NEWS', 'Nuevo acuerdo con instituciones agrícolas latinoamericanas',
+     'EcoShield ha firmado un convenio con instituciones agrícolas de Perú, Colombia y México para promover el uso de herramientas digitales en el monitoreo de plagas. Esta alianza permitirá ampliar la base de datos de detecciones en toda la región.',
+     'https://res.cloudinary.com/dsm9krdik/image/upload/v1759997491/blog3_yequj6.jpg',
+     'ACTIVO', CURRENT_TIMESTAMP),
+
+    (4, 8, 'TIP', 'Cómo identificar señales tempranas de enfermedades en tus plantas',
+     'Observar el color de las hojas, el brillo de los tallos y la presencia de manchas o deformaciones puede ayudarte a detectar enfermedades antes de que se propaguen. Conoce los principales indicadores que EcoShield analiza mediante IA.',
+     'https://res.cloudinary.com/dsm9krdik/image/upload/v1759997489/blog4_vojbxj.jpg',
+     'ACTIVO', CURRENT_TIMESTAMP),
+
+    (5, 1, 'TIP', 'Ahorra agua sin afectar la salud de tus cultivos',
+     'El uso de sensores de humedad y sistemas de riego inteligente permite reducir hasta un 40% el consumo de agua. Aprende cómo configurar alertas automáticas desde tu cuenta EcoShield para evitar el exceso de riego.',
+     'https://res.cloudinary.com/dsm9krdik/image/upload/v1759997490/blog5_a32d8y.jpg',
+     'ACTIVO', CURRENT_TIMESTAMP),
+
+    (6, 8, 'NEWS', 'EcoShield alcanza 10,000 usuarios activos en Latinoamérica',
+     'Gracias a la comunidad agrícola y urbana, EcoShield supera los 10,000 usuarios activos en la región. El crecimiento demuestra el interés en soluciones tecnológicas sostenibles para el manejo de cultivos.',
+     'https://res.cloudinary.com/dsm9krdik/image/upload/v1759997489/blog6_bfymep.jpg',
+     'ACTIVO', CURRENT_TIMESTAMP),
+
+    (7, 1, 'TIP', 'Guía rápida para interpretar tus resultados de detección',
+     'Cuando EcoShield identifica una plaga o enfermedad, el sistema genera un informe detallado con el nivel de confianza, el tipo de daño y las acciones sugeridas. Aprende cómo leer estos datos para tomar decisiones precisas.',
+     'https://res.cloudinary.com/dsm9krdik/image/upload/v1759997490/blog7_cehkup.png',
+     'ACTIVO', CURRENT_TIMESTAMP),
+
+    (8, 1, 'NEWS', 'Implementamos nuevos filtros de búsqueda en el catálogo de plagas',
+     'Ahora los usuarios pueden filtrar plagas y enfermedades por tipo, severidad y temporada. Esto mejora la experiencia de búsqueda y facilita el aprendizaje sobre los cultivos más comunes en su región.',
+     'https://res.cloudinary.com/dsm9krdik/image/upload/v1759997490/blog8_jz1ebd.png',
+     'ACTIVO', CURRENT_TIMESTAMP),
+
+    (9, 8, 'TIP', 'Cómo mantener tu huerto libre de plagas sin químicos',
+     'Utiliza trampas cromáticas, cultivos asociados y biopesticidas naturales para reducir la aparición de plagas. Estas alternativas ecológicas son seguras y efectivas para pequeños huertos urbanos.',
+     'https://res.cloudinary.com/dsm9krdik/image/upload/v1759997490/blog9_x9j7jz.jpg',
+     'ACTIVO', CURRENT_TIMESTAMP),
+
+    (10, 8, 'NEWS', 'EcoShield presenta su módulo de análisis climático en tiempo real',
+     'Con esta nueva función, los agricultores podrán recibir alertas meteorológicas personalizadas que anticipan condiciones favorables para la aparición de plagas o enfermedades.',
+     'https://res.cloudinary.com/dsm9krdik/image/upload/v1759997490/blog10_xoazwn.jpg',
+     'ACTIVO', CURRENT_TIMESTAMP),
+
+    (11, 1, 'TIP', 'Cómo almacenar correctamente tus productos biológicos',
+     'Muchos productos naturales pierden efectividad si se exponen a la luz solar o humedad. Aprende a conservar biopesticidas y biofertilizantes en condiciones óptimas para su uso prolongado.',
+     'https://res.cloudinary.com/dsm9krdik/image/upload/v1759997491/blog11_vsjumk.jpg',
+     'INACTIVO', CURRENT_TIMESTAMP),
+
+    (12, 8, 'NEWS', 'Actualización del ecosistema EcoShield 1.0',
+     'La nueva versión de la plataforma mejora la velocidad de análisis y añade soporte para imágenes de alta resolución, optimizando la precisión de detección y la gestión de datos del usuario.',
+     'https://res.cloudinary.com/dsm9krdik/image/upload/v1759997491/blog12_tje8ro.png',
+     'ARCHIVADO', CURRENT_TIMESTAMP);
+
+-- ========================
+-- 📸 TABLA: POST
+-- ========================
+INSERT INTO post (postid, usuarioid, posttitulo, postdescripcion, postfoto, postfecha)
+VALUES
+    (1, 2, 'Problemas con hongos en hojas de tomate',
+     'Mis plantas de tomate muestran manchas oscuras y secas en las hojas inferiores. Alguien sabe si esto es tizón o alguna otra enfermedad?',
+     'https://res.cloudinary.com/dsm9krdik/image/upload/v1759998075/post1_xibc3f.jpg',
+     CURRENT_TIMESTAMP),
+
+    (2, 4, 'Plaga en hojas de lechuga — ayuda urgente',
+     'Encontré pequeños insectos blancos en el envés de mis hojas de lechuga. ¿Podría tratarse de mosca blanca? ¿Qué puedo hacer?',
+     'https://res.cloudinary.com/dsm9krdik/image/upload/v1759998076/post2_z37ybc.jpg',
+     CURRENT_TIMESTAMP),
+
+    (3, 6, 'Resultados con biopesticidas naturales',
+     'He estado probando extracto de ajo y neem para controlar pulgones, y los resultados han sido buenos. Les comparto mi experiencia.',
+     'https://res.cloudinary.com/dsm9krdik/image/upload/v1759998075/post3_xh9rmz.jpg',
+     CURRENT_TIMESTAMP),
+
+    (4, 9, 'Recomendaciones para cultivar fresas en clima seco',
+     'Vivo en una zona con poca humedad y me cuesta mantener las fresas saludables. ¿Qué consejos pueden darme para evitar plagas y deshidratación?',
+     'https://res.cloudinary.com/dsm9krdik/image/upload/v1759998076/post4_xpjkdi.jpg',
+     CURRENT_TIMESTAMP),
+
+    (5, 10, 'Nuevo usuario de EcoShield — mi primera detección',
+     'Probé el sistema de detección de plagas y me funcionó muy bien. Detectó una posible infestación de trips en mis pimientos. ¡Recomendado!',
+     'https://res.cloudinary.com/dsm9krdik/image/upload/v1759998076/post5_lpoyd9.png',
+     CURRENT_TIMESTAMP);
+
+
+-- ========================
+-- 💬 TABLA: COMENTARIO
+-- ========================
+INSERT INTO comentario (comentarioid, postid, usuarioid, comentariotexto, comentariofecha)
+VALUES
+-- Comentarios del Post 1
+(1, 1, 3, 'Sí, parece tizón tardío. Puedes confirmarlo subiendo una foto más cercana.', CURRENT_TIMESTAMP),
+(2, 1, 8, 'Si es tizón, evita mojar las hojas al regar y usa Trichoderma.', CURRENT_TIMESTAMP),
+(3, 1, 1, 'Buen aporte. También puedes revisar el nivel de humedad del sustrato.', CURRENT_TIMESTAMP),
+
+-- Comentarios del Post 2
+(4, 2, 5, 'Por la descripción, suena a mosca blanca. Usa trampas amarillas.', CURRENT_TIMESTAMP),
+(5, 2, 12, 'Yo tuve el mismo problema, el jabón potásico ayudó mucho.', CURRENT_TIMESTAMP),
+(6, 2, 1, 'Correcto, es mosca blanca. Controla la ventilación y elimina hojas afectadas.', CURRENT_TIMESTAMP),
+
+-- Comentarios del Post 3
+(7, 3, 2, 'Excelente, el neem es muy efectivo contra pulgones y cochinillas.', CURRENT_TIMESTAMP),
+(8, 3, 11, 'Gracias por compartir, probaré esa mezcla con mis plantas ornamentales.', CURRENT_TIMESTAMP),
+(9, 3, 8, 'Recuerda no aplicar al mediodía, puede quemar las hojas.', CURRENT_TIMESTAMP),
+
+-- Comentarios del Post 4
+(10, 4, 6, 'En climas secos puedes usar mulch para mantener la humedad.', CURRENT_TIMESTAMP),
+(11, 4, 10, 'Riega temprano y usa cobertura vegetal. Me ha funcionado bien.', CURRENT_TIMESTAMP),
+
+-- Comentarios del Post 5
+(12, 5, 4, '¡Genial! Yo también tuve detecciones precisas en tomates.', CURRENT_TIMESTAMP),
+(13, 5, 9, 'El modelo ha mejorado mucho en las últimas versiones.', CURRENT_TIMESTAMP),
+(14, 5, 1, 'Gracias por compartir tu experiencia, seguimos mejorando el sistema.', CURRENT_TIMESTAMP);
+
+
+-- ========================
+-- 💬 TABLA: FEEDBACK
+-- ========================
+INSERT INTO feedback (feedbackid, usuarioid, feedbacktipo, feedbackdescripcion, feedbackrating, feedbackfecha)
+VALUES
+    (1, 2, 'GENERAL', 'La aplicación EcoShield me parece intuitiva y fácil de usar. Excelente interfaz.', 5, CURRENT_TIMESTAMP),
+    (2, 3, 'SUGGESTION', 'Sería genial que la app permita comparar plagas detectadas entre usuarios.', 4, CURRENT_TIMESTAMP),
+    (3, 4, 'APP_PROBLEM', 'En algunos casos la detección tarda demasiado cuando la conexión es lenta.', 3, CURRENT_TIMESTAMP),
+    (4, 2, 'GENERAL', 'EcoShield ha mejorado mi producción agrícola reduciendo el uso de pesticidas.', 5, CURRENT_TIMESTAMP),
+    (5, 6, 'SUGGESTION', 'Podrían incluir recordatorios de fumigación o tratamiento automático.', 4, CURRENT_TIMESTAMP),
+    (6, 7, 'APP_PROBLEM', 'No puedo subir fotos grandes, sería bueno un mensaje de error más claro.', 2, CURRENT_TIMESTAMP),
+    (7, 9, 'GENERAL', 'Muy útil para identificar enfermedades del tomate. Resultados precisos.', 5, CURRENT_TIMESTAMP),
+    (8, 10, 'SUGGESTION', 'Faltan más variedades de plagas para cultivos de maíz.', 4, CURRENT_TIMESTAMP),
+    (9, 11, 'GENERAL', 'Excelente iniciativa ecológica, promueve la agricultura sostenible.', 5, CURRENT_TIMESTAMP),
+    (10, 12, 'APP_PROBLEM', 'En iOS se cierra la app al abrir el historial de detecciones.', 2, CURRENT_TIMESTAMP),
+    (11, 5, 'SUGGESTION', 'Podrían incluir consejos según el clima de mi región.', 4, CURRENT_TIMESTAMP),
+    (12, 12, 'GENERAL', 'Desde el panel de administrador puedo gestionar todo fácilmente. Muy bien.', 5, CURRENT_TIMESTAMP);
+
+
+SELECT setval(pg_get_serial_sequence('rol', 'rolid'), COALESCE(MAX(rolid), 0) + 1, false) FROM rol;
+SELECT setval(pg_get_serial_sequence('usuario', 'usuarioid'), COALESCE(MAX(usuarioid), 0) + 1, false) FROM usuario;
+SELECT setval(pg_get_serial_sequence('plaga', 'plagaid'), COALESCE(MAX(plagaid), 0) + 1, false) FROM plaga;
+SELECT setval(pg_get_serial_sequence('enfermedad', 'enfermedadid'), COALESCE(MAX(enfermedadid), 0) + 1, false) FROM enfermedad;
+SELECT setval(pg_get_serial_sequence('blog', 'blogid'), COALESCE(MAX(blogid), 0) + 1, false) FROM blog;
+SELECT setval(pg_get_serial_sequence('post', 'postid'), COALESCE(MAX(postid), 0) + 1, false) FROM post;
+SELECT setval(pg_get_serial_sequence('comentario', 'comentarioid'), COALESCE(MAX(comentarioid), 0) + 1, false) FROM comentario;
+SELECT setval(pg_get_serial_sequence('feedback', 'feedbackid'), COALESCE(MAX(feedbackid), 0) + 1, false) FROM feedback;
