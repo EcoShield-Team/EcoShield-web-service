@@ -1,4 +1,7 @@
 package com.api.ecoshieldwebservice.repositories;
 
-public interface FotoRepository {
+import com.api.ecoshieldwebservice.entities.Foto;
+import org.springframework.data.repository.CrudRepository;
+
+public interface FotoRepository extends CrudRepository<Foto, Long> {
 }

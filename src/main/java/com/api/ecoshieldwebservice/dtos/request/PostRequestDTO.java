@@ -1,8 +1,6 @@
 package com.api.ecoshieldwebservice.dtos.request;
 
 import jakarta.validation.constraints.NotBlank;
-import jakarta.validation.constraints.NotNull;
-import jakarta.validation.constraints.Positive;
 import jakarta.validation.constraints.Size;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
@@ -22,6 +20,4 @@ public class PostRequestDTO {
     @Size(min = 5, max = 2000, message = "La descripción debe tener entre 5 y 2000 caracteres")
     private String postDescripcion;
 
-    @Size(max = 255, message = "La foto no puede superar los 255 caracteres")
-    private String postFoto;
 }

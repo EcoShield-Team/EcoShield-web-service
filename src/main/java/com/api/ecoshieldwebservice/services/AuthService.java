@@ -2,7 +2,6 @@ package com.api.ecoshieldwebservice.services;
 
 import com.api.ecoshieldwebservice.dtos.auth.*;
 import com.api.ecoshieldwebservice.dtos.auth.password.ChangePasswordRequestDTO;
-import com.api.ecoshieldwebservice.dtos.auth.password.ResetPasswordRequestDTO;
 import com.api.ecoshieldwebservice.entities.Rol;
 import com.api.ecoshieldwebservice.entities.Usuario;
 import com.api.ecoshieldwebservice.enums.RolNombre;
@@ -40,8 +39,6 @@ public class AuthService  implements IAuthService {
     @Autowired
     private PasswordEncoder passwordEncoder;
 
-    @Autowired
-    private JwtUserDetailsService userDetailsService;
 
     @Autowired
     private JwtUtil jwtUtil;

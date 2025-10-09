@@ -24,7 +24,7 @@ public class SwaggerConfig {
                                 Incluye gestión de usuarios, blogs, posts, comentarios, feedback y el almanaque de plagas y enfermedades.  
                                 Autenticación mediante JWT Bearer Token.
                                 """)
-                        .version("1.0.0"))
+                        .version("1.1.0"))
                 .addSecurityItem(new SecurityRequirement().addList(securitySchemeName))
                 .components(new Components().addSecuritySchemes(securitySchemeName,
                         new SecurityScheme()
@@ -39,6 +39,7 @@ public class SwaggerConfig {
                 .addTagsItem(new Tag().name("Comentario").description("💬 Gestión de comentarios asociados a los posts"))
                 .addTagsItem(new Tag().name("Blog").description("📚 Blogs informativos: tips y noticias sobre agricultura sostenible"))
                 .addTagsItem(new Tag().name("Feedback").description("🗣️ Opiniones, sugerencias y calificaciones del sistema"))
-                .addTagsItem(new Tag().name("Almanaque").description("🌾 Catálogo de plagas y enfermedades agrícolas con filtros y búsquedas"));
+                .addTagsItem(new Tag().name("Almanaque").description("🌾 Catálogo de plagas y enfermedades agrícolas con filtros y búsquedas"))
+                .addTagsItem(new Tag().name("Deteccion").description("🔎 Detección automática de plagas y enfermedades mediante inteligencia artificial aplicada a imágenes"));
     }
 }

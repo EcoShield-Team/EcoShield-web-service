@@ -26,9 +26,6 @@ public class BlogRequestDTO {
     @Size(min = 10, max = 4000, message = "Descripción entre 10 y 4000 caracteres")
     private String blogDescripcion;
 
-    @Size(max = 255, message = "Imagen: máximo 255 caracteres")
-    private String blogImagen;
-
     @NotNull(message = "Estado obligatorio")
     private BlogEstado blogEstado;
 
