@@ -48,7 +48,6 @@ public class PostController {
     }
 
     @GetMapping("/posts")
-    @PreAuthorize("hasAnyRole('USER','ADMIN')")
     public ResponseEntity<List<PostResponseDTO>> findAllPosts(@RequestParam(required = false) String titulo) {
         List<PostResponseDTO> posts = (titulo != null && !titulo.isBlank())
                 ? postService.findByPosttitulo(titulo)
