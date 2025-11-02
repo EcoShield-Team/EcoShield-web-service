@@ -104,7 +104,7 @@ public class PostService implements IPostService {
 
     @Override
     public List<PostResponseDTO> findAll() {
-        List<Post> lista = postRepository.findAll();
+        List<Post> lista = postRepository.findAllByOrderByPostFechaDesc();
         if (lista.isEmpty()) {
             return List.of();
         }
