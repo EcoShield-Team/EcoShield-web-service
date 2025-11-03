@@ -21,8 +21,8 @@ import java.util.List;
 @RestController
 @RequestMapping("/almanaque")
 @RequiredArgsConstructor
+@CrossOrigin(origins = "http://localhost:4200")
 public class AlmanaqueController {
-
     @Autowired
     private IEnfermedadService enfermedadService;
 
@@ -31,7 +31,7 @@ public class AlmanaqueController {
 
 
     @GetMapping("/enfermedades")
-    @PreAuthorize("hasAnyRole('USER','ADMIN')")
+    //@PreAuthorize("hasAnyRole('USER','ADMIN')")
     public ResponseEntity<List<EnfermedadListDTO>> listarEnfermedades() {
         return ResponseEntity.ok(enfermedadService.listarTodas());
     }
@@ -92,7 +92,7 @@ public class AlmanaqueController {
 
 
     @GetMapping("/plagas")
-    @PreAuthorize("hasAnyRole('USER','ADMIN')")
+    //@PreAuthorize("hasAnyRole('USER','ADMIN')")
     public ResponseEntity<List<PlagaListDTO>> listarPlagas() {
         return ResponseEntity.ok(plagaService.listarTodas());
     }

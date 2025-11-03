@@ -31,6 +31,17 @@ public class JwtRequestFilter extends OncePerRequestFilter {
     protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response, FilterChain chain)
             throws ServletException, IOException {
 
+        String path = request.getRequestURI();
+
+        // ✅ Permitir acceso libre a estas rutas sin validar token
+        if (path.startsWith("/auth/")
+                || path.startsWith("/swagger")
+                || path.startsWith("/v3/api-docs")
+                || path.startsWith("/almanaque")) {
+            chain.doFilter(request, response);
+            return;
+        }
+
         String auth = request.getHeader(HttpHeaders.AUTHORIZATION);
 
         if (auth != null && auth.startsWith("Bearer ")) {
