@@ -64,9 +64,6 @@ public class GeminiService implements IGeminiService {
                     "}"
             );
 
-
-
-
             Map<String, Object> body = Map.of(
                     "contents", List.of(
                             Map.of("parts", List.of(
@@ -94,7 +91,7 @@ public class GeminiService implements IGeminiService {
 
             String text = parts.get(0).get("text").toString();
 
-            System.out.println("🧩 Respuesta Gemini:\n" + text); //quitar luego
+            System.out.println("Respuesta Gemini:\n" + text); //quitar luego
 
             return GeminiResponseDTO.fromJson(text);
 
