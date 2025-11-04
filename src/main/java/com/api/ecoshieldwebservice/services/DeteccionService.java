@@ -66,7 +66,6 @@ public class DeteccionService implements IDeteccionService {
 
         asignarEntidadDetectada(deteccion, aiResult);
 
-        // Si no se pudo mapear a una ficha, guardamos lo que vino de IA en la detección
         if (deteccion.getEnfermedad() == null && deteccion.getPlaga() == null) {
             deteccion.setSintomasIA(aiResult.getSintomas());
             deteccion.setTratamientoIA(aiResult.getTratamiento());
@@ -104,8 +103,6 @@ public class DeteccionService implements IDeteccionService {
                 .toList();
     }
 
-    // -------------------- NÚCLEO: Vincular a ficha existente o crear nueva con enums correctos --------------------
-
     private void asignarEntidadDetectada(Deteccion deteccion, GeminiResponseDTO ai) {
         String nombre = ai.getNombre();
         if (nombre == null) return;
@@ -128,12 +125,10 @@ public class DeteccionService implements IDeteccionService {
                     p.setPlagaFoto(deteccion.getFoto().getFotoRuta());
                 }
 
-                // enums ↴
                 p.setPlagaTipo(toPlagaTipo(ai.getTipoPlaga()));
                 p.setSeveridad(toSeveridad(ai.getSeveridad()));
                 p.setTemporada(toTemporada(ai.getTemporada()));
 
-                // textos ↴
                 p.setPlagaSintomas(ai.getSintomas());
                 p.setPlagaTratamiento(ai.getTratamiento());
                 p.setPlagaCausas(ai.getCausas());
@@ -160,12 +155,10 @@ public class DeteccionService implements IDeteccionService {
                 }
 
 
-                // enums ↴
-                e.setEnfermedadTipo(toEnfermedadTipo(/* puedes crear otro campo en DTO; por ahora inferimos de texto */ ai.getTipoPlaga()));
+                e.setEnfermedadTipo(toEnfermedadTipo(ai.getTipoPlaga()));
                 e.setSeveridad(toSeveridad(ai.getSeveridad()));
                 e.setTemporada(toTemporada(ai.getTemporada()));
 
-                // textos ↴
                 e.setEnfermedadSintomas(ai.getSintomas());
                 e.setEnfermedadTratamiento(ai.getTratamiento());
                 e.setEnfermedadCausas(ai.getCausas());
@@ -176,8 +169,6 @@ public class DeteccionService implements IDeteccionService {
             }
         }
     }
-
-    // -------------------- CONVERSORES A ENUMS (sin strings) --------------------
 
     private Severidad toSeveridad(String s) {
         if (s == null) return Severidad.LEVE;
@@ -192,7 +183,7 @@ public class DeteccionService implements IDeteccionService {
         String v = norm(s);
         if (v.contains("primavera")) return Temporada.PRIMAVERA;
         if (v.contains("verano")) return Temporada.VERANO;
-        if (v.contains("oton")) return Temporada.OTOÑO; // "otoño" sin tilde normalizado → "oton"
+        if (v.contains("oton")) return Temporada.OTOÑO;
         if (v.contains("invierno")) return Temporada.INVIERNO;
         return Temporada.TODO_EL_AÑO;
     }
@@ -216,15 +207,12 @@ public class DeteccionService implements IDeteccionService {
         return EnfermedadTipo.OTRO;
     }
 
-    // Normaliza: minúsculas, sin tildes/diacríticos y sin espacios extra
     private String norm(String in) {
         String s = in == null ? "" : in.trim().toLowerCase();
         s = Normalizer.normalize(s, Normalizer.Form.NFD)
                 .replaceAll("\\p{M}+", ""); // quita tildes
         return s;
     }
-
-    // -------------------- DTO salida --------------------
 
     private DeteccionResponseDTO convertirADTO(Deteccion d, GeminiResponseDTO aiResult) {
         DeteccionResponseDTO dto = new DeteccionResponseDTO();
@@ -260,7 +248,6 @@ public class DeteccionService implements IDeteccionService {
             dto.setPrevencion(p.getPlagaPrevenciones());
 
         } else {
-            // fallback IA
             dto.setTipo("IA");
             dto.setNombreDetectado(aiResult != null ? aiResult.getNombre() : "No clasificado");
             dto.setSintomas(aiResult != null ? aiResult.getSintomas() : "Información no disponible.");
