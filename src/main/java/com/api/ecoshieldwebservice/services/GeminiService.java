@@ -43,10 +43,29 @@ public class GeminiService implements IGeminiService {
 
             String prompt = String.join(" ",
                     "Analiza la imagen de una planta, hoja o cultivo.",
-                    "Identifica si se trata de una enfermedad o plaga conocida en cultivos agrícolas (en español).",
-                    "Devuelve una breve descripción (1 a 2 líneas) de lo que se observa, seguida estrictamente de un JSON plano (sin usar markdown ni ```json) con esta estructura exacta:",
-                    "{\"nombre\": \"<nombre detectado>\", \"tipo\": \"PLAGA o ENFERMEDAD\", \"confianza\": <número entre 0 y 1>, \"x\": <coordenadaX>, \"y\": <coordenadaY>, \"ancho\": <valor>, \"alto\": <valor>}"
+                    "Identifica si presenta una plaga o enfermedad agrícola (responde en español).",
+                    "Devuelve una breve descripción (1 a 2 líneas) seguida estrictamente de un JSON plano con esta estructura:",
+                    "{",
+                    "\"nombre\": \"<nombre detectado>\",",
+                    "\"nombre_cientifico\": \"<nombre científico si se conoce>\",",
+                    "\"tipo\": \"PLAGA o ENFERMEDAD\",",
+                    "\"tipo_plaga\": \"<tipo general: insecto, ácaro, nemátodo, hongo, bacteria, virus, etc.>\",",
+                    "\"severidad\": \"<leve, moderada o severa>\",",
+                    "\"temporada\": \"<época o condición del año en que ocurre>\",",
+                    "\"confianza\": <número entre 0 y 1>,",
+                    "\"x\": <coordenadaX>,",
+                    "\"y\": <coordenadaY>,",
+                    "\"ancho\": <valor>,",
+                    "\"alto\": <valor>,",
+                    "\"sintomas\": \"<síntomas visibles>\",",
+                    "\"tratamiento\": \"<tratamiento recomendado>\",",
+                    "\"causas\": \"<principales causas>\",",
+                    "\"prevencion\": \"<medidas de prevención>\"",
+                    "}"
             );
+
+
+
 
             Map<String, Object> body = Map.of(
                     "contents", List.of(
@@ -74,6 +93,8 @@ public class GeminiService implements IGeminiService {
             List<Map<String, Object>> parts = (List<Map<String, Object>>) content.get("parts");
 
             String text = parts.get(0).get("text").toString();
+
+            System.out.println("🧩 Respuesta Gemini:\n" + text); //quitar luego
 
             return GeminiResponseDTO.fromJson(text);
 

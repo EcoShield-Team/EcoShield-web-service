@@ -25,6 +25,11 @@ public class DeteccionResponseDTO {
     private Long fichaId;
     private String tipoFicha;
 
+    private String sintomas;
+    private String tratamiento;
+    private String causas;
+    private String prevencion;
+
     @Getter
     @Setter
     @NoArgsConstructor

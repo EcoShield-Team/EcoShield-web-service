@@ -53,4 +53,15 @@ public class Deteccion {
     @Column(name = "deteccionfecha", nullable = false, updatable = false)
     private OffsetDateTime deteccionFecha;
 
+    @Column(columnDefinition = "text")
+    private String sintomasIA;
+
+    @Column(columnDefinition = "text")
+    private String tratamientoIA;
+
+    @Column(columnDefinition = "text")
+    private String causasIA;
+
+    @Column(columnDefinition = "text")
+    private String prevencionIA;
 }

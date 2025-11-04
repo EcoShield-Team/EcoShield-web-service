@@ -3,17 +3,22 @@ package com.api.ecoshieldwebservice.services;
 import com.api.ecoshieldwebservice.dtos.response.DeteccionResponseDTO;
 import com.api.ecoshieldwebservice.dtos.response.GeminiResponseDTO;
 import com.api.ecoshieldwebservice.entities.*;
+import com.api.ecoshieldwebservice.enums.EnfermedadTipo;
+import com.api.ecoshieldwebservice.enums.PlagaTipo;
+import com.api.ecoshieldwebservice.enums.Severidad;
+import com.api.ecoshieldwebservice.enums.Temporada;
 import com.api.ecoshieldwebservice.interfaces.ICloudinaryService;
 import com.api.ecoshieldwebservice.interfaces.IDeteccionService;
 import com.api.ecoshieldwebservice.interfaces.IGeminiService;
 import com.api.ecoshieldwebservice.repositories.*;
-import com.api.ecoshieldwebservice.util.TextSimilarityUtils;
+import com.api.ecoshieldwebservice.util.ImageUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.server.ResponseStatusException;
 
+import java.text.Normalizer;
 import java.util.List;
 import java.util.Optional;
 
@@ -32,6 +37,10 @@ public class DeteccionService implements IDeteccionService {
     public DeteccionResponseDTO analizarCultivo(MultipartFile imagen, String correoUsuario) {
         if (imagen == null || imagen.isEmpty()) {
             throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "Debe enviar una imagen válida");
+        }
+
+        if (ImageUtils.isBlurry(imagen)) {
+            throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "La imagen ha salido en movimiento.");
         }
 
         Usuario usuario = usuarioRepository.findByUsuarioCorreo(correoUsuario)
@@ -56,8 +65,16 @@ public class DeteccionService implements IDeteccionService {
         deteccion.setRegionAlto(aiResult.getAlto());
 
         asignarEntidadDetectada(deteccion, aiResult);
-        deteccionRepository.save(deteccion);
 
+        // Si no se pudo mapear a una ficha, guardamos lo que vino de IA en la detección
+        if (deteccion.getEnfermedad() == null && deteccion.getPlaga() == null) {
+            deteccion.setSintomasIA(aiResult.getSintomas());
+            deteccion.setTratamientoIA(aiResult.getTratamiento());
+            deteccion.setCausasIA(aiResult.getCausas());
+            deteccion.setPrevencionIA(aiResult.getPrevencion());
+        }
+
+        deteccionRepository.save(deteccion);
         return convertirADTO(deteccion, aiResult);
     }
 
@@ -87,27 +104,127 @@ public class DeteccionService implements IDeteccionService {
                 .toList();
     }
 
-    // -----------------------------
-    // MÉTODOS AUXILIARES PRIVADOS
-    // -----------------------------
+    // -------------------- NÚCLEO: Vincular a ficha existente o crear nueva con enums correctos --------------------
 
-    private void asignarEntidadDetectada(Deteccion deteccion, GeminiResponseDTO aiResult) {
-        String nombre = aiResult.getNombre();
+    private void asignarEntidadDetectada(Deteccion deteccion, GeminiResponseDTO ai) {
+        String nombre = ai.getNombre();
         if (nombre == null) return;
 
-        if ("PLAGA".equalsIgnoreCase(aiResult.getTipo())) {
-            Optional<Plaga> plaga = plagaRepository.findByPlagaNombreIgnoreCase(nombre)
-                    .or(() -> plagaRepository.findByAliasIgnoreCase(nombre))
-                    .or(() -> buscarPlagaSimilar(nombre));
-            deteccion.setPlaga(plaga.orElse(null));
+        String nombreNormalizado = norm(nombre);
 
-        } else if ("ENFERMEDAD".equalsIgnoreCase(aiResult.getTipo())) {
-            Optional<Enfermedad> enf = enfermedadRepository.findByEnfermedadNombreIgnoreCase(nombre)
-                    .or(() -> enfermedadRepository.findByAliasIgnoreCase(nombre))
-                    .or(() -> buscarEnfermedadSimilar(nombre));
-            deteccion.setEnfermedad(enf.orElse(null));
+        if ("PLAGA".equalsIgnoreCase(ai.getTipo())) {
+            Optional<Plaga> plagaExistente = plagaRepository.findAll().stream()
+                    .filter(p -> p.getPlagaNombre() != null && norm(p.getPlagaNombre()).equals(nombreNormalizado))
+                    .findFirst();
+
+            if (plagaExistente.isPresent()) {
+                deteccion.setPlaga(plagaExistente.get());
+            } else {
+                Plaga p = new Plaga();
+                p.setPlagaNombre(ai.getNombre());
+                p.setPlagaNombreCientifico(ai.getNombreCientifico() != null ? ai.getNombreCientifico() : "Desconocido");
+                p.setPlagaDescripcion(ai.getDescripcion());
+                if (deteccion.getFoto() != null && deteccion.getFoto().getFotoRuta() != null) {
+                    p.setPlagaFoto(deteccion.getFoto().getFotoRuta());
+                }
+
+                // enums ↴
+                p.setPlagaTipo(toPlagaTipo(ai.getTipoPlaga()));
+                p.setSeveridad(toSeveridad(ai.getSeveridad()));
+                p.setTemporada(toTemporada(ai.getTemporada()));
+
+                // textos ↴
+                p.setPlagaSintomas(ai.getSintomas());
+                p.setPlagaTratamiento(ai.getTratamiento());
+                p.setPlagaCausas(ai.getCausas());
+                p.setPlagaPrevenciones(ai.getPrevencion());
+
+                plagaRepository.save(p);
+                deteccion.setPlaga(p);
+            }
+
+        } else if ("ENFERMEDAD".equalsIgnoreCase(ai.getTipo())) {
+            Optional<Enfermedad> enfExistente = enfermedadRepository.findAll().stream()
+                    .filter(e -> e.getEnfermedadNombre() != null && norm(e.getEnfermedadNombre()).equals(nombreNormalizado))
+                    .findFirst();
+
+            if (enfExistente.isPresent()) {
+                deteccion.setEnfermedad(enfExistente.get());
+            } else {
+                Enfermedad e = new Enfermedad();
+                e.setEnfermedadNombre(ai.getNombre());
+                e.setEnfermedadNombreCientifico(ai.getNombreCientifico() != null ? ai.getNombreCientifico() : "Desconocido");
+                e.setEnfermedadDescripcion(ai.getDescripcion());
+                if (deteccion.getFoto() != null && deteccion.getFoto().getFotoRuta() != null) {
+                    e.setEnfermedadFoto(deteccion.getFoto().getFotoRuta());
+                }
+
+
+                // enums ↴
+                e.setEnfermedadTipo(toEnfermedadTipo(/* puedes crear otro campo en DTO; por ahora inferimos de texto */ ai.getTipoPlaga()));
+                e.setSeveridad(toSeveridad(ai.getSeveridad()));
+                e.setTemporada(toTemporada(ai.getTemporada()));
+
+                // textos ↴
+                e.setEnfermedadSintomas(ai.getSintomas());
+                e.setEnfermedadTratamiento(ai.getTratamiento());
+                e.setEnfermedadCausas(ai.getCausas());
+                e.setEnfermedadPrevenciones(ai.getPrevencion());
+
+                enfermedadRepository.save(e);
+                deteccion.setEnfermedad(e);
+            }
         }
     }
+
+    // -------------------- CONVERSORES A ENUMS (sin strings) --------------------
+
+    private Severidad toSeveridad(String s) {
+        if (s == null) return Severidad.LEVE;
+        String v = norm(s);
+        if (v.contains("moder")) return Severidad.MODERADA;
+        if (v.contains("grave") || v.contains("sever")) return Severidad.GRAVE;
+        return Severidad.LEVE;
+    }
+
+    private Temporada toTemporada(String s) {
+        if (s == null) return Temporada.TODO_EL_AÑO;
+        String v = norm(s);
+        if (v.contains("primavera")) return Temporada.PRIMAVERA;
+        if (v.contains("verano")) return Temporada.VERANO;
+        if (v.contains("oton")) return Temporada.OTOÑO; // "otoño" sin tilde normalizado → "oton"
+        if (v.contains("invierno")) return Temporada.INVIERNO;
+        return Temporada.TODO_EL_AÑO;
+    }
+
+    private PlagaTipo toPlagaTipo(String s) {
+        if (s == null) return PlagaTipo.OTRO;
+        String v = norm(s);
+        if (v.contains("insect")) return PlagaTipo.INSECTO;
+        if (v.contains("acaro")) return PlagaTipo.ACARO;
+        if (v.contains("nemat")) return PlagaTipo.NEMATODO;
+        return PlagaTipo.OTRO;
+    }
+
+    private EnfermedadTipo toEnfermedadTipo(String s) {
+        if (s == null) return EnfermedadTipo.OTRO;
+        String v = norm(s);
+        if (v.contains("hongo") || v.contains("fung")) return EnfermedadTipo.HONGO;
+        if (v.contains("bacter")) return EnfermedadTipo.BACTERIA;
+        if (v.contains("virus")) return EnfermedadTipo.VIRUS;
+        if (v.contains("nemat")) return EnfermedadTipo.NEMATODO;
+        return EnfermedadTipo.OTRO;
+    }
+
+    // Normaliza: minúsculas, sin tildes/diacríticos y sin espacios extra
+    private String norm(String in) {
+        String s = in == null ? "" : in.trim().toLowerCase();
+        s = Normalizer.normalize(s, Normalizer.Form.NFD)
+                .replaceAll("\\p{M}+", ""); // quita tildes
+        return s;
+    }
+
+    // -------------------- DTO salida --------------------
 
     private DeteccionResponseDTO convertirADTO(Deteccion d, GeminiResponseDTO aiResult) {
         DeteccionResponseDTO dto = new DeteccionResponseDTO();
@@ -116,35 +233,42 @@ public class DeteccionService implements IDeteccionService {
         dto.setDescripcion(d.getDeteccionResultado());
         dto.setConfianza(d.getConfianza());
         dto.setFecha(d.getDeteccionFecha());
-        dto.setCoordenadas(new DeteccionResponseDTO.RegionDTO(d.getRegionX(), d.getRegionY(), d.getRegionAncho(), d.getRegionAlto()));
+        dto.setCoordenadas(new DeteccionResponseDTO.RegionDTO(
+                d.getRegionX(), d.getRegionY(), d.getRegionAncho(), d.getRegionAlto()
+        ));
 
         if (d.getEnfermedad() != null) {
-            dto.setFichaId(d.getEnfermedad().getEnfermedadId());
+            Enfermedad e = d.getEnfermedad();
+            dto.setFichaId(e.getEnfermedadId());
             dto.setTipoFicha("ENFERMEDAD");
             dto.setTipo("ENFERMEDAD");
-            dto.setNombreDetectado(d.getEnfermedad().getEnfermedadNombre());
+            dto.setNombreDetectado(e.getEnfermedadNombre());
+            dto.setSintomas(e.getEnfermedadSintomas());
+            dto.setTratamiento(e.getEnfermedadTratamiento());
+            dto.setCausas(e.getEnfermedadCausas());
+            dto.setPrevencion(e.getEnfermedadPrevenciones());
+
         } else if (d.getPlaga() != null) {
-            dto.setFichaId(d.getPlaga().getPlagaId());
+            Plaga p = d.getPlaga();
+            dto.setFichaId(p.getPlagaId());
             dto.setTipoFicha("PLAGA");
             dto.setTipo("PLAGA");
-            dto.setNombreDetectado(d.getPlaga().getPlagaNombre());
+            dto.setNombreDetectado(p.getPlagaNombre());
+            dto.setSintomas(p.getPlagaSintomas());
+            dto.setTratamiento(p.getPlagaTratamiento());
+            dto.setCausas(p.getPlagaCausas());
+            dto.setPrevencion(p.getPlagaPrevenciones());
+
         } else {
+            // fallback IA
             dto.setTipo("IA");
             dto.setNombreDetectado(aiResult != null ? aiResult.getNombre() : "No clasificado");
+            dto.setSintomas(aiResult != null ? aiResult.getSintomas() : "Información no disponible.");
+            dto.setTratamiento(aiResult != null ? aiResult.getTratamiento() : "Información no disponible.");
+            dto.setCausas(aiResult != null ? aiResult.getCausas() : "Información no disponible.");
+            dto.setPrevencion(aiResult != null ? aiResult.getPrevencion() : "Información no disponible.");
         }
 
         return dto;
-    }
-
-    private Optional<Enfermedad> buscarEnfermedadSimilar(String nombreIA) {
-        return enfermedadRepository.findAll().stream()
-                .filter(e -> TextSimilarityUtils.areSimilar(nombreIA, e.getEnfermedadNombre(), 3))
-                .findFirst();
-    }
-
-    private Optional<Plaga> buscarPlagaSimilar(String nombreIA) {
-        return plagaRepository.findAll().stream()
-                .filter(p -> TextSimilarityUtils.areSimilar(nombreIA, p.getPlagaNombre(), 3))
-                .findFirst();
     }
 }
