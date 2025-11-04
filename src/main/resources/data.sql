@@ -107,7 +107,77 @@ VALUES
      'Rotar cultivos y eliminar residuos.',
      'https://res.cloudinary.com/dsm9krdik/image/upload/v1759998735/plaga10_g87yzj.jpg', 'PRIMAVERA', 'MODERADA');
 
+-- 🦟 1. Pulgón verde del duraznero
+INSERT INTO plaga_alias (plaga_id, alias) VALUES
+                                              (1, 'pulgones verdes'),
+                                              (1, 'green peach aphid'),
+                                              (1, 'pulgón del melocotonero'),
+                                              (1, 'aphid myzus persicae');
 
+-- 🪰 2. Mosca blanca
+INSERT INTO plaga_alias (plaga_id, alias) VALUES
+                                              (2, 'whitefly'),
+                                              (2, 'mosquita blanca'),
+                                              (2, 'bemisia'),
+                                              (2, 'aleurodidae'),
+                                              (2, 'mosca blanca del tomate');
+
+-- 🕷️ 3. Ácaro rojo
+INSERT INTO plaga_alias (plaga_id, alias) VALUES
+                                              (3, 'spider mite'),
+                                              (3, 'red spider mite'),
+                                              (3, 'tetranychus'),
+                                              (3, 'ácaro de dos manchas');
+
+-- 🐛 4. Gusano cogollero
+INSERT INTO plaga_alias (plaga_id, alias) VALUES
+                                              (4, 'fall armyworm'),
+                                              (4, 'spodoptera'),
+                                              (4, 'gusano del maíz'),
+                                              (4, 'oruga cogollera'),
+                                              (4, 'cogollero del maíz');
+
+-- 🧬 5. Nematodo de las raíces
+INSERT INTO plaga_alias (plaga_id, alias) VALUES
+                                              (5, 'root-knot nematode'),
+                                              (5, 'meloidogyne'),
+                                              (5, 'nemátodos agalladores'),
+                                              (5, 'nemátodo del suelo');
+
+-- 🌸 6. Trips del tomate
+INSERT INTO plaga_alias (plaga_id, alias) VALUES
+                                              (6, 'thrips'),
+                                              (6, 'frankliniella occidentalis'),
+                                              (6, 'trips de las flores'),
+                                              (6, 'western flower thrips');
+
+-- 🍃 7. Minador de hojas
+INSERT INTO plaga_alias (plaga_id, alias) VALUES
+                                              (7, 'leaf miner'),
+                                              (7, 'minador'),
+                                              (7, 'liriomyza'),
+                                              (7, 'minador americano');
+
+-- 🍊 8. Cochinilla algodonosa
+INSERT INTO plaga_alias (plaga_id, alias) VALUES
+                                              (8, 'cochinilla blanca'),
+                                              (8, 'planococcus'),
+                                              (8, 'mealybug'),
+                                              (8, 'cochinilla de los cítricos');
+
+-- 🕸️ 9. Araña amarilla
+INSERT INTO plaga_alias (plaga_id, alias) VALUES
+                                              (9, 'broad mite'),
+                                              (9, 'ácaro amarillo'),
+                                              (9, 'tarsonémido'),
+                                              (9, 'yellow mite');
+
+-- 🪲 10. Escarabajo del pepino
+INSERT INTO plaga_alias (plaga_id, alias) VALUES
+                                              (10, 'cucumber beetle'),
+                                              (10, 'diabrotica'),
+                                              (10, 'escarabajo rayado del pepino'),
+                                              (10, 'beetle pest cucumber');
 -- ========================
 -- 🌱 TABLA: ENFERMEDAD
 -- ========================
@@ -193,7 +263,84 @@ VALUES
      'Rotación y control biológico.',
      'https://res.cloudinary.com/dsm9krdik/image/upload/v1759999179/enf10_taos3y.jpg', 'OTOÑO', 'LEVE');
 
+-- 1️⃣ Tizón tardío del tomate
+INSERT INTO enfermedad_alias (enfermedad_id, alias) VALUES
+                                                        (1, 'late blight'),
+                                                        (1, 'tizon tardio'),
+                                                        (1, 'phytophthora infestans'),
+                                                        (1, 'tizón de la papa'),
+                                                        (1, 'blight tomato disease');
 
+-- 2️⃣ Roya del café
+INSERT INTO enfermedad_alias (enfermedad_id, alias) VALUES
+                                                        (2, 'coffee rust'),
+                                                        (2, 'roya del cafeto'),
+                                                        (2, 'hemileia'),
+                                                        (2, 'leaf rust coffee'),
+                                                        (2, 'coffee leaf rust');
+
+-- 3️⃣ Marchitez bacteriana del plátano
+INSERT INTO enfermedad_alias (enfermedad_id, alias) VALUES
+                                                        (3, 'bacterial wilt'),
+                                                        (3, 'moko disease'),
+                                                        (3, 'ralstonia'),
+                                                        (3, 'marchitez vascular del platano'),
+                                                        (3, 'banana wilt');
+
+-- 4️⃣ Virus del mosaico del pepino
+INSERT INTO enfermedad_alias (enfermedad_id, alias) VALUES
+                                                        (4, 'cucumber mosaic'),
+                                                        (4, 'cmv virus'),
+                                                        (4, 'mosaico del pepino'),
+                                                        (4, 'virus del mosaico del pepinillo'),
+                                                        (4, 'cucumber mosaic virus infection');
+
+-- 5️⃣ Mancha negra de la rosa
+INSERT INTO enfermedad_alias (enfermedad_id, alias) VALUES
+                                                        (5, 'black spot rose'),
+                                                        (5, 'mancha negra en rosales'),
+                                                        (5, 'diplocarpon rosae'),
+                                                        (5, 'blackspot disease');
+
+-- 6️⃣ Pudrición de raíz
+INSERT INTO enfermedad_alias (enfermedad_id, alias) VALUES
+                                                        (6, 'root rot'),
+                                                        (6, 'fusarium wilt'),
+                                                        (6, 'fusarium oxysporum'),
+                                                        (6, 'pudricion radicular'),
+                                                        (6, 'root decay');
+
+-- 7️⃣ Agalla bacteriana
+INSERT INTO enfermedad_alias (enfermedad_id, alias) VALUES
+                                                        (7, 'crown gall'),
+                                                        (7, 'agalla de la raíz'),
+                                                        (7, 'agrobacterium'),
+                                                        (7, 'tumor bacteriano'),
+                                                        (7, 'bacterial gall');
+
+-- 8️⃣ Mildiu polvoriento
+INSERT INTO enfermedad_alias (enfermedad_id, alias) VALUES
+                                                        (8, 'powdery mildew'),
+                                                        (8, 'mildiu blanco'),
+                                                        (8, 'oidio'),
+                                                        (8, 'erysiphe'),
+                                                        (8, 'mildiu en hojas');
+
+-- 9️⃣ Virus del enrollamiento de la hoja del tomate
+INSERT INTO enfermedad_alias (enfermedad_id, alias) VALUES
+                                                        (9, 'tomato leaf curl'),
+                                                        (9, 'tlcv'),
+                                                        (9, 'leaf curl virus'),
+                                                        (9, 'virus del rizado de hojas de tomate'),
+                                                        (9, 'tomato curl');
+
+-- 🔟 Nematodo de la raíz del café
+INSERT INTO enfermedad_alias (enfermedad_id, alias) VALUES
+                                                        (10, 'root lesion nematode'),
+                                                        (10, 'pratylenchus'),
+                                                        (10, 'nematodo del café'),
+                                                        (10, 'root nematode coffee'),
+                                                        (10, 'nemátodo parásito');
 -- ===========================================
 -- 📰 TABLA: BLOG
 -- ===========================================

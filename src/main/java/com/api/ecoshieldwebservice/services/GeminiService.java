@@ -42,12 +42,11 @@ public class GeminiService implements IGeminiService {
             );
 
             String prompt = String.join(" ",
-                    "Analiza la imagen de una hoja o cultivo y describe brevemente qué observas (2 a 3 líneas).",
-                    "Luego, en la siguiente línea, devuelve SOLO un JSON plano (sin usar markdown ni ```json) con esta estructura:",
+                    "Analiza la imagen de una planta, hoja o cultivo.",
+                    "Identifica si se trata de una enfermedad o plaga conocida en cultivos agrícolas (en español).",
+                    "Devuelve una breve descripción (1 a 2 líneas) de lo que se observa, seguida estrictamente de un JSON plano (sin usar markdown ni ```json) con esta estructura exacta:",
                     "{\"nombre\": \"<nombre detectado>\", \"tipo\": \"PLAGA o ENFERMEDAD\", \"confianza\": <número entre 0 y 1>, \"x\": <coordenadaX>, \"y\": <coordenadaY>, \"ancho\": <valor>, \"alto\": <valor>}"
             );
-
-
 
             Map<String, Object> body = Map.of(
                     "contents", List.of(

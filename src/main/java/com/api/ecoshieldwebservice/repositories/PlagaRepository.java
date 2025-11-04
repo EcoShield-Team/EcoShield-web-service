@@ -37,4 +37,7 @@ public interface PlagaRepository extends JpaRepository<Plaga, Long> {
     List<Plaga> findAllByOrderByPlagaNombreAsc();
     List<Plaga> findAllByOrderByPlagaNombreDesc();
     Optional<Plaga> findByPlagaNombreIgnoreCase(String nombre);
+
+    @Query("SELECT p FROM Plaga p JOIN p.alias a WHERE LOWER(a) = LOWER(:nombre)")
+    Optional<Plaga> findByAliasIgnoreCase(String nombre);
 }

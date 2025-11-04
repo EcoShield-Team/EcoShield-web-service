@@ -22,6 +22,8 @@ public class DeteccionResponseDTO {
     private String nombreDetectado;
     private RegionDTO coordenadas;
     private OffsetDateTime fecha;
+    private Long fichaId;
+    private String tipoFicha;
 
     @Getter
     @Setter
@@ -34,3 +36,4 @@ public class DeteccionResponseDTO {
         private BigDecimal alto;
     }
 }
+

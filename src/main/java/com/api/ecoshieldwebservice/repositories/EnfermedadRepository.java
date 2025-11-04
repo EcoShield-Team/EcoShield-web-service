@@ -37,4 +37,7 @@ public interface EnfermedadRepository extends JpaRepository<Enfermedad, Long> {
     List<Enfermedad> findAllByOrderByEnfermedadNombreAsc();
     List<Enfermedad> findAllByOrderByEnfermedadNombreDesc();
     Optional<Enfermedad> findByEnfermedadNombreIgnoreCase(String nombre);
+
+    @Query("SELECT e FROM Enfermedad e JOIN e.alias a WHERE LOWER(a) = LOWER(:nombre)")
+    Optional<Enfermedad> findByAliasIgnoreCase(String nombre);
 }

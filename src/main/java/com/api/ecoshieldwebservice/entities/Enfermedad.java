@@ -55,4 +55,9 @@ public class Enfermedad {
     @Column(name = "severidad", nullable = false, length = 15)
     private Severidad severidad;
 
+    @ElementCollection
+    @CollectionTable(name = "enfermedad_alias", joinColumns = @JoinColumn(name = "enfermedad_id"))
+    @Column(name = "alias", length = 150)
+    private java.util.List<String> alias;
+
 }

@@ -56,4 +56,9 @@ public class Plaga {
     @Column(name = "severidad", nullable = false, length = 15)
     private Severidad severidad;
 
+    @ElementCollection
+    @CollectionTable(name = "plaga_alias", joinColumns = @JoinColumn(name = "plaga_id"))
+    @Column(name = "alias", length = 150)
+    private java.util.List<String> alias;
+
 }
