@@ -1,6 +1,5 @@
 package com.api.ecoshieldwebservice.dtos.response;
 
-
 import com.api.ecoshieldwebservice.dtos.user.UsuarioResponseForoDTO;
 import lombok.Getter;
 import lombok.Setter;

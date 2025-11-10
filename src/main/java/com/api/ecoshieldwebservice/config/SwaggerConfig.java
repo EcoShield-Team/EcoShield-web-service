@@ -40,6 +40,7 @@ public class SwaggerConfig {
                 .addTagsItem(new Tag().name("Blog").description("📚 Blogs informativos: tips y noticias sobre agricultura sostenible"))
                 .addTagsItem(new Tag().name("Feedback").description("🗣️ Opiniones, sugerencias y calificaciones del sistema"))
                 .addTagsItem(new Tag().name("Almanaque").description("🌾 Catálogo de plagas y enfermedades agrícolas con filtros y búsquedas"))
-                .addTagsItem(new Tag().name("Deteccion").description("🔎 Detección automática de plagas y enfermedades mediante inteligencia artificial aplicada a imágenes"));
+                .addTagsItem(new Tag().name("Deteccion").description("🔎 Detección automática de plagas y enfermedades mediante inteligencia artificial aplicada a imágenes"))
+                .addTagsItem(new Tag().name("Clima").description("⛅ Servicio que obtiene el clima actual según coordenadas geográficas o nombre de ciudad"));
     }
 }

@@ -14,7 +14,7 @@ import org.springframework.web.multipart.MultipartFile;
 
 import java.util.List;
 
-@Tag(name = "Detección", description = "Análisis y gestión de detecciones de plagas y enfermedades en cultivos")
+@Tag(name = "Deteccion", description = "Análisis y gestión de detecciones de plagas y enfermedades en cultivos")
 @RestController
 @RequestMapping("/deteccion")
 public class DeteccionController {
