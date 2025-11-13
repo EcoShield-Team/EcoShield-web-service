@@ -15,19 +15,26 @@ public class EmailService implements IEmailService {
         this.mailSender = mailSender;
     }
 
+
     @Override
-    public void sendPasswordReset(String toEmail, String resetLink) {
+    public void sendPasswordReset(String toEmail, String resetLink, String verificationCode) {
         SimpleMailMessage msg = new SimpleMailMessage();
         msg.setTo(toEmail);
         msg.setSubject("EcoShield – Restablecer contraseña");
+
         msg.setText("""
-                Solicitaste restablecer tu contraseña.
-                Usa este enlace (válido por 24 horas):
+            Solicitaste restablecer tu contraseña en EcoShield.
 
-                %s
+            Código de verificación (6 dígitos):
+            %s
 
-                Si no fuiste tú, ignora este correo.
-                """.formatted(resetLink));
+            También puedes usar este enlace (válido por 15 minutos):
+            %s
+
+
+            Si no fuiste tú, ignora este correo.
+            """.formatted(verificationCode, resetLink));
+
         mailSender.send(msg);
     }
 }

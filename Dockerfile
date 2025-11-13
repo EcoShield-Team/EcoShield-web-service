@@ -1,11 +1,13 @@
-FROM eclipse-temurin:21-jdk-jammy
+FROM openjdk:17.0.2-jdk-oracle
 
 ENV TZ=America/Lima
 
-WORKDIR /app
+ARG JAR_FILE=target/*.jar
 
-COPY ecoshieldService.jar app.jar
+COPY ${JAR_FILE} backend_ecoShield.jar
+
+CMD apt-get update -y
 
 EXPOSE 8080
 
-ENTRYPOINT ["java", "-Xmx2048M", "-jar", "/app/app.jar"]
+ENTRYPOINT ["java", "-Xmx2048M", "-jar", "/backend_ecoShield.jar"]

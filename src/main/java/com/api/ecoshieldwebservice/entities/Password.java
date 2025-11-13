@@ -18,6 +18,9 @@ public class Password {
     @Column(nullable=false, unique=true, length=100)
     private String token;
 
+    @Column(nullable = false, length = 6)
+    private String verificationCode;
+
     @ManyToOne(optional=false, fetch=FetchType.LAZY)
     @JoinColumn(name="usuarioid", nullable=false)
     private Usuario usuario;
