@@ -13,6 +13,7 @@ import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.HttpStatus;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.server.ResponseStatusException;
 
 import java.time.OffsetDateTime;
@@ -36,7 +37,7 @@ public class PasswordService implements IPasswordService {
     @Value("${app.reset.base-url:}")
     private String resetBaseUrl;
 
-    @Value("${app.reset.expose-token:false}")
+    @Value("${app.reset.expose-token}")
     private boolean exposeToken;
 
     private String buildResetLink(String token) {
@@ -59,32 +60,57 @@ public class PasswordService implements IPasswordService {
         actives.forEach(t -> t.setUsedAt(OffsetDateTime.now()));
         if (!actives.isEmpty()) passwordRepository.saveAll(actives);
 
-        // Crear nuevo token 24h
         OffsetDateTime now = OffsetDateTime.now();
-        Password prt = PasswordUtil.createToken(usuario,24L);
+        Password prt = PasswordUtil.createToken(usuario,15L);
         passwordRepository.save(prt);
-
-        // Construir link real para tu frontend
-        // Ajusta dominio/puerto según tu app web
         String resetLink = buildResetLink(prt.getToken());
-        emailService.sendPasswordReset(email, resetLink);
+        emailService.sendPasswordReset(email, resetLink, prt.getVerificationCode());
 
         return exposeToken
-                ? new ForgotPasswordResponseDTO("Se envió un enlace de recuperación al correo.", prt.getToken())
-                : new ForgotPasswordResponseDTO("Se envió un enlace de recuperación al correo.", null);
+                ? new ForgotPasswordResponseDTO("Se envió un enlace de recuperación al correo.", prt.getToken(),prt.getVerificationCode())
+                : new ForgotPasswordResponseDTO("Se envió un enlace de recuperación al correo.", null,null);
     }
 
     @Override
     public ValidateTokenResponseDTO validateToken(String tokenValue) {
         Password token = passwordRepository.findByToken(tokenValue)
                 .orElse(null);
-        if (token == null) return new ValidateTokenResponseDTO(false, "Token inválido");
-        if (PasswordUtil.isUsed(token)) return new ValidateTokenResponseDTO(false, "El token ya fue utilizado");
-        if (PasswordUtil.isExpired(token)) return new ValidateTokenResponseDTO(false, "El token ha expirado");
-        return new ValidateTokenResponseDTO(true, "Token válido");
+        if (token == null) return new ValidateTokenResponseDTO(false, "Token inválido",null);
+        if (PasswordUtil.isUsed(token)) return new ValidateTokenResponseDTO(false, "El token ya fue utilizado",null);
+        if (PasswordUtil.isExpired(token)) return new ValidateTokenResponseDTO(false, "El token ha expirado",null);
+        return new ValidateTokenResponseDTO(true, "Token válido", tokenValue);
     }
 
     @Override
+    public ValidateTokenResponseDTO verifyCode(VerifyCodeRequestDTO req) {
+        String email = req.getEmail().trim().toLowerCase();
+
+        Usuario usuario = usuarioRepository.findByUsuarioCorreo(email)
+                .orElseThrow(() -> new ResponseStatusException(
+                        HttpStatus.NOT_FOUND, "El correo no está asociado a ninguna cuenta"));
+
+        Password token = passwordRepository
+                .findFirstByUsuarioAndVerificationCodeAndUsedAtIsNullOrderByCreatedAtDesc(usuario, req.getCode())
+                .orElse(null);
+
+        if (token == null) {
+            return new ValidateTokenResponseDTO(false, "Código inválido o no encontrado", null);
+        }
+
+        if (PasswordUtil.isUsed(token)) {
+            return new ValidateTokenResponseDTO(false, "El token ya fue utilizado", null);
+        }
+
+        if (PasswordUtil.isExpired(token)) {
+            return new ValidateTokenResponseDTO(false, "El token ha expirado", null);
+        }
+
+        // OK: código válido, devolvemos el token para que el front pueda usar /auth/password/reset
+        return new ValidateTokenResponseDTO(true, "Código válido", token.getToken());
+    }
+
+    @Override
+    @Transactional
     public ResetPasswordResponseDTO resetPassword(ResetPasswordRequestDTO req) {
         Password token = passwordRepository.findByToken(req.getToken())
                 .orElseThrow(() -> new ResponseStatusException(HttpStatus.BAD_REQUEST, "Token inválido"));

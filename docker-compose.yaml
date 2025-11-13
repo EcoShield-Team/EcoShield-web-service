@@ -1,34 +1,38 @@
 services:
-  api:
-    build: .
-    image: ecoshield-api:latest
-    container_name: ecoshield-api
+  app:
+    image: 'docker-spring-boot-postgres:latest'
+    build:
+      context: .
+    container_name: app
     ports:
       - "6868:8080"
     networks:
-      - springcloud
+      - network_ecoShield
     depends_on:
       - db
-    env_file:
-      - .env
-    restart: unless-stopped
-
+    environment:
+      - POSTGRES_USER=postgres
+      - POSTGRES_PASSWORD=admin
+      - SPRING_DATASOURCE_URL=jdbc:postgresql://db:5432/db_EcoShield
+      - SPRING_DATASOURCE_USERNAME=postgres
+      - SPRING_DATASOURCE_PASSWORD=admin
+      - SPRING_JPA_HIBERNATE_DDL_AUTO=create-drop
   db:
     image: postgres:16-alpine
-    container_name: ecoshield-db
     volumes:
       - db_data:/var/lib/postgresql/data
-    networks:
-      - springcloud
-    env_file:
-      - .env
     restart: always
+    container_name: db
+    networks:
+      - my-network-name
+    environment:
+      - POSTGRES_USER=postgres
+      - POSTGRES_PASSWORD=admin
+      - POSTGRES_DB=db_productos
     ports:
       - "5433:5432"
-
 volumes:
   db_data:
-
 networks:
-  springcloud:
-    driver: bridge
+  network_ecoShield:
+    name: springcloud

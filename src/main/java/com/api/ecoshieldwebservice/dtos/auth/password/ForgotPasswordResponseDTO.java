@@ -14,4 +14,5 @@ import lombok.Setter;
 public class ForgotPasswordResponseDTO {
     private String message;
     private String tokenPreview;
+    private String verificationCode;
 }

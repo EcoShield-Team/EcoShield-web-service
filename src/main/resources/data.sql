@@ -8,9 +8,9 @@ INSERT INTO rol (rolnombre, roldescripcion) VALUES ('USER', 'Rol por defecto de 
 -- ========================
 INSERT INTO usuario (usuarioid, rolid, usuarionombre, usuariocorreo, usuariocontrasena, usuarioestado, usuariofotoperfil, usuariopais, usuariofecharegistro)
 VALUES
-    (1, 1, 'Gerardo Chávez', 'gerardo@ecoshield.com', '$2a$12$0eZ.w9rAEsY9bzl00.uLte4mE5.agTRH7T1qvrRE54BqNDVk6EE1K', 'ACTIVO', 'https://res.cloudinary.com/dsm9krdik/image/upload/v1759996306/profile1_ctpzyg.png', 'Perú', CURRENT_TIMESTAMP),
+    (1, 1, 'Gerardo Chávez', 'gerardomanuelrichard@gmail.com', '$2a$12$0eZ.w9rAEsY9bzl00.uLte4mE5.agTRH7T1qvrRE54BqNDVk6EE1K', 'ACTIVO', 'https://res.cloudinary.com/dsm9krdik/image/upload/v1759996306/profile1_ctpzyg.png', 'Perú', CURRENT_TIMESTAMP),
     (2, 2, 'Alexander Aquino', 'alexander@ecoshield.com', '$2a$12$VJXI.hPUM5V2AbMr65TrWeFrzmobKsTVRCVpyPdzRrCXs90.2guRO', 'ACTIVO', 'https://res.cloudinary.com/dsm9krdik/image/upload/v1759996306/profile2_hrkoiy.jpg', 'Perú', CURRENT_TIMESTAMP),
-    (3, 2, 'Camilo Párraga', 'camilo@ecoshield.com', '$2a$12$1OzGZWejEJgRSyRa4A8eWO0daHZxn6cbs/Szi8M0AqDHGDw8nItEC', 'ACTIVO', 'https://res.cloudinary.com/dsm9krdik/image/upload/v1759996306/profile3_uj5yw6.jpg', 'Ecuador', CURRENT_TIMESTAMP),
+    (3, 2, 'Camilo Parraga', 'camilopp810@gmail.com', '$2a$12$jVGfmKu7rA8c.X/Wjt8yruAg/Qulxd/2bzwKQvYPDKK/XBNmhytFi', 'ACTIVO', 'https://res.cloudinary.com/dsm9krdik/image/upload/v1759996306/profile3_uj5yw6.jpg', 'Ecuador', CURRENT_TIMESTAMP),
     (4, 2, 'Mauricio Mantilla', 'mauricio@ecoshield.com', '$2a$12$neGxzUr.6lIi0jjfq9YpCuX8Dkr1koPeTVtJ2jurBGAVi3Q9dep5G', 'ACTIVO', 'https://res.cloudinary.com/dsm9krdik/image/upload/v1759996306/profile10_oks6ue.avif', 'Colombia', CURRENT_TIMESTAMP),
     (5, 2, 'Marcelo Rotta', 'marcelo@ecoshield.com', '$2a$12$wixOkszU53ysbHbbd0jTqefl0tzsLAID26asnMXf0J8Dp/UxX4CG2', 'INACTIVO', 'https://res.cloudinary.com/dsm9krdik/image/upload/v1759996307/profile4_ojix5z.jpg', 'Bolivia', CURRENT_TIMESTAMP),
     (6, 2, 'Hadisha Ludeña', 'hadisha@ecoshield.com', '$2a$12$QqpEspFg0P7BHhHisLP9bObe2zqT2l8y.I8JZCAPxHEwWjo3pHc7S', 'ACTIVO', 'https://res.cloudinary.com/dsm9krdik/image/upload/v1759996307/profile12_vusbwz.jpg', 'Perú', CURRENT_TIMESTAMP),

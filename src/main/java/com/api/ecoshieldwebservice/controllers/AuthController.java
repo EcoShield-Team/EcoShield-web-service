@@ -56,14 +56,13 @@ public class AuthController {
     }
 
     @PostMapping("/password/forgot")
-    public ResponseEntity<ForgotPasswordResponseDTO> forgotPassword(HttpServletRequest request,
-                                                                    @Valid @RequestBody ForgotPasswordRequestDTO body) {
+    public ResponseEntity<ForgotPasswordResponseDTO> forgotPassword(HttpServletRequest request, @Valid @RequestBody ForgotPasswordRequestDTO body) {
         String ip = request.getHeader("X-Forwarded-For");
         if (ip == null || ip.isBlank()) ip = request.getRemoteAddr();
 
         if (!simpleRateLimiter.allow("forgot:" + ip)) {
             return ResponseEntity.status(429).body(
-                    new ForgotPasswordResponseDTO("Demasiadas solicitudes. Inténtalo en un minuto.", null)
+                    new ForgotPasswordResponseDTO("Demasiadas solicitudes. Inténtalo en un minuto.", null,null)
             );
         }
         return ResponseEntity.ok(passwordService.requestReset(body));
@@ -78,6 +77,12 @@ public class AuthController {
     @PostMapping("/password/reset")
     public ResponseEntity<ResetPasswordResponseDTO> resetPassword(@Valid @RequestBody ResetPasswordRequestDTO request) {
         ResetPasswordResponseDTO response = passwordService.resetPassword(request);
+        return ResponseEntity.ok(response);
+    }
+
+    @PostMapping("/password/verify-code")
+    public ResponseEntity<ValidateTokenResponseDTO> verifyCode(@Valid @RequestBody VerifyCodeRequestDTO request) {
+        ValidateTokenResponseDTO response = passwordService.verifyCode(request);
         return ResponseEntity.ok(response);
     }
 }
