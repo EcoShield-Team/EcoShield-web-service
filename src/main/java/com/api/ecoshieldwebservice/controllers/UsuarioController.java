@@ -31,7 +31,7 @@ public class UsuarioController {
     }
 
     @GetMapping("/{id}")
-    @PreAuthorize("hasRole('ADMIN')")
+    @PreAuthorize("hasAnyRole('USER','ADMIN')")
     public ResponseEntity<UsuarioProfileDTO> findById(@PathVariable Long id) {
         return ResponseEntity.ok(usuarioService.findById(id));
     }
