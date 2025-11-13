@@ -72,16 +72,6 @@ public class PasswordService implements IPasswordService {
     }
 
     @Override
-    public ValidateTokenResponseDTO validateToken(String tokenValue) {
-        Password token = passwordRepository.findByToken(tokenValue)
-                .orElse(null);
-        if (token == null) return new ValidateTokenResponseDTO(false, "Token inválido",null);
-        if (PasswordUtil.isUsed(token)) return new ValidateTokenResponseDTO(false, "El token ya fue utilizado",null);
-        if (PasswordUtil.isExpired(token)) return new ValidateTokenResponseDTO(false, "El token ha expirado",null);
-        return new ValidateTokenResponseDTO(true, "Token válido", tokenValue);
-    }
-
-    @Override
     public ValidateTokenResponseDTO verifyCode(VerifyCodeRequestDTO req) {
         String email = req.getEmail().trim().toLowerCase();
 

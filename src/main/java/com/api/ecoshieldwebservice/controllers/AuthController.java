@@ -68,12 +68,6 @@ public class AuthController {
         return ResponseEntity.ok(passwordService.requestReset(body));
     }
 
-    @GetMapping("/password/validate")
-    public ResponseEntity<ValidateTokenResponseDTO> validateToken(@RequestParam("token") String token) {
-        ValidateTokenResponseDTO response = passwordService.validateToken(token);
-        return ResponseEntity.ok(response);
-    }
-
     @PostMapping("/password/reset")
     public ResponseEntity<ResetPasswordResponseDTO> resetPassword(@Valid @RequestBody ResetPasswordRequestDTO request) {
         ResetPasswordResponseDTO response = passwordService.resetPassword(request);
