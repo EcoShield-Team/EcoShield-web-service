@@ -105,13 +105,13 @@ public class ComentarioService implements IComentarioService {
 
     @Override
     public List<ComentarioResponseDTO> findAll() {
-        List<Comentario> lista = comentarioRepository.findAll();
+        List<Comentario> lista = comentarioRepository.findAllByOrderByComentarioFechaDesc();
         return lista.stream().map(c -> convertirAComentarioResponseDTO(c, null)).toList();
     }
 
     @Override
     public List<ComentarioResponseDTO> findByPostId(Long postId, String correoActual) {
-        List<Comentario> lista = comentarioRepository.findByPost_PostIdOrderByComentarioFechaAsc(postId);
+        List<Comentario> lista = comentarioRepository.findByPost_PostIdOrderByComentarioFechaDesc(postId);
         return lista.stream().map(c -> convertirAComentarioResponseDTO(c, correoActual)).toList();
     }
 
