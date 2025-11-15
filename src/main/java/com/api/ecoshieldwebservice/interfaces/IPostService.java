@@ -12,9 +12,9 @@ public interface IPostService {
     PostResponseDTO registrar(PostRequestDTO dto, MultipartFile imagen, String correo);
     PostResponseDTO actualizar(Long id, PostRequestDTO dto, MultipartFile imagen, String correo);
     List<PostResponseDTO> findByPosttitulo(String titulo);
-    List<PostResponseDTO> findAll();
-    PostResponseDTO findById(Long id);
-    List<PostResponseDTO> findByUsuarioid(Long usuarioId);
+    List<PostResponseDTO> findAll(String correoActual);
+    PostResponseDTO findById(Long id, String correoActual);
+    List<PostResponseDTO> findByUsuarioid(Long usuarioId, String correoActual);
     void borrar(Long id, String correo, Collection<? extends GrantedAuthority> roles);
     boolean esAutorDelPost(Long postId, String correo);
     List<PostResponseDTO> findByCorreo(String correo);

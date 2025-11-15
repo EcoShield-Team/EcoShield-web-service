@@ -48,17 +48,18 @@ public class PostController {
     }
 
     @GetMapping("/posts")
-    public ResponseEntity<List<PostResponseDTO>> findAllPosts(@RequestParam(required = false) String titulo) {
-        List<PostResponseDTO> posts = (titulo != null && !titulo.isBlank())
-                ? postService.findByPosttitulo(titulo)
-                : postService.findAll();
-        return ResponseEntity.ok(posts);
+    public ResponseEntity<List<PostResponseDTO>> findAllPosts(@RequestParam(required = false) String titulo, Authentication auth) {
+        if (titulo != null && !titulo.isBlank()) {
+            return ResponseEntity.ok(postService.findByPosttitulo(titulo));
+        }
+        String correo = auth != null ? auth.getName() : null;
+        return ResponseEntity.ok(postService.findAll(correo));
     }
 
     @GetMapping("/posts/{id}")
     @PreAuthorize("hasAnyRole('USER','ADMIN')")
-    public ResponseEntity<PostResponseDTO> findById(@PathVariable Long id) {
-        return ResponseEntity.ok(postService.findById(id));
+    public ResponseEntity<PostResponseDTO> findById(@PathVariable Long id, Authentication auth) {
+        return ResponseEntity.ok(postService.findById(id, auth.getName()));
     }
 
     @DeleteMapping("/posts/{id}")
@@ -69,10 +70,12 @@ public class PostController {
     }
 
     @GetMapping("/usuarios/{usuarioId}/posts")
-    @PreAuthorize("hasRole('ADMIN')")
-    public ResponseEntity<List<PostResponseDTO>> listarPorUsuario(@PathVariable Long usuarioId) {
-        return ResponseEntity.ok(postService.findByUsuarioid(usuarioId));
+    @PreAuthorize("hasAnyRole('USER','ADMIN')")
+    public ResponseEntity<List<PostResponseDTO>> listarPorUsuario(@PathVariable Long usuarioId, Authentication auth) {
+        String correoActual = auth != null ? auth.getName() : null;
+        return ResponseEntity.ok(postService.findByUsuarioid(usuarioId, correoActual));
     }
+
 
     @GetMapping("/posts/mis-posts")
     @PreAuthorize("hasAnyRole('USER','ADMIN')")

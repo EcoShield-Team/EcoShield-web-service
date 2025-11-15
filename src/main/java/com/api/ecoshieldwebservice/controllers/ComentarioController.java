@@ -54,9 +54,10 @@ public class ComentarioController {
 
     @GetMapping("/posts/{postId}/comentarios")
     @PreAuthorize("hasAnyRole('USER','ADMIN')")
-    public ResponseEntity<List<ComentarioResponseDTO>> listarPorPost(@PathVariable Long postId) {
-        return ResponseEntity.ok(comentarioService.findByPostId(postId));
+    public ResponseEntity<List<ComentarioResponseDTO>> listarPorPost(@PathVariable Long postId, Authentication auth) {
+        return ResponseEntity.ok(comentarioService.findByPostId(postId, auth.getName()));
     }
+
 
     @GetMapping("/usuarios/{usuarioId}/comentarios")
     @PreAuthorize("hasRole('ADMIN')")

@@ -7,6 +7,7 @@ import com.api.ecoshieldwebservice.entities.Comentario;
 import com.api.ecoshieldwebservice.entities.Post;
 import com.api.ecoshieldwebservice.entities.Usuario;
 import com.api.ecoshieldwebservice.interfaces.IComentarioService;
+import com.api.ecoshieldwebservice.repositories.ComentarioLikeRepository;
 import com.api.ecoshieldwebservice.repositories.ComentarioRepository;
 import com.api.ecoshieldwebservice.repositories.PostRepository;
 import com.api.ecoshieldwebservice.repositories.UsuarioRepository;
@@ -32,6 +33,9 @@ public class ComentarioService implements IComentarioService {
     @Autowired
     private UsuarioRepository usuarioRepository;
 
+    @Autowired
+    private ComentarioLikeRepository comentarioLikeRepository;
+
 
     @Override
     public ComentarioResponseDTO registrar(ComentarioRequestDTO dto, String correo) {
@@ -50,7 +54,7 @@ public class ComentarioService implements IComentarioService {
         comentario.setUsuario(usuario);
 
         Comentario guardado = comentarioRepository.save(comentario);
-        return convertirAComentarioResponseDTO(guardado);
+        return convertirAComentarioResponseDTO(guardado, correo);
     }
 
     @Override
@@ -70,7 +74,7 @@ public class ComentarioService implements IComentarioService {
 
         comentario.setComentarioTexto(dto.getComentarioTexto());
         Comentario actualizado = comentarioRepository.save(comentario);
-        return convertirAComentarioResponseDTO(actualizado);
+        return convertirAComentarioResponseDTO(actualizado, correo);
     }
 
     @Override
@@ -96,19 +100,19 @@ public class ComentarioService implements IComentarioService {
     public ComentarioResponseDTO findById(Long comentarioId) {
         Comentario comentario = comentarioRepository.findById(comentarioId)
                 .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "Comentario no encontrado"));
-        return convertirAComentarioResponseDTO(comentario);
+        return convertirAComentarioResponseDTO(comentario, null);
     }
 
     @Override
     public List<ComentarioResponseDTO> findAll() {
         List<Comentario> lista = comentarioRepository.findAll();
-        return lista.stream().map(this::convertirAComentarioResponseDTO).toList();
+        return lista.stream().map(c -> convertirAComentarioResponseDTO(c, null)).toList();
     }
 
     @Override
-    public List<ComentarioResponseDTO> findByPostId(Long postId) {
+    public List<ComentarioResponseDTO> findByPostId(Long postId, String correoActual) {
         List<Comentario> lista = comentarioRepository.findByPost_PostIdOrderByComentarioFechaAsc(postId);
-        return lista.stream().map(this::convertirAComentarioResponseDTO).toList();
+        return lista.stream().map(c -> convertirAComentarioResponseDTO(c, correoActual)).toList();
     }
 
     @Override
@@ -117,7 +121,7 @@ public class ComentarioService implements IComentarioService {
                 .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "Usuario no encontrado"));
 
         List<Comentario> lista = comentarioRepository.findByUsuario(usuario);
-        return lista.stream().map(this::convertirAComentarioResponseDTO).toList();
+        return lista.stream().map(c -> convertirAComentarioResponseDTO(c, null)).toList();
     }
 
     private void validarComentario(ComentarioRequestDTO dto) {
@@ -131,14 +135,21 @@ public class ComentarioService implements IComentarioService {
         return comentarioRepository.existsByComentarioIdAndUsuario_UsuarioCorreo(comentarioId, correo);
     }
 
-    private ComentarioResponseDTO convertirAComentarioResponseDTO(Comentario comentario) {
+    private ComentarioResponseDTO convertirAComentarioResponseDTO(Comentario comentario, String correoActual) {
+
         ComentarioResponseDTO dto = new ComentarioResponseDTO();
         dto.setComentarioId(comentario.getComentarioId());
         dto.setComentarioTexto(comentario.getComentarioTexto());
         dto.setComentarioFecha(comentario.getComentarioFecha());
+        int totalLikes = comentarioLikeRepository.countByComentario_ComentarioId(comentario.getComentarioId());
+        dto.setLikeCount(totalLikes);
+        if (correoActual != null) {
+            boolean userLiked = comentarioLikeRepository.existsByComentario_ComentarioIdAndUsuario_UsuarioCorreo(comentario.getComentarioId(), correoActual);
+            dto.setUserLiked(userLiked);
+        } else { dto.setUserLiked(false);}
 
-        if (comentario.getUsuario() != null) {
-            Usuario usuario = comentario.getUsuario();
+        Usuario usuario = comentario.getUsuario();
+        if (usuario != null) {
             UsuarioResponseForoDTO uDto = new UsuarioResponseForoDTO();
             uDto.setUsuarioId(usuario.getUsuarioId());
             uDto.setUsuarioNombre(usuario.getUsuarioNombre());
@@ -149,4 +160,5 @@ public class ComentarioService implements IComentarioService {
 
         return dto;
     }
+
 }

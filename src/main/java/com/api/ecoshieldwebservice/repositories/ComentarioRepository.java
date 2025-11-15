@@ -10,4 +10,5 @@ public interface ComentarioRepository extends JpaRepository<Comentario,Long> {
     List<Comentario> findByPost_PostIdOrderByComentarioFechaAsc(Long postId);
     List<Comentario> findByUsuario(Usuario usuario);
     boolean existsByComentarioIdAndUsuario_UsuarioCorreo(Long id, String usuarioCorreo);
+    int countByPost_PostId(Long postId);
 }

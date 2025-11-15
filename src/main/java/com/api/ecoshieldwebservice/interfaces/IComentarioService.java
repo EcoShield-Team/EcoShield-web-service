@@ -13,7 +13,7 @@ public interface IComentarioService {
     ComentarioResponseDTO findById(Long comentarioid);
     List<ComentarioResponseDTO> findAll();
     void borrar(Long postId, Long comentarioId, String correo, Collection<? extends GrantedAuthority> roles);
-    List<ComentarioResponseDTO> findByPostId(Long postId);
+    List<ComentarioResponseDTO> findByPostId(Long postId, String correoActual);
     List<ComentarioResponseDTO> findByUsuarioid(Long usuarioId);
     boolean esAutorDelComentario(Long comentarioId, String correo);
 }

@@ -12,7 +12,6 @@ public interface PostRepository extends JpaRepository<Post,Long> {
     List<Post> findByPostTitulo(String titulo);
     List<Post> findAllByOrderByPostFechaDesc();
     boolean existsByPostIdAndUsuario_UsuarioCorreo(Long id, String usuarioCorreo);
-
     @Query("SELECT p FROM Post p WHERE p.usuario.usuarioCorreo = :correo ORDER BY p.postFecha DESC")
     List<Post> listarPostsPorCorreo(String correo);
 }

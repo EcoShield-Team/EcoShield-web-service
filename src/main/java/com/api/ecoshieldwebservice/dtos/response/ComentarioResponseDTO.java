@@ -13,4 +13,6 @@ public class ComentarioResponseDTO {
     private UsuarioResponseForoDTO usuario;
     private String comentarioTexto;
     private OffsetDateTime comentarioFecha;
+    private int likeCount;
+    private boolean userLiked;
 }

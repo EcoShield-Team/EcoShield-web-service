@@ -9,17 +9,17 @@ INSERT INTO rol (rolnombre, roldescripcion) VALUES ('USER', 'Rol por defecto de 
 INSERT INTO usuario (usuarioid, rolid, usuarionombre, usuariocorreo, usuariocontrasena, usuarioestado, usuariofotoperfil, usuariopais, usuariofecharegistro)
 VALUES
     (1, 1, 'Gerardo Chávez', 'gerardomanuelrichard@gmail.com', '$2a$12$0eZ.w9rAEsY9bzl00.uLte4mE5.agTRH7T1qvrRE54BqNDVk6EE1K', 'ACTIVO', 'https://res.cloudinary.com/dsm9krdik/image/upload/v1759996306/profile1_ctpzyg.png', 'Perú', CURRENT_TIMESTAMP),
-    (2, 2, 'Alexander Aquino', 'alexander@ecoshield.com', '$2a$12$VJXI.hPUM5V2AbMr65TrWeFrzmobKsTVRCVpyPdzRrCXs90.2guRO', 'ACTIVO', 'https://res.cloudinary.com/dsm9krdik/image/upload/v1759996306/profile2_hrkoiy.jpg', 'Perú', CURRENT_TIMESTAMP),
-    (3, 2, 'Camilo Parraga', 'camilopp810@gmail.com', '$2a$12$jVGfmKu7rA8c.X/Wjt8yruAg/Qulxd/2bzwKQvYPDKK/XBNmhytFi', 'ACTIVO', 'https://res.cloudinary.com/dsm9krdik/image/upload/v1759996306/profile3_uj5yw6.jpg', 'Ecuador', CURRENT_TIMESTAMP),
-    (4, 2, 'Mauricio Mantilla', 'mauricio@ecoshield.com', '$2a$12$neGxzUr.6lIi0jjfq9YpCuX8Dkr1koPeTVtJ2jurBGAVi3Q9dep5G', 'ACTIVO', 'https://res.cloudinary.com/dsm9krdik/image/upload/v1759996306/profile10_oks6ue.avif', 'Colombia', CURRENT_TIMESTAMP),
-    (5, 2, 'Marcelo Rotta', 'marcelo@ecoshield.com', '$2a$12$wixOkszU53ysbHbbd0jTqefl0tzsLAID26asnMXf0J8Dp/UxX4CG2', 'INACTIVO', 'https://res.cloudinary.com/dsm9krdik/image/upload/v1759996307/profile4_ojix5z.jpg', 'Bolivia', CURRENT_TIMESTAMP),
-    (6, 2, 'Hadisha Ludeña', 'hadisha@ecoshield.com', '$2a$12$QqpEspFg0P7BHhHisLP9bObe2zqT2l8y.I8JZCAPxHEwWjo3pHc7S', 'ACTIVO', 'https://res.cloudinary.com/dsm9krdik/image/upload/v1759996307/profile12_vusbwz.jpg', 'Perú', CURRENT_TIMESTAMP),
-    (7, 2, 'Diego Castro', 'diego@ecoshield.com', '$2a$12$1lGdcDgxB3v4.sB9fq/u.OC9XpC5m5X93ztJzhIomMCPJ/HM.hri2', 'BLOQUEADO', 'https://res.cloudinary.com/dsm9krdik/image/upload/v1759996307/profile7_mpxppf.jpg', 'Chile', CURRENT_TIMESTAMP),
-    (8, 1, 'Admin Global', 'admin@ecoshield.com', '$2a$12$zUO15GSNu.N6LrphgchVCeVAGsoXYI/wx9c896S7uxppJVeoqMckG', 'ACTIVO', 'https://res.cloudinary.com/dsm9krdik/image/upload/v1759996306/profile11_xrllds.jpg', 'Argentina', CURRENT_TIMESTAMP),
-    (9, 2, 'Laura Llanos', 'laura@ecoshield.com', '$2a$12$mPv1EvkquPNAMneSsPT2de2ydAHuDkf8GNGSilnQLqxITYD9xtGv6', 'ACTIVO', 'https://res.cloudinary.com/dsm9krdik/image/upload/v1759996307/profile6_olmnjd.jpg', 'México', CURRENT_TIMESTAMP),
-    (10, 2, 'César Rodríguez', 'cesar@ecoshield.com', '$2a$12$Gwsl2eZFOinAqPT5meCUhusPP1Wk6BTsPfaFzlL4PXy/xFEjNEuDe', 'ACTIVO', 'https://res.cloudinary.com/dsm9krdik/image/upload/v1759996307/profile5_c41umt.jpg', 'Perú', CURRENT_TIMESTAMP),
-    (11, 2, 'Gonzalo Morales', 'gonzalo@ecoshield.com', '$2a$12$6ct3ioca2w8wPcsCmCGhduzjyEoB5pS8LWWZZRml45rU9lcBjWVQi', 'ACTIVO', 'https://res.cloudinary.com/dsm9krdik/image/upload/v1759996307/profile8_bfc0ao.jpg', 'Colombia', CURRENT_TIMESTAMP),
-    (12, 2, 'Andrea Paredes', 'andrea@ecoshield.com', '$2a$12$LNpYpl/9WSV6LWhnnCUaruk4aRVSDWJsGlak7FXPtU0Kzd1tB7bOq', 'ACTIVO', 'https://res.cloudinary.com/dsm9krdik/image/upload/v1759996311/profile9_aibspy.jpg', 'Perú', CURRENT_TIMESTAMP);
+    (2, 1, 'Admin Global', 'admin@ecoshield.com', '$2a$12$zUO15GSNu.N6LrphgchVCeVAGsoXYI/wx9c896S7uxppJVeoqMckG', 'ACTIVO', 'https://res.cloudinary.com/dsm9krdik/image/upload/v1759996306/profile11_xrllds.jpg', 'Argentina', CURRENT_TIMESTAMP),
+    (3, 2, 'Alexander Aquino', 'alexander@ecoshield.com', '$2a$12$osIgA6Ts4o/eKucuIP9wpuZmvAqEslWEuvkDSehCZOx259.t9I6pC', 'ACTIVO', 'https://res.cloudinary.com/dsm9krdik/image/upload/v1759996306/profile2_hrkoiy.jpg', 'Perú', CURRENT_TIMESTAMP),
+    (4, 2, 'Camilo Parraga', 'camilopp810@gmail.com', '$2a$12$osIgA6Ts4o/eKucuIP9wpuZmvAqEslWEuvkDSehCZOx259.t9I6pC', 'ACTIVO', 'https://res.cloudinary.com/dsm9krdik/image/upload/v1759996306/profile3_uj5yw6.jpg', 'Ecuador', CURRENT_TIMESTAMP),
+    (5, 2, 'Mauricio Mantilla', 'mauricio@ecoshield.com', '$2a$12$osIgA6Ts4o/eKucuIP9wpuZmvAqEslWEuvkDSehCZOx259.t9I6pC', 'ACTIVO', 'https://res.cloudinary.com/dsm9krdik/image/upload/v1759996306/profile10_oks6ue.avif', 'Colombia', CURRENT_TIMESTAMP),
+    (6, 2, 'Marcelo Rotta', 'marcelo@ecoshield.com', '$2a$12$osIgA6Ts4o/eKucuIP9wpuZmvAqEslWEuvkDSehCZOx259.t9I6pC', 'INACTIVO', 'https://res.cloudinary.com/dsm9krdik/image/upload/v1759996307/profile4_ojix5z.jpg', 'Bolivia', CURRENT_TIMESTAMP),
+    (7, 2, 'Hadisha Ludeña', 'hadisha@ecoshield.com', '$2a$12$osIgA6Ts4o/eKucuIP9wpuZmvAqEslWEuvkDSehCZOx259.t9I6pC', 'ACTIVO', 'https://res.cloudinary.com/dsm9krdik/image/upload/v1759996307/profile12_vusbwz.jpg', 'Perú', CURRENT_TIMESTAMP),
+    (8, 2, 'Diego Castro', 'diego@ecoshield.com', '$2a$12$osIgA6Ts4o/eKucuIP9wpuZmvAqEslWEuvkDSehCZOx259.t9I6pC', 'BLOQUEADO', 'https://res.cloudinary.com/dsm9krdik/image/upload/v1759996307/profile7_mpxppf.jpg', 'Chile', CURRENT_TIMESTAMP),
+    (9, 2, 'Laura Llanos', 'laura@ecoshield.com', '$2a$12$osIgA6Ts4o/eKucuIP9wpuZmvAqEslWEuvkDSehCZOx259.t9I6pC', 'ACTIVO', 'https://res.cloudinary.com/dsm9krdik/image/upload/v1759996307/profile6_olmnjd.jpg', 'México', CURRENT_TIMESTAMP),
+    (10, 2, 'César Rodríguez', 'cesar@ecoshield.com', '$2a$12$osIgA6Ts4o/eKucuIP9wpuZmvAqEslWEuvkDSehCZOx259.t9I6pC', 'ACTIVO', 'https://res.cloudinary.com/dsm9krdik/image/upload/v1759996307/profile5_c41umt.jpg', 'Perú', CURRENT_TIMESTAMP),
+    (11, 2, 'Gonzalo Morales', 'gonzalo@ecoshield.com', '$2a$12$osIgA6Ts4o/eKucuIP9wpuZmvAqEslWEuvkDSehCZOx259.t9I6pC', 'ACTIVO', 'https://res.cloudinary.com/dsm9krdik/image/upload/v1759996307/profile8_bfc0ao.jpg', 'Colombia', CURRENT_TIMESTAMP),
+    (12, 2, 'Andrea Paredes', 'andrea@ecoshield.com', '$2a$12$osIgA6Ts4o/eKucuIP9wpuZmvAqEslWEuvkDSehCZOx259.t9I6pC', 'ACTIVO', 'https://res.cloudinary.com/dsm9krdik/image/upload/v1759996311/profile9_aibspy.jpg', 'Perú', CURRENT_TIMESTAMP);
 
 
 -- ========================
@@ -566,12 +566,12 @@ VALUES
      'https://res.cloudinary.com/dsm9krdik/image/upload/v1759997490/blog2_eyalkf.jpg',
      'ACTIVO', CURRENT_TIMESTAMP),
 
-    (3, 8, 'NEWS', 'Nuevo acuerdo con instituciones agrícolas latinoamericanas',
+    (3, 2, 'NEWS', 'Nuevo acuerdo con instituciones agrícolas latinoamericanas',
      'EcoShield ha firmado un convenio con instituciones agrícolas de Perú, Colombia y México para promover el uso de herramientas digitales en el monitoreo de plagas. Esta alianza permitirá ampliar la base de datos de detecciones en toda la región.',
      'https://res.cloudinary.com/dsm9krdik/image/upload/v1759997491/blog3_yequj6.jpg',
      'ACTIVO', CURRENT_TIMESTAMP),
 
-    (4, 8, 'TIP', 'Cómo identificar señales tempranas de enfermedades en tus plantas',
+    (4, 2, 'TIP', 'Cómo identificar señales tempranas de enfermedades en tus plantas',
      'Observar el color de las hojas, el brillo de los tallos y la presencia de manchas o deformaciones puede ayudarte a detectar enfermedades antes de que se propaguen. Conoce los principales indicadores que EcoShield analiza mediante IA.',
      'https://res.cloudinary.com/dsm9krdik/image/upload/v1759997489/blog4_vojbxj.jpg',
      'ACTIVO', CURRENT_TIMESTAMP),
@@ -581,7 +581,7 @@ VALUES
      'https://res.cloudinary.com/dsm9krdik/image/upload/v1759997490/blog5_a32d8y.jpg',
      'ACTIVO', CURRENT_TIMESTAMP),
 
-    (6, 8, 'NEWS', 'EcoShield alcanza 10,000 usuarios activos en Latinoamérica',
+    (6, 2, 'NEWS', 'EcoShield alcanza 10,000 usuarios activos en Latinoamérica',
      'Gracias a la comunidad agrícola y urbana, EcoShield supera los 10,000 usuarios activos en la región. El crecimiento demuestra el interés en soluciones tecnológicas sostenibles para el manejo de cultivos.',
      'https://res.cloudinary.com/dsm9krdik/image/upload/v1759997489/blog6_bfymep.jpg',
      'ACTIVO', CURRENT_TIMESTAMP),
@@ -596,12 +596,12 @@ VALUES
      'https://res.cloudinary.com/dsm9krdik/image/upload/v1759997490/blog8_jz1ebd.png',
      'ACTIVO', CURRENT_TIMESTAMP),
 
-    (9, 8, 'TIP', 'Cómo mantener tu huerto libre de plagas sin químicos',
+    (9, 2, 'TIP', 'Cómo mantener tu huerto libre de plagas sin químicos',
      'Utiliza trampas cromáticas, cultivos asociados y biopesticidas naturales para reducir la aparición de plagas. Estas alternativas ecológicas son seguras y efectivas para pequeños huertos urbanos.',
      'https://res.cloudinary.com/dsm9krdik/image/upload/v1759997490/blog9_x9j7jz.jpg',
      'ACTIVO', CURRENT_TIMESTAMP),
 
-    (10, 8, 'NEWS', 'EcoShield presenta su módulo de análisis climático en tiempo real',
+    (10, 2, 'NEWS', 'EcoShield presenta su módulo de análisis climático en tiempo real',
      'Con esta nueva función, los agricultores podrán recibir alertas meteorológicas personalizadas que anticipan condiciones favorables para la aparición de plagas o enfermedades.',
      'https://res.cloudinary.com/dsm9krdik/image/upload/v1759997490/blog10_xoazwn.jpg',
      'ACTIVO', CURRENT_TIMESTAMP),
@@ -611,7 +611,7 @@ VALUES
      'https://res.cloudinary.com/dsm9krdik/image/upload/v1759997491/blog11_vsjumk.jpg',
      'INACTIVO', CURRENT_TIMESTAMP),
 
-    (12, 8, 'NEWS', 'Actualización del ecosistema EcoShield 1.0',
+    (12, 2, 'NEWS', 'Actualización del ecosistema EcoShield 1.0',
      'La nueva versión de la plataforma mejora la velocidad de análisis y añade soporte para imágenes de alta resolución, optimizando la precisión de detección y la gestión de datos del usuario.',
      'https://res.cloudinary.com/dsm9krdik/image/upload/v1759997491/blog12_tje8ro.png',
      'ARCHIVADO', CURRENT_TIMESTAMP);
@@ -624,27 +624,27 @@ VALUES
     (1, 2, 'Problemas con hongos en hojas de tomate',
      'Mis plantas de tomate muestran manchas oscuras y secas en las hojas inferiores. Alguien sabe si esto es tizón o alguna otra enfermedad?',
      'https://res.cloudinary.com/dsm9krdik/image/upload/v1759998075/post1_xibc3f.jpg',
-     CURRENT_TIMESTAMP),
+     '2025-09-28 14:32:10'),
 
     (2, 4, 'Plaga en hojas de lechuga — ayuda urgente',
      'Encontré pequeños insectos blancos en el envés de mis hojas de lechuga. ¿Podría tratarse de mosca blanca? ¿Qué puedo hacer?',
      'https://res.cloudinary.com/dsm9krdik/image/upload/v1759998076/post2_z37ybc.jpg',
-     CURRENT_TIMESTAMP),
+     '2025-10-03 09:17:54'),
 
     (3, 6, 'Resultados con biopesticidas naturales',
      'He estado probando extracto de ajo y neem para controlar pulgones, y los resultados han sido buenos. Les comparto mi experiencia.',
      'https://res.cloudinary.com/dsm9krdik/image/upload/v1759998075/post3_xh9rmz.jpg',
-     CURRENT_TIMESTAMP),
+     '2025-10-11 19:45:22'),
 
     (4, 9, 'Recomendaciones para cultivar fresas en clima seco',
      'Vivo en una zona con poca humedad y me cuesta mantener las fresas saludables. ¿Qué consejos pueden darme para evitar plagas y deshidratación?',
      'https://res.cloudinary.com/dsm9krdik/image/upload/v1759998076/post4_xpjkdi.jpg',
-     CURRENT_TIMESTAMP),
+     '2025-10-19 07:58:43'),
 
     (5, 10, 'Nuevo usuario de EcoShield — mi primera detección',
      'Probé el sistema de detección de plagas y me funcionó muy bien. Detectó una posible infestación de trips en mis pimientos. ¡Recomendado!',
      'https://res.cloudinary.com/dsm9krdik/image/upload/v1759998076/post5_lpoyd9.png',
-     CURRENT_TIMESTAMP);
+     '2025-11-02 16:24:11');
 
 
 -- ========================
@@ -682,10 +682,10 @@ VALUES
 -- ========================
 INSERT INTO feedback (feedbackid, usuarioid, feedbacktipo, feedbackdescripcion, feedbackrating, feedbackfecha)
 VALUES
-    (1, 2, 'GENERAL', 'La aplicación EcoShield me parece intuitiva y fácil de usar. Excelente interfaz.', 5, CURRENT_TIMESTAMP),
+    (1, 8, 'GENERAL', 'La aplicación EcoShield me parece intuitiva y fácil de usar. Excelente interfaz.', 5, CURRENT_TIMESTAMP),
     (2, 3, 'SUGGESTION', 'Sería genial que la app permita comparar plagas detectadas entre usuarios.', 4, CURRENT_TIMESTAMP),
     (3, 4, 'APP_PROBLEM', 'En algunos casos la detección tarda demasiado cuando la conexión es lenta.', 3, CURRENT_TIMESTAMP),
-    (4, 2, 'GENERAL', 'EcoShield ha mejorado mi producción agrícola reduciendo el uso de pesticidas.', 5, CURRENT_TIMESTAMP),
+    (4, 8, 'GENERAL', 'EcoShield ha mejorado mi producción agrícola reduciendo el uso de pesticidas.', 5, CURRENT_TIMESTAMP),
     (5, 6, 'SUGGESTION', 'Podrían incluir recordatorios de fumigación o tratamiento automático.', 4, CURRENT_TIMESTAMP),
     (6, 7, 'APP_PROBLEM', 'No puedo subir fotos grandes, sería bueno un mensaje de error más claro.', 2, CURRENT_TIMESTAMP),
     (7, 9, 'GENERAL', 'Muy útil para identificar enfermedades del tomate. Resultados precisos.', 5, CURRENT_TIMESTAMP),
@@ -696,6 +696,48 @@ VALUES
     (12, 12, 'GENERAL', 'Desde el panel de administrador puedo gestionar todo fácilmente. Muy bien.', 5, CURRENT_TIMESTAMP);
 
 
+-- ========================
+-- 💬 TABLA: POST_LIKE
+-- ========================
+INSERT INTO post_like (postid, usuarioid, fechalike)
+VALUES
+    (1, 3, CURRENT_TIMESTAMP),
+    (1, 8, CURRENT_TIMESTAMP),
+    (1, 1, CURRENT_TIMESTAMP),
+    (2, 4, CURRENT_TIMESTAMP),
+    (2, 5, CURRENT_TIMESTAMP),
+    (3, 2, CURRENT_TIMESTAMP),
+    (4, 6, CURRENT_TIMESTAMP),
+    (5, 10, CURRENT_TIMESTAMP),
+    (5, 1, CURRENT_TIMESTAMP),
+    (5, 9, CURRENT_TIMESTAMP);
+
+
+
+-- ========================
+-- 💬 TABLA: COMENTARIO_LIKE
+-- ========================
+INSERT INTO comentario_like (comentarioid, usuarioid, fechalike)
+VALUES
+    (1, 1, CURRENT_TIMESTAMP),
+    (1, 8, CURRENT_TIMESTAMP),
+    (2, 3, CURRENT_TIMESTAMP),
+    (3, 1, CURRENT_TIMESTAMP),
+    (4, 5, CURRENT_TIMESTAMP),
+    (5, 12, CURRENT_TIMESTAMP),
+    (6, 1, CURRENT_TIMESTAMP),
+    (7, 2, CURRENT_TIMESTAMP),
+    (8, 11, CURRENT_TIMESTAMP),
+    (9, 8, CURRENT_TIMESTAMP),
+    (10, 6, CURRENT_TIMESTAMP),
+    (11, 10, CURRENT_TIMESTAMP),
+    (12, 4, CURRENT_TIMESTAMP),
+    (13, 9, CURRENT_TIMESTAMP),
+    (14, 1, CURRENT_TIMESTAMP);
+
+
+
+
 SELECT setval(pg_get_serial_sequence('rol', 'rolid'), COALESCE(MAX(rolid), 0) + 1, false) FROM rol;
 SELECT setval(pg_get_serial_sequence('usuario', 'usuarioid'), COALESCE(MAX(usuarioid), 0) + 1, false) FROM usuario;
 SELECT setval(pg_get_serial_sequence('plaga', 'plagaid'), COALESCE(MAX(plagaid), 0) + 1, false) FROM plaga;
@@ -704,3 +746,5 @@ SELECT setval(pg_get_serial_sequence('blog', 'blogid'), COALESCE(MAX(blogid), 0)
 SELECT setval(pg_get_serial_sequence('post', 'postid'), COALESCE(MAX(postid), 0) + 1, false) FROM post;
 SELECT setval(pg_get_serial_sequence('comentario', 'comentarioid'), COALESCE(MAX(comentarioid), 0) + 1, false) FROM comentario;
 SELECT setval(pg_get_serial_sequence('feedback', 'feedbackid'), COALESCE(MAX(feedbackid), 0) + 1, false) FROM feedback;
+SELECT setval(pg_get_serial_sequence('post_like', 'likeid'), COALESCE(MAX(likeid), 0) + 1, false) FROM post_like;
+SELECT setval(pg_get_serial_sequence('comentario_like', 'likeid'), COALESCE(MAX(likeid), 0) + 1,false) FROM comentario_like;

@@ -2,12 +2,16 @@ package com.api.ecoshieldwebservice.services;
 
 import com.api.ecoshieldwebservice.dtos.request.PostRequestDTO;
 import com.api.ecoshieldwebservice.dtos.response.PostResponseDTO;
+import com.api.ecoshieldwebservice.dtos.user.UsuarioResponseForoDTO;
 import com.api.ecoshieldwebservice.entities.Post;
 import com.api.ecoshieldwebservice.entities.Usuario;
 import com.api.ecoshieldwebservice.interfaces.ICloudinaryService;
 import com.api.ecoshieldwebservice.interfaces.IPostService;
+import com.api.ecoshieldwebservice.repositories.ComentarioRepository;
+import com.api.ecoshieldwebservice.repositories.PostLikeRepository;
 import com.api.ecoshieldwebservice.repositories.PostRepository;
 import com.api.ecoshieldwebservice.repositories.UsuarioRepository;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.security.core.GrantedAuthority;
@@ -29,11 +33,17 @@ public class PostService implements IPostService {
     private UsuarioRepository usuarioRepository;
 
     @Autowired
-    private ICloudinaryService cloudinaryService;
+    private PostLikeRepository postLikeRepository;
 
+    @Autowired
+    private ComentarioRepository comentarioRepository;
+
+    @Autowired
+    private ICloudinaryService cloudinaryService;
 
     @Override
     public PostResponseDTO registrar(PostRequestDTO dto, MultipartFile imagen, String correo) {
+
         validarCampos(dto);
 
         Usuario usuario = usuarioRepository.findByUsuarioCorreo(correo)
@@ -51,11 +61,12 @@ public class PostService implements IPostService {
         }
 
         Post guardado = postRepository.save(post);
-        return convertirAPostResponseDTO(guardado);
+        return convertirAPostResponseDTO(guardado, correo);
     }
 
     @Override
     public PostResponseDTO actualizar(Long id, PostRequestDTO dto, MultipartFile imagen, String correo) {
+
         validarCampos(dto);
 
         Post existente = postRepository.findById(id)
@@ -75,11 +86,12 @@ public class PostService implements IPostService {
         }
 
         Post actualizado = postRepository.save(existente);
-        return convertirAPostResponseDTO(actualizado);
+        return convertirAPostResponseDTO(actualizado, correo);
     }
 
     @Override
     public void borrar(Long id, String correo, Collection<? extends GrantedAuthority> roles) {
+
         Post post = postRepository.findById(id)
                 .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "Post no encontrado"));
 
@@ -96,39 +108,29 @@ public class PostService implements IPostService {
     @Override
     public List<PostResponseDTO> findByPosttitulo(String titulo) {
         List<Post> lista = postRepository.findByPostTitulo(titulo);
-        if (lista.isEmpty()) {
-            return List.of();
-        }
-        return lista.stream().map(this::convertirAPostResponseDTO).toList();
+        return lista.stream().map(p -> convertirAPostResponseDTO(p, null)).toList();
     }
 
     @Override
-    public List<PostResponseDTO> findAll() {
+    public List<PostResponseDTO> findAll(String correoActual) {
         List<Post> lista = postRepository.findAllByOrderByPostFechaDesc();
-        if (lista.isEmpty()) {
-            return List.of();
-        }
-        return lista.stream().map(this::convertirAPostResponseDTO).toList();
+        return lista.stream().map(p -> convertirAPostResponseDTO(p, correoActual)).toList();
     }
 
     @Override
-    public PostResponseDTO findById(Long id) {
+    public PostResponseDTO findById(Long id, String correoActual) {
         Post post = postRepository.findById(id)
                 .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "Post no encontrado"));
-        return convertirAPostResponseDTO(post);
+        return convertirAPostResponseDTO(post, correoActual);
     }
 
     @Override
-    public List<PostResponseDTO> findByUsuarioid(Long usuarioId) {
+    public List<PostResponseDTO> findByUsuarioid(Long usuarioId, String correoActual)  {
         Usuario usuario = usuarioRepository.findById(usuarioId)
                 .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "Usuario no encontrado"));
 
         List<Post> lista = postRepository.findByUsuario(usuario);
-        if (lista.isEmpty()) {
-            return List.of();
-        }
-
-        return lista.stream().map(this::convertirAPostResponseDTO).toList();
+        return lista.stream().map(p -> convertirAPostResponseDTO(p, correoActual)).toList();
     }
 
     private void validarCampos(PostRequestDTO dto) {
@@ -141,10 +143,7 @@ public class PostService implements IPostService {
     @Override
     public List<PostResponseDTO> findByCorreo(String correo) {
         List<Post> lista = postRepository.listarPostsPorCorreo(correo);
-        if (lista.isEmpty()) {
-            return List.of();
-        }
-        return lista.stream().map(this::convertirAPostResponseDTO).toList();
+        return lista.stream().map(p -> convertirAPostResponseDTO(p, correo)).toList();
     }
 
     @Override
@@ -152,24 +151,31 @@ public class PostService implements IPostService {
         return postRepository.existsByPostIdAndUsuario_UsuarioCorreo(postId, correo);
     }
 
-    private PostResponseDTO convertirAPostResponseDTO(Post post) {
+    private PostResponseDTO convertirAPostResponseDTO(Post post, String correoActual) {
         PostResponseDTO dto = new PostResponseDTO();
+
         dto.setPostId(post.getPostId());
         dto.setPostTitulo(post.getPostTitulo());
         dto.setPostDescripcion(post.getPostDescripcion());
         dto.setPostFoto(post.getPostFoto());
         dto.setPostFecha(post.getPostFecha());
+        dto.setLikeCount(postLikeRepository.countByPost_PostId(post.getPostId()));
+        if (correoActual != null) {
+            dto.setUserLiked(postLikeRepository.existsByPost_PostIdAndUsuario_UsuarioCorreo(post.getPostId(), correoActual));
+        } else { dto.setUserLiked(false);}
+
+        dto.setCommentCount(comentarioRepository.countByPost_PostId(post.getPostId()));
+
 
         if (post.getUsuario() != null) {
-            var usuarioDTO = new com.api.ecoshieldwebservice.dtos.user.UsuarioResponseForoDTO();
-            usuarioDTO.setUsuarioId(post.getUsuario().getUsuarioId());
-            usuarioDTO.setUsuarioNombre(post.getUsuario().getUsuarioNombre());
-            usuarioDTO.setUsuarioFotoPerfil(post.getUsuario().getUsuarioFotoPerfil());
-            usuarioDTO.setUsuarioPais(post.getUsuario().getUsuarioPais());
-            dto.setUsuario(usuarioDTO);
+            UsuarioResponseForoDTO userDTO = new UsuarioResponseForoDTO();
+            userDTO.setUsuarioId(post.getUsuario().getUsuarioId());
+            userDTO.setUsuarioNombre(post.getUsuario().getUsuarioNombre());
+            userDTO.setUsuarioFotoPerfil(post.getUsuario().getUsuarioFotoPerfil());
+            userDTO.setUsuarioPais(post.getUsuario().getUsuarioPais());
+            dto.setUsuario(userDTO);
         }
 
         return dto;
     }
-
 }
