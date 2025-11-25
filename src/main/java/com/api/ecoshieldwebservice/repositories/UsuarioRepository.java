@@ -1,7 +1,6 @@
 package com.api.ecoshieldwebservice.repositories;
 
 import com.api.ecoshieldwebservice.entities.Usuario;
-import com.api.ecoshieldwebservice.enums.UsuarioEstado;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 
