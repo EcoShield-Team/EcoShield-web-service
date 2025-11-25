@@ -8,12 +8,12 @@ import java.util.Collection;
 import java.util.List;
 
 public interface IComentarioService {
-    ComentarioResponseDTO registrar(ComentarioRequestDTO dto, String correo);
+    ComentarioResponseDTO registrar(Long postId, ComentarioRequestDTO dto, String correo);
     ComentarioResponseDTO actualizar(Long postId, Long comentarioId, ComentarioRequestDTO dto, String correo);
     ComentarioResponseDTO findById(Long comentarioid);
     List<ComentarioResponseDTO> findAll();
     void borrar(Long postId, Long comentarioId, String correo, Collection<? extends GrantedAuthority> roles);
     List<ComentarioResponseDTO> findByPostId(Long postId, String correoActual);
-    List<ComentarioResponseDTO> findByUsuarioid(Long usuarioId);
+    List<ComentarioResponseDTO> findByUsuarioid(Long usuarioId, String correoActual);
     boolean esAutorDelComentario(Long comentarioId, String correo);
 }

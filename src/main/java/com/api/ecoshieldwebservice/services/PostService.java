@@ -2,6 +2,7 @@ package com.api.ecoshieldwebservice.services;
 
 import com.api.ecoshieldwebservice.dtos.request.PostRequestDTO;
 import com.api.ecoshieldwebservice.dtos.response.PostResponseDTO;
+import com.api.ecoshieldwebservice.dtos.response.SearchResponseDTO;
 import com.api.ecoshieldwebservice.dtos.user.UsuarioResponseForoDTO;
 import com.api.ecoshieldwebservice.entities.Post;
 import com.api.ecoshieldwebservice.entities.Usuario;
@@ -53,7 +54,7 @@ public class PostService implements IPostService {
         post.setPostTitulo(dto.getPostTitulo());
         post.setPostDescripcion(dto.getPostDescripcion());
         post.setUsuario(usuario);
-        post.setPostFecha(OffsetDateTime.now());
+        post.setPostFechaModificacion(null);
 
         if (imagen != null && !imagen.isEmpty()) {
             String url = cloudinaryService.uploadImage(imagen);
@@ -78,7 +79,7 @@ public class PostService implements IPostService {
 
         existente.setPostTitulo(dto.getPostTitulo());
         existente.setPostDescripcion(dto.getPostDescripcion());
-        existente.setPostFecha(OffsetDateTime.now());
+        existente.setPostFechaModificacion(OffsetDateTime.now());
 
         if (imagen != null && !imagen.isEmpty()) {
             String url = cloudinaryService.uploadImage(imagen);
@@ -106,12 +107,6 @@ public class PostService implements IPostService {
     }
 
     @Override
-    public List<PostResponseDTO> findByPosttitulo(String titulo) {
-        List<Post> lista = postRepository.findByPostTitulo(titulo);
-        return lista.stream().map(p -> convertirAPostResponseDTO(p, null)).toList();
-    }
-
-    @Override
     public List<PostResponseDTO> findAll(String correoActual) {
         List<Post> lista = postRepository.findAllByOrderByPostFechaDesc();
         return lista.stream().map(p -> convertirAPostResponseDTO(p, correoActual)).toList();
@@ -122,6 +117,42 @@ public class PostService implements IPostService {
         Post post = postRepository.findById(id)
                 .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "Post no encontrado"));
         return convertirAPostResponseDTO(post, correoActual);
+    }
+
+    @Override
+    public SearchResponseDTO buscar(String query, String tipo, String correo) {
+
+        SearchResponseDTO respuesta = new SearchResponseDTO();
+
+        switch (tipo.toLowerCase()) {
+            case "destacado":
+                List<Post> destacados = postRepository.buscarPostsDestacados(query);
+                respuesta.setPosts(destacados.stream()
+                                .map(p -> convertirAPostResponseDTO(p, correo)).toList());
+                break;
+
+            case "recientes":
+                List<Post> recientes = postRepository.buscarPostsRecientes(query);
+                respuesta.setPosts(recientes.stream()
+                                .map(p -> convertirAPostResponseDTO(p, correo)).toList());
+                break;
+
+            case "personas":
+                List<Usuario> usuarios = usuarioRepository.buscarUsuariosPorNombre(query);
+                respuesta.setUsuarios(
+                        usuarios.stream().map(u -> {
+                            UsuarioResponseForoDTO dto = new UsuarioResponseForoDTO();
+                            dto.setUsuarioId(u.getUsuarioId());
+                            dto.setUsuarioNombre(u.getUsuarioNombre());
+                            dto.setUsuarioFotoPerfil(u.getUsuarioFotoPerfil());
+                            dto.setUsuarioPais(u.getUsuarioPais());
+                            return dto;
+                        }).toList());
+                break;
+
+            default: throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "Tipo de búsqueda inválido: " + tipo);
+        }
+        return respuesta;
     }
 
     @Override
@@ -152,6 +183,7 @@ public class PostService implements IPostService {
     }
 
     private PostResponseDTO convertirAPostResponseDTO(Post post, String correoActual) {
+
         PostResponseDTO dto = new PostResponseDTO();
 
         dto.setPostId(post.getPostId());
@@ -159,6 +191,9 @@ public class PostService implements IPostService {
         dto.setPostDescripcion(post.getPostDescripcion());
         dto.setPostFoto(post.getPostFoto());
         dto.setPostFecha(post.getPostFecha());
+        dto.setPostFechaModificacion(post.getPostFechaModificacion());
+        dto.setEditado(post.getPostFechaModificacion() != null);
+
         dto.setLikeCount(postLikeRepository.countByPost_PostId(post.getPostId()));
         if (correoActual != null) {
             dto.setUserLiked(postLikeRepository.existsByPost_PostIdAndUsuario_UsuarioCorreo(post.getPostId(), correoActual));

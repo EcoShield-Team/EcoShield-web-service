@@ -46,4 +46,6 @@ public class Usuario {
     @Column(name = "usuariofecharegistro", nullable = false, updatable = false)
     private OffsetDateTime usuarioFechaRegistro;
 
+    @Column(name = "last_seen")
+    private OffsetDateTime lastSeen;
 }

@@ -21,14 +21,14 @@ public class ComentarioController {
     @Autowired
     private IComentarioService comentarioService;
 
-
+ 
     @PostMapping("/posts/{postId}/comentarios")
     @PreAuthorize("hasAnyRole('USER','ADMIN')")
     public ResponseEntity<ComentarioResponseDTO> crear(@PathVariable Long postId,
                                                        @Valid @RequestBody ComentarioRequestDTO dto,
                                                        Authentication authentication) {
-        dto.setPostId(postId);
-        ComentarioResponseDTO created = comentarioService.registrar(dto, authentication.getName());
+
+        ComentarioResponseDTO created = comentarioService.registrar(postId, dto, authentication.getName());
         return ResponseEntity.status(HttpStatus.CREATED).body(created);
     }
 
@@ -38,9 +38,8 @@ public class ComentarioController {
                                                             @PathVariable Long comentarioId,
                                                             @Valid @RequestBody ComentarioRequestDTO dto,
                                                             Authentication authentication) {
-        dto.setPostId(postId);
-        ComentarioResponseDTO updated = comentarioService.actualizar(postId, comentarioId, dto, authentication.getName());
-        return ResponseEntity.ok(updated);
+
+        return ResponseEntity.ok(comentarioService.actualizar(postId, comentarioId, dto, authentication.getName()));
     }
 
     @DeleteMapping("/posts/{postId}/comentarios/{comentarioId}")
@@ -54,15 +53,17 @@ public class ComentarioController {
 
     @GetMapping("/posts/{postId}/comentarios")
     @PreAuthorize("hasAnyRole('USER','ADMIN')")
-    public ResponseEntity<List<ComentarioResponseDTO>> listarPorPost(@PathVariable Long postId, Authentication auth) {
+    public ResponseEntity<List<ComentarioResponseDTO>> listarPorPost(@PathVariable Long postId,
+                                                                     Authentication auth) {
         return ResponseEntity.ok(comentarioService.findByPostId(postId, auth.getName()));
     }
 
 
     @GetMapping("/usuarios/{usuarioId}/comentarios")
-    @PreAuthorize("hasRole('ADMIN')")
-    public ResponseEntity<List<ComentarioResponseDTO>> listarPorUsuario(@PathVariable Long usuarioId) {
-        return ResponseEntity.ok(comentarioService.findByUsuarioid(usuarioId));
+    @PreAuthorize("hasAnyRole('USER','ADMIN')")
+    public ResponseEntity<List<ComentarioResponseDTO>> listarPorUsuario(@PathVariable Long usuarioId,
+                                                                        Authentication auth) {
+        return ResponseEntity.ok(comentarioService.findByUsuarioid(usuarioId, auth.getName()));
     }
 
     @GetMapping("/comentarios/{comentarioId}")

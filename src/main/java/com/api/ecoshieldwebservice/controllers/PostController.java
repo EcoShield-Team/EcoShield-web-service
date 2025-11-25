@@ -2,6 +2,7 @@ package com.api.ecoshieldwebservice.controllers;
 
 import com.api.ecoshieldwebservice.dtos.request.PostRequestDTO;
 import com.api.ecoshieldwebservice.dtos.response.PostResponseDTO;
+import com.api.ecoshieldwebservice.dtos.response.SearchResponseDTO;
 import com.api.ecoshieldwebservice.interfaces.IPostService;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.validation.Valid;
@@ -48,10 +49,8 @@ public class PostController {
     }
 
     @GetMapping("/posts")
-    public ResponseEntity<List<PostResponseDTO>> findAllPosts(@RequestParam(required = false) String titulo, Authentication auth) {
-        if (titulo != null && !titulo.isBlank()) {
-            return ResponseEntity.ok(postService.findByPosttitulo(titulo));
-        }
+    @PreAuthorize("hasAnyRole('USER','ADMIN')")
+    public ResponseEntity<List<PostResponseDTO>> findAllPosts(Authentication auth) {
         String correo = auth != null ? auth.getName() : null;
         return ResponseEntity.ok(postService.findAll(correo));
     }
@@ -60,6 +59,15 @@ public class PostController {
     @PreAuthorize("hasAnyRole('USER','ADMIN')")
     public ResponseEntity<PostResponseDTO> findById(@PathVariable Long id, Authentication auth) {
         return ResponseEntity.ok(postService.findById(id, auth.getName()));
+    }
+
+    @GetMapping("/posts/search")
+    @PreAuthorize("hasAnyRole('USER','ADMIN')")
+    public ResponseEntity<SearchResponseDTO> buscar(@RequestParam String query, @RequestParam String tipo,
+                                                    Authentication auth) {
+
+        String correoActual = auth != null ? auth.getName() : null;
+        return ResponseEntity.ok(postService.buscar(query, tipo, correoActual));
     }
 
     @DeleteMapping("/posts/{id}")
@@ -75,7 +83,6 @@ public class PostController {
         String correoActual = auth != null ? auth.getName() : null;
         return ResponseEntity.ok(postService.findByUsuarioid(usuarioId, correoActual));
     }
-
 
     @GetMapping("/posts/mis-posts")
     @PreAuthorize("hasAnyRole('USER','ADMIN')")

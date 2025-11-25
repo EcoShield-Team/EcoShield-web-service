@@ -15,9 +15,6 @@ import lombok.Setter;
 @AllArgsConstructor
 @NoArgsConstructor
 public class ComentarioRequestDTO {
-    @Schema(hidden = true)
-    private Long postId;
-
     @NotBlank(message = "El comentario no puede estar vacío")
     @Size(min = 2, max = 1000, message = "El comentario debe tener entre 2 y 1000 caracteres")
     private String comentarioTexto;

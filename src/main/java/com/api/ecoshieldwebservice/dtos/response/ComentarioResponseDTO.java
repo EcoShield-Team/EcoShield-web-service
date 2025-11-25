@@ -10,9 +10,12 @@ import java.time.OffsetDateTime;
 @Setter
 public class ComentarioResponseDTO {
     private Long comentarioId;
-    private UsuarioResponseForoDTO usuario;
+    private Long postId;
     private String comentarioTexto;
     private OffsetDateTime comentarioFecha;
+    private OffsetDateTime comentarioFechaModificacion;
+    private UsuarioResponseForoDTO usuario;
     private int likeCount;
     private boolean userLiked;
+    private boolean editado;
 }

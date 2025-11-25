@@ -1,13 +1,14 @@
 package com.api.ecoshieldwebservice.entities;
 
 import jakarta.persistence.*;
-import jakarta.validation.constraints.NotNull;
 import lombok.Getter;
 import lombok.Setter;
-import org.hibernate.annotations.ColumnDefault;
 import org.hibernate.annotations.CreationTimestamp;
+import org.hibernate.annotations.UpdateTimestamp;
 
 import java.time.OffsetDateTime;
+import java.util.ArrayList;
+import java.util.List;
 
 @Getter
 @Setter
@@ -34,4 +35,12 @@ public class Comentario {
     @CreationTimestamp
     @Column(name = "comentariofecha", nullable = false, updatable = false)
     private OffsetDateTime comentarioFecha;
+
+    @UpdateTimestamp
+    @Column(name = "comentariofechamodificacion")
+    private OffsetDateTime comentarioFechaModificacion;
+
+    @OneToMany(mappedBy = "comentario", cascade = CascadeType.ALL, orphanRemoval = true)
+    private List<ComentarioLike> likes = new ArrayList<>();
+
 }

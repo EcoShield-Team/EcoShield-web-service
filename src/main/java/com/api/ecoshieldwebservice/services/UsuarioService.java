@@ -17,6 +17,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.server.ResponseStatusException;
 
+import java.time.OffsetDateTime;
 import java.util.List;
 
 @Service
@@ -34,12 +35,21 @@ public class UsuarioService implements IUsuarioService {
     @Autowired
     private CloudinaryService cloudinaryService;
 
-
     @Override
-    public UsuarioProfileDTO findById(Long id) {
+    public UsuarioResponseDTO findById(Long id) {
         Usuario usuario = usuarioRepository.findById(id)
                 .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "Usuario no encontrado"));
-        return modelMapper.map(usuario, UsuarioProfileDTO.class);
+
+        UsuarioResponseDTO dto = modelMapper.map(usuario, UsuarioResponseDTO.class);
+        dto.setRolNombre(usuario.getRol().getRolNombre());
+        dto.setUsuarioEstado(usuario.getUsuarioEstado());
+
+        boolean online = usuario.getLastSeen() != null &&
+                usuario.getLastSeen().isAfter(OffsetDateTime.now().minusSeconds(45));
+
+        dto.setOnline(online);
+
+        return dto;
     }
 
     @Override
@@ -103,21 +113,12 @@ public class UsuarioService implements IUsuarioService {
         return dto;
     }
 
-    public void marcarOnline(String correo) {
-        Usuario u = usuarioRepository.findByUsuarioCorreo(correo)
+    public void heartbeat(String correo) {
+        Usuario usuario = usuarioRepository.findByUsuarioCorreo(correo)
                 .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "Usuario no encontrado"));
-        if (u.getUsuarioEstado() != UsuarioEstado.BLOQUEADO) {
-            u.setUsuarioEstado(UsuarioEstado.ACTIVO);
-            usuarioRepository.save(u);
-        }
+
+        usuario.setLastSeen(OffsetDateTime.now());
+        usuarioRepository.save(usuario);
     }
 
-    public void marcarOffline(String correo) {
-        Usuario u = usuarioRepository.findByUsuarioCorreo(correo)
-                .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "Usuario no encontrado"));
-        if (u.getUsuarioEstado() != UsuarioEstado.BLOQUEADO) {
-            u.setUsuarioEstado(UsuarioEstado.INACTIVO);
-            usuarioRepository.save(u);
-        }
-    }
 }

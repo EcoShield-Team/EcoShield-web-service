@@ -16,7 +16,9 @@ public class PostResponseDTO {
     private String postDescripcion;
     private String postFoto;
     private OffsetDateTime postFecha;
+    private OffsetDateTime postFechaModificacion;
     private int likeCount;
     private boolean userLiked;
     private int commentCount;
+    private boolean editado;
 }

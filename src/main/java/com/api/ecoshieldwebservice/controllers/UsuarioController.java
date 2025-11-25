@@ -11,6 +11,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
+import org.springframework.security.core.Authentication;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
@@ -32,7 +33,7 @@ public class UsuarioController {
 
     @GetMapping("/{id}")
     @PreAuthorize("hasAnyRole('USER','ADMIN')")
-    public ResponseEntity<UsuarioProfileDTO> findById(@PathVariable Long id) {
+    public ResponseEntity<UsuarioResponseDTO> findById(@PathVariable Long id) {
         return ResponseEntity.ok(usuarioService.findById(id));
     }
 
@@ -61,4 +62,12 @@ public class UsuarioController {
 
         return ResponseEntity.ok(usuarioService.asignarRol(id, nuevoRol));
     }
+
+    @PostMapping("/heartbeat")
+    @PreAuthorize("hasAnyRole('USER','ADMIN')")
+    public ResponseEntity<Void> heartbeat(Authentication auth) {
+        usuarioService.heartbeat(auth.getName());
+        return ResponseEntity.ok().build();
+    }
+
 }

@@ -7,8 +7,11 @@ import lombok.Getter;
 import lombok.Setter;
 import org.hibernate.annotations.ColumnDefault;
 import org.hibernate.annotations.CreationTimestamp;
+import org.hibernate.annotations.UpdateTimestamp;
 
 import java.time.OffsetDateTime;
+import java.util.ArrayList;
+import java.util.List;
 
 @Getter
 @Setter
@@ -37,4 +40,14 @@ public class Post {
     @CreationTimestamp
     @Column(name = "postfecha", nullable = false, updatable = false)
     private OffsetDateTime postFecha;
+
+    @Column(name = "postfechamodificacion")
+    private OffsetDateTime postFechaModificacion;
+
+    @OneToMany(mappedBy = "post", cascade = CascadeType.ALL, orphanRemoval = true)
+    private List<Comentario> comentarios;
+
+    @OneToMany(mappedBy = "post", cascade = CascadeType.ALL, orphanRemoval = true)
+    private List<PostLike> likes = new ArrayList<>();
+
 }

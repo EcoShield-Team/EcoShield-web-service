@@ -23,5 +23,5 @@ public class UsuarioResponseDTO {
     private UsuarioEstado usuarioEstado;
     private RolNombre rolNombre;
     private OffsetDateTime usuarioFechaRegistro;
-
+    private boolean online;
 }

@@ -17,7 +17,6 @@ import org.springframework.security.core.GrantedAuthority;
 import org.springframework.stereotype.Service;
 import org.springframework.web.server.ResponseStatusException;
 
-import java.time.OffsetDateTime;
 import java.util.Collection;
 import java.util.List;
 
@@ -38,18 +37,21 @@ public class ComentarioService implements IComentarioService {
 
 
     @Override
-    public ComentarioResponseDTO registrar(ComentarioRequestDTO dto, String correo) {
-        validarComentario(dto);
+    public ComentarioResponseDTO registrar(Long postId, ComentarioRequestDTO dto, String correo) {
 
-        Post post = postRepository.findById(dto.getPostId())
+        if (dto.getComentarioTexto() == null || dto.getComentarioTexto().isBlank()) {
+            throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "El comentario no puede estar vacío");
+        }
+
+        Post post = postRepository.findById(postId)
                 .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "Post no encontrado"));
+
 
         Usuario usuario = usuarioRepository.findByUsuarioCorreo(correo)
                 .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "Usuario no encontrado"));
 
         Comentario comentario = new Comentario();
         comentario.setComentarioTexto(dto.getComentarioTexto());
-        comentario.setComentarioFecha(OffsetDateTime.now());
         comentario.setPost(post);
         comentario.setUsuario(usuario);
 
@@ -59,7 +61,10 @@ public class ComentarioService implements IComentarioService {
 
     @Override
     public ComentarioResponseDTO actualizar(Long postId, Long comentarioId, ComentarioRequestDTO dto, String correo) {
-        validarComentario(dto);
+
+        if (dto.getComentarioTexto() == null || dto.getComentarioTexto().isBlank()) {
+            throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "El comentario no puede estar vacío");
+        }
 
         Comentario comentario = comentarioRepository.findById(comentarioId)
                 .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "Comentario no encontrado"));
@@ -74,6 +79,7 @@ public class ComentarioService implements IComentarioService {
 
         comentario.setComentarioTexto(dto.getComentarioTexto());
         Comentario actualizado = comentarioRepository.save(comentario);
+
         return convertirAComentarioResponseDTO(actualizado, correo);
     }
 
@@ -88,8 +94,9 @@ public class ComentarioService implements IComentarioService {
 
         boolean esAutor = esAutorDelComentario(comentarioId, correo);
         boolean esAdmin = roles.stream().anyMatch(a -> a.getAuthority().equals("ROLE_ADMIN"));
+        boolean esAutorDelPost = comentario.getPost().getUsuario().getUsuarioCorreo().equals(correo);
 
-        if (!esAutor && !esAdmin) {
+        if (!esAutor && !esAdmin && !esAutorDelPost) {
             throw new ResponseStatusException(HttpStatus.FORBIDDEN, "No tienes permiso para eliminar este comentario");
         }
 
@@ -116,18 +123,12 @@ public class ComentarioService implements IComentarioService {
     }
 
     @Override
-    public List<ComentarioResponseDTO> findByUsuarioid(Long usuarioId) {
+    public List<ComentarioResponseDTO> findByUsuarioid(Long usuarioId, String correoActual) {
         Usuario usuario = usuarioRepository.findById(usuarioId)
                 .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "Usuario no encontrado"));
 
         List<Comentario> lista = comentarioRepository.findByUsuario(usuario);
-        return lista.stream().map(c -> convertirAComentarioResponseDTO(c, null)).toList();
-    }
-
-    private void validarComentario(ComentarioRequestDTO dto) {
-        if (dto.getComentarioTexto() == null || dto.getComentarioTexto().isBlank()) {
-            throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "El comentario no puede estar vacío");
-        }
+        return lista.stream().map(c -> convertirAComentarioResponseDTO(c, correoActual)).toList();
     }
 
     @Override
@@ -138,25 +139,29 @@ public class ComentarioService implements IComentarioService {
     private ComentarioResponseDTO convertirAComentarioResponseDTO(Comentario comentario, String correoActual) {
 
         ComentarioResponseDTO dto = new ComentarioResponseDTO();
+
         dto.setComentarioId(comentario.getComentarioId());
         dto.setComentarioTexto(comentario.getComentarioTexto());
         dto.setComentarioFecha(comentario.getComentarioFecha());
+        dto.setComentarioFechaModificacion(comentario.getComentarioFechaModificacion());
+        dto.setEditado(comentario.getComentarioFechaModificacion() != null);
+        dto.setPostId(comentario.getPost().getPostId());
+
         int totalLikes = comentarioLikeRepository.countByComentario_ComentarioId(comentario.getComentarioId());
         dto.setLikeCount(totalLikes);
+
         if (correoActual != null) {
             boolean userLiked = comentarioLikeRepository.existsByComentario_ComentarioIdAndUsuario_UsuarioCorreo(comentario.getComentarioId(), correoActual);
             dto.setUserLiked(userLiked);
         } else { dto.setUserLiked(false);}
 
         Usuario usuario = comentario.getUsuario();
-        if (usuario != null) {
-            UsuarioResponseForoDTO uDto = new UsuarioResponseForoDTO();
-            uDto.setUsuarioId(usuario.getUsuarioId());
-            uDto.setUsuarioNombre(usuario.getUsuarioNombre());
-            uDto.setUsuarioFotoPerfil(usuario.getUsuarioFotoPerfil());
-            uDto.setUsuarioPais(usuario.getUsuarioPais());
-            dto.setUsuario(uDto);
-        }
+        UsuarioResponseForoDTO u = new UsuarioResponseForoDTO();
+        u.setUsuarioId(usuario.getUsuarioId());
+        u.setUsuarioNombre(usuario.getUsuarioNombre());
+        u.setUsuarioFotoPerfil(usuario.getUsuarioFotoPerfil());
+        u.setUsuarioPais(usuario.getUsuarioPais());
+        dto.setUsuario(u);
 
         return dto;
     }
