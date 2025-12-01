@@ -42,8 +42,7 @@ public class PasswordService implements IPasswordService {
 
     private String buildResetLink(String token) {
         if (resetBaseUrl == null || resetBaseUrl.isBlank()) {
-            // fallback que apunta a tu backend, útil para Postman
-            return "http://localhost:8080/auth/password/validate?token=" + token;
+            throw new IllegalStateException("app.reset.base-url no está configurado en producción.");
         }
         return resetBaseUrl + (resetBaseUrl.contains("?") ? "&" : "?") + "token=" + token;
     }
@@ -95,7 +94,6 @@ public class PasswordService implements IPasswordService {
             return new ValidateTokenResponseDTO(false, "El token ha expirado", null);
         }
 
-        // OK: código válido, devolvemos el token para que el front pueda usar /auth/password/reset
         return new ValidateTokenResponseDTO(true, "Código válido", token.getToken());
     }
 
